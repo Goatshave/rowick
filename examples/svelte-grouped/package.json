@@ -10,14 +10,14 @@
   },
   "dependencies": {
     "@rowick/data": "workspace:*",
-    "@lucide/svelte": "^1.57.0",
+    "@lucide/svelte": "^1.63.0",
     "@rowick/core": "workspace:*",
     "@rowick/svelte": "workspace:*",
     "@rowick/svelte-ui": "workspace:*",
     "@rowick/theme": "workspace:*",
     "@sveltejs/vite-plugin-svelte": "^7.2.0",
-    "svelte": "^5.57.2",
-    "vite": "^8.3.4",
+    "svelte": "^5.57.3",
+    "vite": "^8.3.5",
     "@rowick/example-shared-server": "workspace:*"
   },
   "devDependencies": {

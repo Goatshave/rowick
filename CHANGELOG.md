@@ -9,6 +9,8 @@ The initial `0.1.0` release is in preparation. Publication is pending.
 - Preserve protected column positions when restoring partial or equivalent saved
   orders, and enforce export header budgets when the data set is empty.
 - Supply Rowick favicons for the maintained framework examples.
+- Keep the React analytics example's loading and initialized layout consistent
+  to prevent intermittent heading overflow in WebKit on narrow screens.
 - Ship repository Markdown guides and GitHub documentation links. Website source,
   generator dependencies and deployment configuration are excluded from the initial repository.
 

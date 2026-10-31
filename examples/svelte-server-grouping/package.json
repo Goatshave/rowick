@@ -1,0 +1,24 @@
+{
+  "name": "@rowick/example-svelte-server-grouping",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@rowick/core": "workspace:*",
+    "@rowick/example-shared-server": "workspace:*",
+    "@rowick/svelte": "workspace:*",
+    "@rowick/svelte-ui": "workspace:*",
+    "@rowick/theme": "workspace:*",
+    "@sveltejs/vite-plugin-svelte": "^7.2.0",
+    "svelte": "^5.57.2",
+    "vite": "^8.3.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

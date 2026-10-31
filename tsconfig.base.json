@@ -1,0 +1,117 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@rowick/core": [
+        "packages/core/src/index.ts"
+      ],
+      "@rowick/data": [
+        "packages/data/src/index.ts"
+      ],
+      "@rowick/data/editing": [
+        "packages/data/src/editing.ts"
+      ],
+      "@rowick/data/filtering": [
+        "packages/data/src/filtering.ts"
+      ],
+      "@rowick/data/server-data": [
+        "packages/data/src/datasource-entry.ts"
+      ],
+      "@rowick/data/analytics": [
+        "packages/data/src/analytics.ts"
+      ],
+      "@rowick/data/layout": [
+        "packages/data/src/layout.ts"
+      ],
+      "@rowick/data/locale": [
+        "packages/data/src/locale.ts"
+      ],
+      "@rowick/export-xlsx": [
+        "packages/export-xlsx/src/index.ts"
+      ],
+      "@rowick/react": [
+        "packages/react/src/index.ts"
+      ],
+      "@rowick/react-ui": [
+        "packages/react-ui/src/index.tsx"
+      ],
+      "@rowick/vue": [
+        "packages/vue/src/index.ts"
+      ],
+      "@rowick/vue-ui": [
+        "packages/vue-ui/src/index.ts"
+      ],
+      "@rowick/svelte": [
+        "packages/svelte/src/index.ts"
+      ],
+      "@rowick/svelte-ui": [
+        "packages/svelte-ui/src/index.ts"
+      ],
+      "@rowick/virtual": [
+        "packages/virtual/src/index.ts"
+      ],
+      "@rowick/primitives": [
+        "packages/primitives/src/index.ts"
+      ],
+      "@rowick/theme/tokens": [
+        "packages/theme/src/tokens.ts"
+      ],
+      "@rowick/example-shared-server": [
+        "examples/shared-server/src/index.ts"
+      ],
+      "@rowick/react-ui/filtering": [
+        "packages/react-ui/src/filtering.tsx"
+      ],
+      "@rowick/vue-ui/filtering": [
+        "packages/vue-ui/src/filtering.ts"
+      ],
+      "@rowick/svelte-ui/filtering": [
+        "packages/svelte-ui/src/filtering.ts"
+      ],
+      "@rowick/react-ui/server-data": [
+        "packages/react-ui/src/server-data.tsx"
+      ],
+      "@rowick/react-ui/analytics": [
+        "packages/react-ui/src/analytics.tsx"
+      ],
+      "@rowick/vue-ui/server-data": [
+        "packages/vue-ui/src/server-data.ts"
+      ],
+      "@rowick/vue-ui/analytics": [
+        "packages/vue-ui/src/analytics.ts"
+      ],
+      "@rowick/svelte-ui/server-data": [
+        "packages/svelte-ui/src/server-data.ts"
+      ],
+      "@rowick/svelte-ui/analytics": [
+        "packages/svelte-ui/src/analytics.ts"
+      ],
+      "@rowick/react-ui/layout": [
+        "packages/react-ui/src/layout.tsx"
+      ],
+      "@rowick/vue-ui/layout": [
+        "packages/vue-ui/src/layout.ts"
+      ],
+      "@rowick/svelte-ui/layout": [
+        "packages/svelte-ui/src/layout.ts"
+      ]
+    },
+    "strict": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true
+  }
+}

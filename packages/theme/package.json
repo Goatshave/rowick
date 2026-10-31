@@ -1,0 +1,35 @@
+{
+  "name": "@rowick/theme",
+  "version": "0.1.0",
+  "description": "CSS variables, base themes, and typed product token adapters for Rowick.",
+  "keywords": ["data-grid", "grid", "table", "css", "theme"],
+  "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/theme#readme",
+  "bugs": {
+    "url": "https://github.com/Goatshave/rowick/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": ["dist/index.css", "src/index.css"],
+  "exports": {
+    ".": "./dist/index.css",
+    "./css": "./dist/index.css",
+    "./tokens": {
+      "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.js"
+    }
+  },
+  "files": ["dist", "LICENSE"],
+  "scripts": {
+    "build": "tsup src/tokens.ts --format esm --dts --clean && cp src/index.css dist/index.css",
+    "check": "tsc --noEmit && test -f src/index.css",
+    "test": "pnpm build && node --test test/*.test.mjs",
+    "lint": "tsc --noEmit && test -f src/index.css"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}

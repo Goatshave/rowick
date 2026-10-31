@@ -1,0 +1,15 @@
+node_modules
+dist
+coverage
+.release
+.turbo
+.DS_Store
+*.tsbuildinfo
+test-results
+.playwright-cli
+.benchmark-results
+.next
+.nuxt
+.output
+.svelte-kit
+/examples/sveltekit-server-export/build

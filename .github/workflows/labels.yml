@@ -1,0 +1,74 @@
+name: Issue Labels
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/labels.json"
+      - ".github/workflows/labels.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: issue-labels
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync labels
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout label definitions
+        uses: actions/checkout@v7
+        with:
+          ref: refs/heads/main
+          persist-credentials: false
+
+      - name: Create or update managed labels
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { readFileSync } = require('node:fs');
+            const labels = JSON.parse(readFileSync('.github/labels.json', 'utf8'));
+            if (!Array.isArray(labels) || labels.length === 0) {
+              throw new Error('The managed label catalog must be a non-empty array.');
+            }
+            const names = new Set();
+            for (const label of labels) {
+              if (!label || typeof label.name !== 'string' || !label.name.trim() ||
+                  label.name !== label.name.trim() || names.has(label.name.toLowerCase()) ||
+                  typeof label.color !== 'string' || !/^[0-9a-f]{6}$/i.test(label.color) ||
+                  typeof label.description !== 'string' || label.description.length > 100) {
+                throw new Error('Invalid or duplicate managed label definition.');
+              }
+              names.add(label.name.toLowerCase());
+            }
+            for (const label of labels) {
+              const { owner, repo } = context.repo;
+              let existing;
+              try {
+                ({ data: existing } = await github.rest.issues.getLabel({ owner, repo, name: label.name }));
+              } catch (error) {
+                if (error.status !== 404) throw error;
+              }
+              if (!existing) {
+                await github.rest.issues.createLabel({ owner, repo, ...label });
+                core.info(`Created label: ${label.name}`);
+              } else if (existing.archived_at) {
+                throw new Error(`Restore the archived managed label before using issue forms: ${label.name}`);
+              } else if (existing.color.toLowerCase() !== label.color.toLowerCase() ||
+                         (existing.description ?? '') !== label.description) {
+                await github.rest.issues.updateLabel({ owner, repo, name: label.name,
+                  color: label.color, description: label.description });
+                core.info(`Updated label: ${label.name}`);
+              } else {
+                core.info(`Label already matches: ${label.name}`);
+              }
+            }

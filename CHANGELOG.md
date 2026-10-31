@@ -1,0 +1,27 @@
+# Changelog
+
+Notable Rowick changes are recorded here before tagging or publication.
+
+## Unreleased
+
+The initial `0.1.0` release is in preparation. Publication is pending.
+
+- Preserve protected column positions when restoring partial or equivalent saved
+  orders, and enforce export header budgets when the data set is empty.
+- Supply Rowick favicons for the maintained framework examples.
+- Ship repository Markdown guides and GitHub documentation links. Website source,
+  generator dependencies and deployment configuration are excluded from the initial repository.
+
+## 0.1.0 - 2026-10-30
+
+Initial release candidate prepared on this date; this is not a publication record.
+
+- Provide twelve aligned `@rowick/*` packages: a framework-independent grid engine,
+  virtualization, primitives, themes, React/Vue/Svelte adapters and UI renderers,
+  optional data controllers and an XLSX exporter.
+- Include typed filters and saved views, row transactions and batch editing,
+  server data, layout and selection ranges, pivot/export and locale codecs.
+- Supply guides, framework examples, declaration contracts, package-consumption
+  checks, browser tests and independent XLSX verification.
+- Define contribution approval, issue classification, private security reporting
+  and protected release procedures.

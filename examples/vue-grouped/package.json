@@ -1,0 +1,25 @@
+{
+  "name": "@rowick/example-vue-grouped",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@rowick/data": "workspace:*",
+    "@lucide/vue": "^1.57.0",
+    "@rowick/core": "workspace:*",
+    "@rowick/theme": "workspace:*",
+    "@rowick/vue": "workspace:*",
+    "@rowick/vue-ui": "workspace:*",
+    "vite": "^8.3.4",
+    "vue": "^3.5.44",
+    "@rowick/example-shared-server": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

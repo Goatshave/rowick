@@ -1,0 +1,34 @@
+{
+  "name": "@rowick/virtual",
+  "version": "0.1.0",
+  "description": "Framework-agnostic virtualization primitives for Rowick.",
+  "keywords": ["data-grid", "grid", "table", "virtualization", "typescript"],
+  "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/virtual#readme",
+  "bugs": {
+    "url": "https://github.com/Goatshave/rowick/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "LICENSE"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "check": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.11"
+  }
+}

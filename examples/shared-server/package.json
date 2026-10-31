@@ -1,0 +1,136 @@
+{
+  "name": "@rowick/example-shared-server",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./locale-client": {
+      "types": "./src/locale-client.ts",
+      "import": "./src/locale-client.ts"
+    },
+    "./analytics-api": {
+      "types": "./src/analytics-api.ts",
+      "import": "./src/analytics-api.ts"
+    },
+    "./row-editing-client": {
+      "types": "./src/row-editing-client.ts",
+      "import": "./src/row-editing-client.ts"
+    },
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./framework-app-examples/nextjs/app/tickets/page": {
+      "types": "./src/framework-app-examples/nextjs/app/tickets/page.ts",
+      "import": "./src/framework-app-examples/nextjs/app/tickets/page.ts"
+    },
+    "./framework-app-examples/nextjs/app/api/tickets/export/route": {
+      "types": "./src/framework-app-examples/nextjs/app/api/tickets/export/route.ts",
+      "import": "./src/framework-app-examples/nextjs/app/api/tickets/export/route.ts"
+    },
+    "./framework-app-examples/nuxt/pages/tickets": {
+      "types": "./src/framework-app-examples/nuxt/pages/tickets.ts",
+      "import": "./src/framework-app-examples/nuxt/pages/tickets.ts"
+    },
+    "./framework-app-examples/nuxt/server/api/tickets/export.get": {
+      "types": "./src/framework-app-examples/nuxt/server/api/tickets/export.get.ts",
+      "import": "./src/framework-app-examples/nuxt/server/api/tickets/export.get.ts"
+    },
+    "./framework-app-examples/sveltekit/src/routes/tickets/+page": {
+      "types": "./src/framework-app-examples/sveltekit/src/routes/tickets/+page.ts",
+      "import": "./src/framework-app-examples/sveltekit/src/routes/tickets/+page.ts"
+    },
+    "./framework-app-examples/sveltekit/src/routes/api/tickets/export/+server": {
+      "types": "./src/framework-app-examples/sveltekit/src/routes/api/tickets/export/+server.ts",
+      "import": "./src/framework-app-examples/sveltekit/src/routes/api/tickets/export/+server.ts"
+    },
+    "./framework-tree-examples/nextjs/app/portfolios/page": {
+      "types": "./src/framework-tree-examples/nextjs/app/portfolios/page.ts",
+      "import": "./src/framework-tree-examples/nextjs/app/portfolios/page.ts"
+    },
+    "./framework-tree-examples/nextjs/app/api/portfolios/children/route": {
+      "types": "./src/framework-tree-examples/nextjs/app/api/portfolios/children/route.ts",
+      "import": "./src/framework-tree-examples/nextjs/app/api/portfolios/children/route.ts"
+    },
+    "./framework-tree-examples/nuxt/pages/portfolios": {
+      "types": "./src/framework-tree-examples/nuxt/pages/portfolios.ts",
+      "import": "./src/framework-tree-examples/nuxt/pages/portfolios.ts"
+    },
+    "./framework-tree-examples/nuxt/server/api/portfolios/children.get": {
+      "types": "./src/framework-tree-examples/nuxt/server/api/portfolios/children.get.ts",
+      "import": "./src/framework-tree-examples/nuxt/server/api/portfolios/children.get.ts"
+    },
+    "./framework-tree-examples/sveltekit/src/routes/portfolios/+page": {
+      "types": "./src/framework-tree-examples/sveltekit/src/routes/portfolios/+page.ts",
+      "import": "./src/framework-tree-examples/sveltekit/src/routes/portfolios/+page.ts"
+    },
+    "./framework-tree-examples/sveltekit/src/routes/api/portfolios/children/+server": {
+      "types": "./src/framework-tree-examples/sveltekit/src/routes/api/portfolios/children/+server.ts",
+      "import": "./src/framework-tree-examples/sveltekit/src/routes/api/portfolios/children/+server.ts"
+    },
+    "./framework-tree-examples/shared": {
+      "types": "./src/framework-tree-examples/shared.ts",
+      "import": "./src/framework-tree-examples/shared.ts"
+    },
+    "./framework-deployment-examples/shared": {
+      "types": "./src/framework-deployment-examples/shared.ts",
+      "import": "./src/framework-deployment-examples/shared.ts"
+    },
+    "./framework-standalone-examples/shared": {
+      "types": "./src/framework-standalone-examples/shared.ts",
+      "import": "./src/framework-standalone-examples/shared.ts"
+    },
+    "./cell-edit-client": {
+      "types": "./src/cell-edit-client.ts",
+      "import": "./src/cell-edit-client.ts"
+    },
+    "./ticket-client": {
+      "types": "./src/ticket-client.ts",
+      "import": "./src/ticket-client.ts"
+    },
+    "./ticket-api": {
+      "types": "./src/ticket-api.ts",
+      "import": "./src/ticket-api.ts"
+    },
+    "./ticket-api-server": {
+      "types": "./src/ticket-api-server.ts",
+      "import": "./src/ticket-api-server.ts"
+    },
+    "./filtering-client": {
+      "types": "./src/filtering-client.ts",
+      "import": "./src/filtering-client.ts"
+    },
+    "./datasource-api-server": {
+      "types": "./src/datasource-api-server.ts",
+      "import": "./src/datasource-api-server.ts"
+    },
+    "./datasource-client": {
+      "types": "./src/datasource-client.ts",
+      "import": "./src/datasource-client.ts"
+    },
+    "./analytics-client": {
+      "types": "./src/analytics-client.ts",
+      "import": "./src/analytics-client.ts"
+    },
+    "./layout-client": {
+      "types": "./src/layout-client.ts",
+      "import": "./src/layout-client.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "check": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@rowick/data": "workspace:*",
+    "@rowick/core": "workspace:*",
+    "@rowick/export-xlsx": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.11"
+  }
+}

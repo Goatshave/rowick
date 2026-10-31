@@ -1,0 +1,91 @@
+{
+  "name": "@rowick/svelte-ui",
+  "version": "0.1.0",
+  "description": "Optional styled Svelte data grid for Rowick.",
+  "keywords": [
+    "data-grid",
+    "grid",
+    "table",
+    "svelte",
+    "ui"
+  ],
+  "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/svelte-ui#readme",
+  "bugs": {
+    "url": "https://github.com/Goatshave/rowick/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "dist/index.css",
+    "dist/editing.css",
+    "src/index.css",
+    "dist/filtering.css",
+    "dist/analytics.css",
+    "dist/layout.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./DataGrid.svelte": {
+      "svelte": "./dist/DataGrid.svelte",
+      "types": "./dist/DataGrid.svelte.d.ts",
+      "import": "./dist/DataGrid.svelte"
+    },
+    "./css": "./dist/index.css",
+    "./editing": {
+      "types": "./dist/editing.d.ts",
+      "import": "./dist/editing.js"
+    },
+    "./editing.css": "./dist/editing.css",
+    "./filtering": {
+      "types": "./dist/filtering.d.ts",
+      "import": "./dist/filtering.js"
+    },
+    "./filtering.css": "./dist/filtering.css",
+    "./server-data": {
+      "types": "./dist/server-data.d.ts",
+      "import": "./dist/server-data.js"
+    },
+    "./analytics": {
+      "types": "./dist/analytics.d.ts",
+      "import": "./dist/analytics.js"
+    },
+    "./analytics.css": "./dist/analytics.css",
+    "./layout": {
+      "types": "./dist/layout.d.ts",
+      "import": "./dist/layout.js"
+    },
+    "./layout.css": "./dist/layout.css"
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts src/editing.ts src/filtering.ts src/server-data.ts src/analytics.ts src/layout.ts --format esm --dts --clean --external ./DataGrid.svelte --external ./RowEditingPanel.svelte --external ./ServerDataPanel.svelte --external ./AnalyticsPanel.svelte --external ./LayoutGrid.svelte --external ./FilterPanel.svelte && mkdir -p dist && cp src/DataGrid.svelte src/RenderValue.svelte src/ColumnFilter.svelte src/RowEditingPanel.svelte src/ServerDataPanel.svelte src/AnalyticsPanel.svelte src/LayoutGrid.svelte src/FilterPanel.svelte dist/ && cp src/DataGrid.svelte.d.ts src/RowEditingPanel.svelte.d.ts src/ServerDataPanel.svelte.d.ts src/AnalyticsPanel.svelte.d.ts src/LayoutGrid.svelte.d.ts src/FilterPanel.svelte.d.ts dist/ && cp ../react-ui/src/index.css dist/index.css && cp ../react-ui/src/editing.css dist/editing.css && cp ../react-ui/src/filtering.css dist/filtering.css && cp ../react-ui/src/analytics.css dist/analytics.css && cp ../react-ui/src/layout.css dist/layout.css",
+    "check": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rowick/data": "workspace:*",
+    "@rowick/core": "workspace:*",
+    "@rowick/primitives": "workspace:*",
+    "@rowick/svelte": "workspace:*",
+    "@rowick/virtual": "workspace:*"
+  },
+  "peerDependencies": {
+    "svelte": "^4.2.20 || ^5.0.0"
+  },
+  "devDependencies": {
+    "svelte": "^5.57.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.11"
+  }
+}

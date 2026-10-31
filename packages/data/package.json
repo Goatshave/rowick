@@ -1,0 +1,70 @@
+{
+  "name": "@rowick/data",
+  "version": "0.1.0",
+  "description": "Optional immutable transactions and data controllers for Rowick.",
+  "keywords": [
+    "data-grid",
+    "grid",
+    "table",
+    "transactions",
+    "datasource"
+  ],
+  "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/data#readme",
+  "bugs": {
+    "url": "https://github.com/Goatshave/rowick/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./editing": {
+      "types": "./dist/editing.d.ts",
+      "import": "./dist/editing.js"
+    },
+    "./filtering": {
+      "types": "./dist/filtering.d.ts",
+      "import": "./dist/filtering.js"
+    },
+    "./server-data": {
+      "types": "./dist/datasource-entry.d.ts",
+      "import": "./dist/datasource-entry.js"
+    },
+    "./analytics": {
+      "types": "./dist/analytics.d.ts",
+      "import": "./dist/analytics.js"
+    },
+    "./layout": {
+      "types": "./dist/layout.d.ts",
+      "import": "./dist/layout.js"
+    },
+    "./locale": {
+      "types": "./dist/locale.d.ts",
+      "import": "./dist/locale.js"
+    }
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts src/editing.ts src/filtering.ts src/datasource-entry.ts src/analytics.ts src/layout.ts src/locale.ts --format esm --dts --clean --minify --sourcemap",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rowick/core": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.11"
+  }
+}

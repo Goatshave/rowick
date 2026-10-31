@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 162 162" width="162" height="162" role="img" aria-labelledby="title description" color="#4B4946">
+  <title id="title">Rowick</title>
+  <desc id="description">Four rounded cells with one selected cell offset above its outlined position.</desc>
+  <g fill="currentColor">
+    <rect x="78" y="20" width="64" height="64" rx="15" fill="none" stroke="currentColor" stroke-width="4"/>
+    <rect x="8" y="20" width="64" height="64" rx="15"/>
+    <rect x="8" y="90" width="64" height="64" rx="15"/>
+    <rect x="78" y="90" width="64" height="64" rx="15"/>
+    <rect x="90" y="8" width="64" height="64" rx="15"/>
+  </g>
+</svg>

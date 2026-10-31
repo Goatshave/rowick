@@ -1,0 +1,22 @@
+{
+  "name": "@rowick/example-nuxt-server-export",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
+  "scripts": {
+    "dev": "nuxt dev --host 127.0.0.1",
+    "build": "nuxt build",
+    "start": "node .output/server/index.mjs"
+  },
+  "dependencies": {
+    "@rowick/example-shared-server": "workspace:*",
+    "nuxt": "^4.6.3",
+    "vue": "^3.5.44"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

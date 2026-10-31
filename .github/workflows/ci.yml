@@ -1,0 +1,138 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit dependency security
+        run: pnpm security:audit
+
+      - name: Typecheck
+        run: pnpm check
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Verify public API contract
+        run: pnpm api:check
+
+      - name: Verify framework compatibility
+        run: pnpm compatibility:check
+
+      - name: Test
+        run: pnpm test
+
+      - name: Setup Python for independent XLSX verification
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: packages/export-xlsx/test/requirements.txt
+
+      - name: Install independent spreadsheet reader
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r packages/export-xlsx/test/requirements.txt
+
+      - name: Verify XLSX with independent reader
+        env:
+          ROWICK_XLSX_READER_PYTHON: python
+        run: pnpm test:xlsx:independent
+
+      - name: Build examples
+        run: pnpm build:examples
+
+      - name: Verify publishable package boundaries
+        run: pnpm release:check -- --json
+
+  browser-smoke:
+    name: UI Smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run React, Vue, and Svelte smoke tests
+        run: pnpm e2e:smoke
+
+      - name: Verify remote reads, edits, and recovery across frameworks
+        run: pnpm e2e:server-data
+
+      - name: Retain failed browser diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: browser-failure-diagnostics
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  browser-integration:
+    name: UI Integration
+    uses: ./.github/workflows/browser-integration.yml
+
+  required-gate:
+    name: Required Gate
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - quality
+      - browser-smoke
+      - browser-integration
+
+    steps:
+      - name: Verify required CI jobs
+        env:
+          QUALITY_RESULT: ${{ needs.quality.result }}
+          UI_SMOKE_RESULT: ${{ needs.browser-smoke.result }}
+          UI_INTEGRATION_RESULT: ${{ needs.browser-integration.result }}
+        run: |
+          test "$QUALITY_RESULT" = "success"
+          test "$UI_SMOKE_RESULT" = "success"
+          test "$UI_INTEGRATION_RESULT" = "success"

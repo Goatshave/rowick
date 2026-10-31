@@ -1,0 +1,41 @@
+{
+  "name": "@rowick/vue",
+  "version": "0.1.0",
+  "description": "Vue adapter for Rowick.",
+  "keywords": ["data-grid", "grid", "table", "vue", "adapter"],
+  "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/vue#readme",
+  "bugs": {
+    "url": "https://github.com/Goatshave/rowick/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "LICENSE"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "check": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rowick/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.11",
+    "vue": "^3.5.44"
+  }
+}

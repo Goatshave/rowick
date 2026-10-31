@@ -1,0 +1,12 @@
+.rowick-filter-panel { color: var(--rowick-text, #182230); font: inherit; }
+.rowick-filter-panel > section { margin-block: 1.5rem; }
+.rowick-filter-panel fieldset { margin-block: .75rem; padding: .75rem; border: 1px solid var(--rowick-border-color, #98a2b3); border-radius: .4rem; }
+.rowick-filter-panel label { display: block; margin-block: .35rem; }
+.rowick-filter-panel input, .rowick-filter-panel select, .rowick-filter-panel textarea, .rowick-filter-panel button { box-sizing: border-box; max-width: 100%; min-height: 2.25rem; color: inherit; font: inherit; }
+.rowick-filter-panel input:not([type="checkbox"]), .rowick-filter-panel select, .rowick-filter-panel textarea { padding: .35rem; background: var(--rowick-surface, #fff); border: 1px solid var(--rowick-border-color, #98a2b3); border-radius: .25rem; }
+.rowick-filter-panel textarea { width: 100%; }
+.rowick-filter-panel [role="group"] { display: flex; flex-wrap: wrap; gap: .4rem; }
+.rowick-filter-panel [role="alert"] { color: var(--rowick-danger, #b42318); }
+.rowick-filter-panel [aria-invalid="true"] { border-color: var(--rowick-danger, #b42318); }
+.rowick-filter-panel :focus-visible { outline: 2px solid var(--rowick-accent, #155eef); outline-offset: 2px; }
+.rowick-filter-panel ul { max-height: 20rem; overflow: auto; }

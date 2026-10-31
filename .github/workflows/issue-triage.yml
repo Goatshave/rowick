@@ -1,0 +1,39 @@
+name: Issue Triage
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Open issue number to classify using the current rules."
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: issue-triage-${{ github.event.issue.number || github.event.inputs.issue_number }}
+  cancel-in-progress: false
+
+jobs:
+  triage:
+    name: Classify issue content
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout trusted rules
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: Add content labels
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { triageIssue } = require('./scripts/issue-triage.cjs');
+            const result = await triageIssue({ github, context });
+            core.info(`Issue triage: ${result.status}; labels: ${result.labels.join(', ')}`);

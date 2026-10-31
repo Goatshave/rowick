@@ -1,0 +1,211 @@
+name: Release Verification
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Semver release version to use for release planning, staging, and publish dry-run checks."
+        required: true
+        default: "0.0.0"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    name: Detect release changes
+    runs-on: ubuntu-latest
+    outputs:
+      release: ${{ steps.filter.outputs.release }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Detect release-related changes
+        id: filter
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            echo "release=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          release=false
+          while IFS= read -r file; do
+            case "$file" in
+              CHANGELOG.md|\
+              api-contract/*|\
+              .github/workflows/release-publish.yml|\
+              .github/workflows/release-verify.yml|\
+              .github/workflows/browser-integration.yml|\
+              docs/api-stability.md|\
+              docs/release.md|\
+              e2e/*|\
+              examples/*|\
+              package.json|\
+              packages/*|\
+              playwright.config.ts|\
+              playwright.*.config.ts|\
+              playwright.smoke.config.ts|\
+              pnpm-lock.yaml|\
+              pnpm-workspace.yaml|\
+              scripts/release-*.mjs|\
+              scripts/fixtures/release-consumer/*|\
+              scripts/vite-production.*|\
+              scripts/api-contract.mjs|\
+              tsconfig*.json)
+                release=true
+                break
+                ;;
+            esac
+          done < <(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
+
+          echo "release=$release" >> "$GITHUB_OUTPUT"
+
+  release-artifacts:
+    name: Artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: changes
+    if: needs.changes.outputs.release == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Resolve release version
+        env:
+          REQUESTED_VERSION: ${{ github.event.inputs.version }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            VERSION="$REQUESTED_VERSION"
+          else
+            VERSION="$(node -p "require('./package.json').version")"
+          fi
+          [[ "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]] || exit 1
+          printf 'RELEASE_VERSION=%s\n' "$VERSION" >> "$GITHUB_ENV"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Release policy
+        run: pnpm release:policy -- --version "$RELEASE_VERSION" --tag "rowick-v$RELEASE_VERSION" --json
+
+      - name: Release readiness check
+        run: pnpm release:check -- --json
+
+      - name: Trusted publishing setup plan
+        run: pnpm release:trusted-publishing -- --version "$RELEASE_VERSION" --tag latest --repository-url git+https://github.com/example/rowick.git --json
+
+      - name: First publish status summary
+        run: pnpm release:first-publish-status -- --version "$RELEASE_VERSION" --repository-url git+https://github.com/example/rowick.git --skip-github-push --json
+
+      - name: Release plan
+        run: pnpm release:plan -- --version "$RELEASE_VERSION" --json
+
+      - name: Stage release tarballs
+        run: pnpm release:stage -- --version "$RELEASE_VERSION" --out-dir .release/"$RELEASE_VERSION"
+
+      - name: Publish dry-run
+        run: pnpm release:publish-dry-run -- --version "$RELEASE_VERSION" --json
+
+      - name: Verify external package consumption
+        run: pnpm release:consumer-smoke -- --version "$RELEASE_VERSION" --tarball-dir .release/"$RELEASE_VERSION" --json
+
+      - name: Verify minimum supported external peers
+        run: pnpm release:consumer-smoke -- --version "$RELEASE_VERSION" --tarball-dir .release/"$RELEASE_VERSION" --compatibility minimum --json
+
+      - name: Upload staged tarballs
+        uses: actions/upload-artifact@v7
+        with:
+          name: rowick-${{ env.RELEASE_VERSION }}-tarballs
+          path: .release/${{ env.RELEASE_VERSION }}/*.tgz
+          if-no-files-found: error
+
+  full-e2e:
+    name: Full E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: changes
+    if: needs.changes.outputs.release == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        run: pnpm e2e
+
+  browser-integration:
+    name: UI Integration
+    needs: changes
+    if: needs.changes.outputs.release == 'true'
+    uses: ./.github/workflows/browser-integration.yml
+
+  required-gate:
+    name: Release Gate
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - changes
+      - release-artifacts
+      - full-e2e
+      - browser-integration
+
+    steps:
+      - name: Verify required release jobs
+        env:
+          CHANGES_RESULT: ${{ needs.changes.result }}
+          RELEASE_RELATED: ${{ needs.changes.outputs.release }}
+          ARTIFACTS_RESULT: ${{ needs.release-artifacts.result }}
+          E2E_RESULT: ${{ needs.full-e2e.result }}
+          INTEGRATION_RESULT: ${{ needs.browser-integration.result }}
+        run: |
+          test "$CHANGES_RESULT" = "success"
+
+          if [ "$RELEASE_RELATED" = "false" ]; then
+            exit 0
+          fi
+
+          test "$RELEASE_RELATED" = "true"
+          test "$ARTIFACTS_RESULT" = "success"
+          test "$E2E_RESULT" = "success"
+          test "$INTEGRATION_RESULT" = "success"

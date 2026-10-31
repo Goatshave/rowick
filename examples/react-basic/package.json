@@ -1,0 +1,29 @@
+{
+  "name": "@rowick/example-react-basic",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@rowick/data": "workspace:*",
+    "@rowick/core": "workspace:*",
+    "@rowick/react": "workspace:*",
+    "@rowick/react-ui": "workspace:*",
+    "@rowick/theme": "workspace:*",
+    "@vitejs/plugin-react": "^6.1.2",
+    "lucide-react": "^1.57.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "vite": "^8.3.4",
+    "@rowick/example-shared-server": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^5.7.2"
+  }
+}

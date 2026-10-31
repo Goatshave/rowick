@@ -1,0 +1,11 @@
+.rowick-analytics { color: var(--rowick-text, #182230); font: inherit; }
+.rowick-analytics fieldset { padding: .75rem; margin-block: .75rem; border: 1px solid var(--rowick-border-color, #98a2b3); border-radius: .5rem; }
+.rowick-analytics label { display: inline-flex; align-items: center; gap: .35rem; margin: .35rem .75rem .35rem 0; }
+.rowick-analytics label:has(select[multiple]) { flex-direction: column; align-items: start; }
+.rowick-analytics select, .rowick-analytics button { font: inherit; color: inherit; min-height: 2rem; }
+.rowick-analytics select { background: var(--rowick-surface, #fff); }
+.rowick-analytics [role="group"] { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-block: .75rem; }
+.rowick-analytics table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.rowick-analytics th, .rowick-analytics td { padding: .4rem; border: 1px solid var(--rowick-border-color, #98a2b3); text-align: start; overflow-wrap: anywhere; }
+.rowick-analytics [role="alert"] { color: var(--rowick-danger, #b42318); }
+.rowick-analytics :focus-visible { outline: 2px solid var(--rowick-accent, #155eef); outline-offset: 2px; }

@@ -1,0 +1,19 @@
+{
+  "name": "@rowick/compat-svelte-4",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@rowick/core": "workspace:*",
+    "@rowick/svelte-ui": "workspace:*",
+    "@sveltejs/vite-plugin-svelte": "3.1.2",
+    "svelte": "4.2.20",
+    "vite": "5.4.21"
+  },
+  "devDependencies": {
+    "typescript": "5.7.2"
+  }
+}

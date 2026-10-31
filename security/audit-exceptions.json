@@ -1,0 +1,206 @@
+{
+  "version": 1,
+  "reviewed": "2026-10-31",
+  "exceptions": [
+    {
+      "advisory": "GHSA-9jrq-w75r-8gcw",
+      "package": "vite",
+      "version": "5.4.21",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Build-only Svelte 4 lower-bound fixture rejects dev and preview server commands in its Vite config. It does not embed a custom middleware server or pass request URLs to transformIndexHtml."
+    },
+    {
+      "advisory": "GHSA-rq7h-c2jc-7f22",
+      "package": "vite",
+      "version": "5.4.21",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Build-only Svelte 4 lower-bound fixture rejects dev and preview server commands in its Vite config, preventing the vulnerable development-server file-serving path. No server is exposed or deployed."
+    },
+    {
+      "advisory": "GHSA-67mh-4wv8-2f99",
+      "package": "esbuild",
+      "version": "0.21.5",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-crpf-4hrx-3jrp",
+      "package": "svelte",
+      "version": "4.2.20",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-m56q-vw4c-c2cp",
+      "package": "svelte",
+      "version": "4.2.20",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-f7gr-6p89-r883",
+      "package": "svelte",
+      "version": "4.2.20",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-phwv-c562-gvmh",
+      "package": "svelte",
+      "version": "4.2.20",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-4w7w-66w2-5vf9",
+      "package": "vite",
+      "version": "5.4.21",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-rcqx-6q8c-2c42",
+      "package": "svelte",
+      "version": "4.2.20",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-pr6f-5x2q-rwfp",
+      "package": "svelte",
+      "version": "4.2.20",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-v6wh-96g9-6wx3",
+      "package": "vite",
+      "version": "5.4.21",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-fx2h-pf6j-xcff",
+      "package": "vite",
+      "version": "5.4.21",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-g2v6-rqmx-r4w6",
+      "package": "@vue/server-renderer",
+      "version": "3.4.38",
+      "pathPrefix": "compatibility/vue-3.4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Vue 3.4.38 fixture is typechecked only; it is not an SSR server or a deployed application."
+    },
+    {
+      "advisory": "GHSA-698v-4r3x-3vcv",
+      "package": "vite",
+      "version": "5.4.21",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-r825-w8mm-5pxw",
+      "package": "vite",
+      "version": "5.4.21",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-587h-7wmj-h5pm",
+      "package": "vite",
+      "version": "5.4.21",
+      "pathPrefix": "compatibility/svelte-4 > ",
+      "expires": "2026-11-22",
+      "reason": "Pinned lower-bound Svelte 4.2.20 / Vite 5 fixture is built locally for compatibility only; no dev or SSR server is started or deployed."
+    },
+    {
+      "advisory": "GHSA-gcqx-w48m-w2h4",
+      "package": "deepmerge",
+      "version": "4.3.1",
+      "path": "compatibility/svelte-4 > @sveltejs/vite-plugin-svelte@3.1.2 > deepmerge@4.3.1",
+      "expires": "2026-11-22",
+      "reason": "No patched upstream version on 2026-10-30. pnpm patchedDependencies deepmerge@4.3.1 applies patches/deepmerge@4.3.1.patch to source and both CJS/UMD distributions (lock patch hash djkursnltbasccsuuew3zwz2ya). Installed-package exploit and ordinary merge compatibility regressions in scripts/test/dependency-audit-installed.test.mjs cover this exact dependency chain. Audit reports the unchanged upstream version despite the local fix; remove this exception and patch when an upstream fixed version is verified."
+    },
+    {
+      "advisory": "GHSA-gcqx-w48m-w2h4",
+      "package": "deepmerge",
+      "version": "4.3.1",
+      "path": "examples/nuxt-server-export > nuxt@4.6.3 > @nuxt/nitro-server@4.6.3 > nitropack@2.13.5 > @rollup/plugin-node-resolve@16.0.3 > deepmerge@4.3.1",
+      "expires": "2026-11-22",
+      "reason": "No patched upstream version on 2026-10-30. pnpm patchedDependencies deepmerge@4.3.1 applies patches/deepmerge@4.3.1.patch to source and both CJS/UMD distributions (lock patch hash djkursnltbasccsuuew3zwz2ya). Installed-package exploit and ordinary merge compatibility regressions in scripts/test/dependency-audit-installed.test.mjs cover this exact dependency chain. Audit reports the unchanged upstream version despite the local fix; remove this exception and patch when an upstream fixed version is verified. Revalidated on 2026-10-31 after the Nuxt 4.6.3 / Nitro 2.13.5 security update."
+    },
+    {
+      "advisory": "GHSA-gcqx-w48m-w2h4",
+      "package": "deepmerge",
+      "version": "4.3.1",
+      "path": "examples/svelte-grouped > @sveltejs/vite-plugin-svelte@7.3.1 > deepmerge@4.3.1",
+      "expires": "2026-11-22",
+      "reason": "No patched upstream version on 2026-10-30. pnpm patchedDependencies deepmerge@4.3.1 applies patches/deepmerge@4.3.1.patch to source and both CJS/UMD distributions (lock patch hash djkursnltbasccsuuew3zwz2ya). Installed-package exploit and ordinary merge compatibility regressions in scripts/test/dependency-audit-installed.test.mjs cover this exact dependency chain. Audit reports the unchanged upstream version despite the local fix; remove this exception and patch when an upstream fixed version is verified."
+    },
+    {
+      "advisory": "GHSA-gcqx-w48m-w2h4",
+      "package": "deepmerge",
+      "version": "4.3.1",
+      "path": "examples/svelte-server-grouping > @sveltejs/vite-plugin-svelte@7.3.1 > deepmerge@4.3.1",
+      "expires": "2026-11-22",
+      "reason": "No patched upstream version on 2026-10-30. pnpm patchedDependencies deepmerge@4.3.1 applies patches/deepmerge@4.3.1.patch to source and both CJS/UMD distributions (lock patch hash djkursnltbasccsuuew3zwz2ya). Installed-package exploit and ordinary merge compatibility regressions in scripts/test/dependency-audit-installed.test.mjs cover this exact dependency chain. Audit reports the unchanged upstream version despite the local fix; remove this exception and patch when an upstream fixed version is verified."
+    },
+    {
+      "advisory": "GHSA-gcqx-w48m-w2h4",
+      "package": "deepmerge",
+      "version": "4.3.1",
+      "path": "examples/svelte-server-side > @sveltejs/vite-plugin-svelte@7.3.1 > deepmerge@4.3.1",
+      "expires": "2026-11-22",
+      "reason": "No patched upstream version on 2026-10-30. pnpm patchedDependencies deepmerge@4.3.1 applies patches/deepmerge@4.3.1.patch to source and both CJS/UMD distributions (lock patch hash djkursnltbasccsuuew3zwz2ya). Installed-package exploit and ordinary merge compatibility regressions in scripts/test/dependency-audit-installed.test.mjs cover this exact dependency chain. Audit reports the unchanged upstream version despite the local fix; remove this exception and patch when an upstream fixed version is verified."
+    },
+    {
+      "advisory": "GHSA-gcqx-w48m-w2h4",
+      "package": "deepmerge",
+      "version": "4.3.1",
+      "path": "examples/svelte-server-tree > @sveltejs/vite-plugin-svelte@7.3.1 > deepmerge@4.3.1",
+      "expires": "2026-11-22",
+      "reason": "No patched upstream version on 2026-10-30. pnpm patchedDependencies deepmerge@4.3.1 applies patches/deepmerge@4.3.1.patch to source and both CJS/UMD distributions (lock patch hash djkursnltbasccsuuew3zwz2ya). Installed-package exploit and ordinary merge compatibility regressions in scripts/test/dependency-audit-installed.test.mjs cover this exact dependency chain. Audit reports the unchanged upstream version despite the local fix; remove this exception and patch when an upstream fixed version is verified."
+    },
+    {
+      "advisory": "GHSA-gcqx-w48m-w2h4",
+      "package": "deepmerge",
+      "version": "4.3.1",
+      "path": "examples/sveltekit-server-export > @sveltejs/adapter-node@6.0.0 > @sveltejs/kit@3.1.0 > @sveltejs/vite-plugin-svelte@7.3.1 > deepmerge@4.3.1",
+      "expires": "2026-11-22",
+      "reason": "No patched upstream version on 2026-10-30. pnpm patchedDependencies deepmerge@4.3.1 applies patches/deepmerge@4.3.1.patch to source and both CJS/UMD distributions (lock patch hash djkursnltbasccsuuew3zwz2ya). Installed-package exploit and ordinary merge compatibility regressions in scripts/test/dependency-audit-installed.test.mjs cover this exact dependency chain. Audit reports the unchanged upstream version despite the local fix; remove this exception and patch when an upstream fixed version is verified."
+    },
+    {
+      "advisory": "GHSA-gcqx-w48m-w2h4",
+      "package": "deepmerge",
+      "version": "4.3.1",
+      "path": "examples/sveltekit-server-export > @sveltejs/kit@3.1.0 > @sveltejs/vite-plugin-svelte@7.3.1 > deepmerge@4.3.1",
+      "expires": "2026-11-22",
+      "reason": "No patched upstream version on 2026-10-30. pnpm patchedDependencies deepmerge@4.3.1 applies patches/deepmerge@4.3.1.patch to source and both CJS/UMD distributions (lock patch hash djkursnltbasccsuuew3zwz2ya). Installed-package exploit and ordinary merge compatibility regressions in scripts/test/dependency-audit-installed.test.mjs cover this exact dependency chain. Audit reports the unchanged upstream version despite the local fix; remove this exception and patch when an upstream fixed version is verified."
+    },
+    {
+      "advisory": "GHSA-gcqx-w48m-w2h4",
+      "package": "deepmerge",
+      "version": "4.3.1",
+      "path": "examples/sveltekit-server-export > @sveltejs/vite-plugin-svelte@7.3.1 > deepmerge@4.3.1",
+      "expires": "2026-11-22",
+      "reason": "No patched upstream version on 2026-10-30. pnpm patchedDependencies deepmerge@4.3.1 applies patches/deepmerge@4.3.1.patch to source and both CJS/UMD distributions (lock patch hash djkursnltbasccsuuew3zwz2ya). Installed-package exploit and ordinary merge compatibility regressions in scripts/test/dependency-audit-installed.test.mjs cover this exact dependency chain. Audit reports the unchanged upstream version despite the local fix; remove this exception and patch when an upstream fixed version is verified."
+    }
+  ]
+}

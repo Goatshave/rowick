@@ -1,0 +1,175 @@
+name: Release Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Semver release version to publish."
+        required: true
+        default: "0.0.0"
+        type: string
+      npm_tag:
+        description: "npm dist-tag to assign to published packages."
+        required: true
+        default: "latest"
+        type: string
+      repository_url:
+        description: "Public git repository URL to embed in published package metadata."
+        required: true
+        type: string
+      confirm_publish:
+        description: "Type publish-rowick to publish packages to npm."
+        required: true
+        default: "false"
+        type: string
+      ui_smoke_report:
+        description: "Completed .release/ui-smoke-report.json content. Use gh -F ui_smoke_report=@.release/ui-smoke-report.json."
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: release-publish-${{ github.event.inputs.version }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish release packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: npm
+    env:
+      RELEASE_VERSION: ${{ github.event.inputs.version }}
+      NPM_TAG: ${{ github.event.inputs.npm_tag }}
+      REPOSITORY_URL: ${{ github.event.inputs.repository_url }}
+      CONFIRM_PUBLISH: ${{ github.event.inputs.confirm_publish }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Require release version
+        run: |
+          [[ "$RELEASE_VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]] || exit 1
+
+      - name: Require npm dist-tag
+        run: |
+          [[ "$NPM_TAG" =~ ^[A-Za-z][A-Za-z0-9._-]*$ ]] || exit 1
+          [[ ! "$NPM_TAG" =~ ^v?[0-9] ]] || exit 1
+          if [[ "$RELEASE_VERSION" == *-* ]]; then
+            [[ "$RELEASE_VERSION" =~ -(alpha|beta|rc)\.[1-9][0-9]*(\+.*)?$ ]] || exit 1
+            test "$NPM_TAG" = "next"
+          fi
+
+      - name: Require publish confirmation
+        run: test "$CONFIRM_PUBLISH" = "publish-rowick"
+
+      - name: Require public repository URL
+        run: |
+          [[ "$REPOSITORY_URL" =~ ^git\+https://github\.com/[A-Za-z0-9-]+/[A-Za-z0-9._-]+\.git$ ]] || exit 1
+          test "$REPOSITORY_URL" != "git+https://github.com/OWNER/REPO.git"
+
+      - name: Install npm 11 CLI
+        run: |
+          npm install -g npm@11
+          npm --version
+
+      - name: Materialize manual UI evidence
+        env:
+          UI_SMOKE_REPORT: ${{ github.event.inputs.ui_smoke_report }}
+        run: |
+          mkdir -p .release
+          printf '%s' "$UI_SMOKE_REPORT" > .release/ui-smoke-report.json
+
+      - name: Validate manual UI evidence
+        run: pnpm release:ui-smoke-report-check -- --version "$RELEASE_VERSION" --tag "$NPM_TAG" --repository-url "$REPOSITORY_URL" --json
+
+      - name: Trusted publishing setup plan
+        run: pnpm release:trusted-publishing -- --version "$RELEASE_VERSION" --tag "$NPM_TAG" --repository-url "$REPOSITORY_URL" --json
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit dependency security
+        run: pnpm security:audit
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium firefox webkit
+
+      - name: Check
+        run: pnpm check
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Verify public API contract
+        run: pnpm api:check
+
+      - name: Verify framework compatibility
+        run: pnpm compatibility:check
+
+      - name: Test
+        run: pnpm test
+
+      - name: Setup Python for independent XLSX verification
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: packages/export-xlsx/test/requirements.txt
+
+      - name: Install independent spreadsheet reader
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r packages/export-xlsx/test/requirements.txt
+
+      - name: Verify XLSX with independent reader
+        env:
+          ROWICK_XLSX_READER_PYTHON: python
+        run: pnpm test:xlsx:independent
+
+      - name: Build examples
+        run: pnpm build:examples
+
+      - name: Release policy
+        run: pnpm release:policy -- --version "$RELEASE_VERSION" --tag "rowick-v$RELEASE_VERSION" --json
+
+      - name: Release readiness check
+        run: pnpm release:check -- --json
+
+      - name: Release plan
+        run: pnpm release:plan -- --version "$RELEASE_VERSION" --json
+
+      - name: Stage release tarballs
+        run: pnpm release:stage -- --version "$RELEASE_VERSION" --out-dir .release/"$RELEASE_VERSION" --repository-url "$REPOSITORY_URL"
+
+      - name: Publish dry-run
+        run: pnpm release:publish -- --version "$RELEASE_VERSION" --tag "$NPM_TAG" --out-dir .release/"$RELEASE_VERSION" --repository-url "$REPOSITORY_URL" --dry-run --json
+
+      - name: Verify external package consumption
+        run: pnpm release:consumer-smoke -- --version "$RELEASE_VERSION" --tarball-dir .release/"$RELEASE_VERSION" --json
+
+      - name: Verify minimum supported external peers
+        run: pnpm release:consumer-smoke -- --version "$RELEASE_VERSION" --tarball-dir .release/"$RELEASE_VERSION" --compatibility minimum --json
+
+      - name: Quick UI smoke tests
+        run: pnpm e2e:smoke
+
+      - name: End-to-end tests
+        run: pnpm e2e
+
+      - name: Verify Chromium, Firefox, and WebKit integration workflows
+        run: pnpm e2e:integration
+
+      - name: Publish to npm
+        run: pnpm release:publish -- --version "$RELEASE_VERSION" --tag "$NPM_TAG" --out-dir .release/"$RELEASE_VERSION" --repository-url "$REPOSITORY_URL" --provenance --confirm publish-rowick --json

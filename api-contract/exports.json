@@ -1,0 +1,236 @@
+{
+  "schemaVersion": 1,
+  "packages": [
+    {
+      "directory": "core",
+      "name": "@rowick/core",
+      "exports": {
+        ".": {
+          "import": "./dist/index.js",
+          "types": "./dist/index.d.ts"
+        }
+      }
+    },
+    {
+      "directory": "data",
+      "name": "@rowick/data",
+      "exports": {
+        ".": {
+          "import": "./dist/index.js",
+          "types": "./dist/index.d.ts"
+        },
+        "./analytics": {
+          "import": "./dist/analytics.js",
+          "types": "./dist/analytics.d.ts"
+        },
+        "./editing": {
+          "import": "./dist/editing.js",
+          "types": "./dist/editing.d.ts"
+        },
+        "./filtering": {
+          "import": "./dist/filtering.js",
+          "types": "./dist/filtering.d.ts"
+        },
+        "./layout": {
+          "import": "./dist/layout.js",
+          "types": "./dist/layout.d.ts"
+        },
+        "./locale": {
+          "import": "./dist/locale.js",
+          "types": "./dist/locale.d.ts"
+        },
+        "./server-data": {
+          "import": "./dist/datasource-entry.js",
+          "types": "./dist/datasource-entry.d.ts"
+        }
+      }
+    },
+    {
+      "directory": "export-xlsx",
+      "name": "@rowick/export-xlsx",
+      "exports": {
+        ".": {
+          "import": "./dist/index.js",
+          "types": "./dist/index.d.ts"
+        }
+      }
+    },
+    {
+      "directory": "primitives",
+      "name": "@rowick/primitives",
+      "exports": {
+        ".": {
+          "import": "./dist/index.js",
+          "types": "./dist/index.d.ts"
+        }
+      }
+    },
+    {
+      "directory": "react",
+      "name": "@rowick/react",
+      "exports": {
+        ".": {
+          "import": "./dist/index.js",
+          "types": "./dist/index.d.ts"
+        }
+      }
+    },
+    {
+      "directory": "react-ui",
+      "name": "@rowick/react-ui",
+      "exports": {
+        ".": {
+          "import": "./dist/index.js",
+          "types": "./dist/index.d.ts"
+        },
+        "./analytics": {
+          "import": "./dist/analytics.js",
+          "types": "./dist/analytics.d.ts"
+        },
+        "./analytics.css": "./dist/analytics.css",
+        "./css": "./dist/index.css",
+        "./editing": {
+          "import": "./dist/editing.js",
+          "types": "./dist/editing.d.ts"
+        },
+        "./editing.css": "./dist/editing.css",
+        "./filtering": {
+          "import": "./dist/filtering.js",
+          "types": "./dist/filtering.d.ts"
+        },
+        "./filtering.css": "./dist/filtering.css",
+        "./layout": {
+          "import": "./dist/layout.js",
+          "types": "./dist/layout.d.ts"
+        },
+        "./layout.css": "./dist/layout.css",
+        "./server-data": {
+          "import": "./dist/server-data.js",
+          "types": "./dist/server-data.d.ts"
+        },
+        "./virtual": {
+          "import": "./dist/virtual.js",
+          "types": "./dist/virtual.d.ts"
+        },
+        "./virtual.css": "./dist/virtual.css"
+      }
+    },
+    {
+      "directory": "svelte",
+      "name": "@rowick/svelte",
+      "exports": {
+        ".": {
+          "import": "./dist/index.js",
+          "types": "./dist/index.d.ts"
+        }
+      }
+    },
+    {
+      "directory": "svelte-ui",
+      "name": "@rowick/svelte-ui",
+      "exports": {
+        ".": {
+          "import": "./dist/index.js",
+          "types": "./dist/index.d.ts"
+        },
+        "./DataGrid.svelte": {
+          "import": "./dist/DataGrid.svelte",
+          "svelte": "./dist/DataGrid.svelte",
+          "types": "./dist/DataGrid.svelte.d.ts"
+        },
+        "./analytics": {
+          "import": "./dist/analytics.js",
+          "types": "./dist/analytics.d.ts"
+        },
+        "./analytics.css": "./dist/analytics.css",
+        "./css": "./dist/index.css",
+        "./editing": {
+          "import": "./dist/editing.js",
+          "types": "./dist/editing.d.ts"
+        },
+        "./editing.css": "./dist/editing.css",
+        "./filtering": {
+          "import": "./dist/filtering.js",
+          "types": "./dist/filtering.d.ts"
+        },
+        "./filtering.css": "./dist/filtering.css",
+        "./layout": {
+          "import": "./dist/layout.js",
+          "types": "./dist/layout.d.ts"
+        },
+        "./layout.css": "./dist/layout.css",
+        "./server-data": {
+          "import": "./dist/server-data.js",
+          "types": "./dist/server-data.d.ts"
+        }
+      }
+    },
+    {
+      "directory": "theme",
+      "name": "@rowick/theme",
+      "exports": {
+        ".": "./dist/index.css",
+        "./css": "./dist/index.css",
+        "./tokens": {
+          "import": "./dist/tokens.js",
+          "types": "./dist/tokens.d.ts"
+        }
+      }
+    },
+    {
+      "directory": "virtual",
+      "name": "@rowick/virtual",
+      "exports": {
+        ".": {
+          "import": "./dist/index.js",
+          "types": "./dist/index.d.ts"
+        }
+      }
+    },
+    {
+      "directory": "vue",
+      "name": "@rowick/vue",
+      "exports": {
+        ".": {
+          "import": "./dist/index.js",
+          "types": "./dist/index.d.ts"
+        }
+      }
+    },
+    {
+      "directory": "vue-ui",
+      "name": "@rowick/vue-ui",
+      "exports": {
+        ".": {
+          "import": "./dist/index.js",
+          "types": "./dist/index.d.ts"
+        },
+        "./analytics": {
+          "import": "./dist/analytics.js",
+          "types": "./dist/analytics.d.ts"
+        },
+        "./analytics.css": "./dist/analytics.css",
+        "./css": "./dist/index.css",
+        "./editing": {
+          "import": "./dist/editing.js",
+          "types": "./dist/editing.d.ts"
+        },
+        "./editing.css": "./dist/editing.css",
+        "./filtering": {
+          "import": "./dist/filtering.js",
+          "types": "./dist/filtering.d.ts"
+        },
+        "./filtering.css": "./dist/filtering.css",
+        "./layout": {
+          "import": "./dist/layout.js",
+          "types": "./dist/layout.d.ts"
+        },
+        "./layout.css": "./dist/layout.css",
+        "./server-data": {
+          "import": "./dist/server-data.js",
+          "types": "./dist/server-data.d.ts"
+        }
+      }
+    }
+  ]
+}

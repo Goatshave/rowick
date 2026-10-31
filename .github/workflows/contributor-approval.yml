@@ -1,0 +1,43 @@
+name: Contributor Approval
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Open pull request number to recheck against the current approval list."
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: contributor-approval-${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+  cancel-in-progress: false
+
+jobs:
+  approval:
+    name: Contributor approval
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout trusted policy
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: Check contributor approval
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { checkContributorApproval } = require('./scripts/contributor-approval.cjs');
+            const result = await checkContributorApproval({ github, context });
+            core.info(`Contributor approval: ${result.status}`);
+            if (result.status === 'closed') {
+              core.setFailed('First-time contributor approval is required before opening a PR.');
+            }

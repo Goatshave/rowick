@@ -1,0 +1,51 @@
+name: Feature request
+description: Propose a focused capability or API improvement
+title: "[Feature]: "
+labels:
+  - enhancement
+  - needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: Discuss the feature here before implementation. First-time contributors also need contributor approval before opening their first PR, including a draft.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the product or developer problem, not only the desired API.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Framework and performance impact
+      description: Identify affected adapters and expected bundle, rendering, or server-side impact.
+  - type: dropdown
+    id: contribution-intent
+    attributes:
+      label: Would you like to work on this?
+      description: Reporting a problem does not require offering an implementation.
+      options:
+        - Report or discuss only
+        - I would like to work on this (first-time contributors need approval)
+    validations:
+      required: true
+  - type: checkboxes
+    id: approval-policy
+    attributes:
+      label: Contribution policy
+      options:
+        - label: I understand that first-time contributors must wait until their account is approved on the default branch before opening a PR, including a draft. Large changes still need prior discussion after contributor approval.
+          required: true

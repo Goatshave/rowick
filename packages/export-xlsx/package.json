@@ -1,0 +1,17 @@
+{
+  "name": "@rowick/export-xlsx",
+  "version": "0.1.0",
+  "description": "Optional dependency-free typed XLSX exporter for Rowick.",
+  "keywords": ["data-grid", "grid", "table", "xlsx", "export"],
+  "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/export-xlsx#readme",
+  "bugs": { "url": "https://github.com/Goatshave/rowick/issues" },
+  "publishConfig": { "access": "public" },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "files": ["dist", "LICENSE"],
+  "scripts": { "build": "tsup src/index.ts --format esm --dts --clean", "check": "tsc --noEmit", "test": "vitest run", "test:independent": "vitest run --config vitest.independent.config.ts", "lint": "tsc --noEmit" },
+  "dependencies": { "@rowick/data": "workspace:*" },
+  "devDependencies": { "tsup": "^8.3.5", "typescript": "^5.7.2", "vitest": "^4.1.11" }
+}

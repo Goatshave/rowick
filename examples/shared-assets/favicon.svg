@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-labelledby="title description">
+  <title id="title">Rowick</title>
+  <desc id="description">A selected apricot cell moves above three charcoal cells, revealing its outlined position.</desc>
+  <style>
+    .cells { fill: #4B4946; }
+    .position { stroke: #8C877E; }
+    @media (prefers-color-scheme: dark) {
+      .cells { fill: #89837B; }
+      .position { stroke: #B2A496; }
+    }
+  </style>
+  <rect class="position" x="16" y="5" width="12" height="12" rx="3" fill="none" stroke-width="1.8"/>
+  <g class="cells">
+    <rect x="2" y="5" width="12" height="12" rx="3"/>
+    <rect x="2" y="19" width="12" height="12" rx="3"/>
+    <rect x="16" y="19" width="12" height="12" rx="3"/>
+  </g>
+  <rect x="19" y="2" width="12" height="12" rx="3" fill="#E4AF86"/>
+</svg>

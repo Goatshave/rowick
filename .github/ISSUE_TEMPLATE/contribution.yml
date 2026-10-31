@@ -1,0 +1,46 @@
+name: Contribution proposal
+description: Propose focused work or request first-time contributor approval
+title: "[Contribution]: "
+labels:
+  - contribution
+  - needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use a bug report or feature request for those topics. If an issue already
+        covers this work, request approval in that issue instead of opening a duplicate.
+        First-time contributors need maintainer approval and a merged entry in the
+        approved contributor list before opening a PR, including a draft. Already
+        approved contributors can submit routine changes directly; use an issue
+        to discuss larger changes first.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or improvement
+      description: Explain what users or maintainers would gain from the change.
+    validations:
+      required: true
+  - type: textarea
+    id: approach
+    attributes:
+      label: Proposed approach and scope
+      description: Describe the intended change, affected files or packages, and what is outside the scope.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification plan
+      description: Explain how you would check the change, including compatibility impact where relevant.
+    validations:
+      required: true
+  - type: checkboxes
+    id: approval-policy
+    attributes:
+      label: Contribution policy
+      options:
+        - label: I searched existing issues and read CONTRIBUTING.md.
+          required: true
+        - label: I understand that first-time contributors must be approved on the default branch before opening a PR, including a draft. Already approved contributors need prior discussion for large changes, not repeat account approval.
+          required: true

@@ -1,0 +1,67 @@
+[
+  {
+    "name": "bug",
+    "color": "d73a4a",
+    "description": "A reproducible defect in Rowick."
+  },
+  {
+    "name": "enhancement",
+    "color": "a2eeef",
+    "description": "A proposed feature or API improvement."
+  },
+  {
+    "name": "contribution",
+    "color": "5319e7",
+    "description": "A proposal for documentation, tests, refactoring or maintenance."
+  },
+  {
+    "name": "needs-triage",
+    "color": "fbca04",
+    "description": "Awaiting maintainer assessment; this is not PR approval."
+  },
+  {
+    "name": "area:react",
+    "color": "1d76db",
+    "description": "React integration."
+  },
+  {
+    "name": "area:vue",
+    "color": "1d76db",
+    "description": "Vue integration."
+  },
+  {
+    "name": "area:svelte",
+    "color": "1d76db",
+    "description": "Svelte or SvelteKit integration."
+  },
+  {
+    "name": "area:accessibility",
+    "color": "1d76db",
+    "description": "Keyboard and assistive technology access."
+  },
+  {
+    "name": "area:editing",
+    "color": "1d76db",
+    "description": "Cell editing, clipboard or edit history."
+  },
+  {
+    "name": "area:server-data",
+    "color": "1d76db",
+    "description": "Remote data, queries or pagination."
+  },
+  {
+    "name": "area:export",
+    "color": "1d76db",
+    "description": "CSV or XLSX export."
+  },
+  {
+    "name": "area:docs",
+    "color": "1d76db",
+    "description": "User or contributor documentation."
+  },
+  {
+    "name": "triage:manual",
+    "color": "eeeeee",
+    "description": "Maintainer-owned classification; skip automatic content labeling."
+  }
+]

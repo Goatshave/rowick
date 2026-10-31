@@ -1,0 +1,131 @@
+import { describe, expect, it } from "vitest";
+import { get, writable } from "svelte/store";
+import { createGridSelectorStore, createGridStore, type ColumnDef, type GridOptions } from "../src";
+
+interface Person {
+  id: string;
+  name: string;
+  age: number;
+}
+
+const columns: ColumnDef<Person>[] = [
+  { accessorKey: "name", header: "Name" },
+  { accessorKey: "age", header: "Age" },
+];
+
+const data: Person[] = [
+  { id: "1", name: "Mina", age: 32 },
+  { id: "2", name: "Joon", age: 25 },
+];
+
+describe("createGridStore", () => {
+  it("disposes options and active state subscriptions while leaving the core usable", () => {
+    const options = writable<GridOptions<Person>>({ data, columns, getRowId: (row) => row.id });
+    const adapter = createGridStore(options), values: string[] = [];
+    const unsubscribe = adapter.state.subscribe((state) => values.push(state.globalFilter));
+    adapter.grid.setGlobalFilter("before");
+    adapter.dispose(); adapter.dispose();
+    adapter.grid.setGlobalFilter("after");
+    options.update((previous) => ({ ...previous, data: [] }));
+    expect(values).toEqual(["", "before"]);
+    expect(adapter.grid.getOptions().data).toBe(data);
+    unsubscribe();
+    expect(get(adapter.state).globalFilter).toBe("before");
+    expect(adapter.grid.getState().globalFilter).toBe("after");
+  });
+
+  it("validates replaced IDs and recovers through the options store", () => {
+    const options = writable<GridOptions<Person>>({ data, columns, getRowId: (row) => row.id });
+    const adapter = createGridStore(options);
+    try {
+      adapter.grid.toggleRowSelected("2");
+      options.update((previous) => ({ ...previous, data: [data[0]!, data[0]!] }));
+      expect(() => adapter.grid.getCoreRowModel()).toThrow(/duplicate row ID/);
+      options.update((previous) => ({ ...previous, data: [...data].reverse() }));
+      expect(adapter.grid.getSelectedRowModel().rows[0]?.original.id).toBe("2");
+    } finally { adapter.dispose(); }
+  });
+
+  it("keeps special row IDs safe through store options and selection", () => {
+    const ids = ["__proto__", "constructor", "toString", "hasOwnProperty"];
+    const options = writable<GridOptions<Person>>({ data: ids.map((id) => ({ id, name: id, age: 20 })), columns, getRowId: (row) => row.id });
+    const adapter = createGridStore(options);
+    let latest = get(adapter.state);
+    const unsubscribe = adapter.state.subscribe((state) => { latest = state; });
+    try {
+      expect(Object.keys(adapter.grid.getCoreRowModel().rowsById)).toEqual(ids);
+      adapter.grid.toggleRowSelected("__proto__");
+      expect(Object.hasOwn(latest.rowSelection, "__proto__")).toBe(true);
+      expect(adapter.grid.getSelectedRowModel().rows.map((row) => row.id)).toEqual(["__proto__"]);
+      options.update((previous) => ({ ...previous, data: previous.data.filter((row) => row.id !== "constructor") }));
+      expect(adapter.grid.getCoreRowModel().rowsById.constructor).toBeUndefined();
+    } finally { unsubscribe(); adapter.dispose(); }
+  });
+
+  it("syncs grid state into a readable store", () => {
+    const adapter = createGridStore<Person>({
+      data,
+      columns,
+      getRowId: (row) => row.id,
+    });
+
+    adapter.grid.toggleRowSelected("1");
+
+    expect(get(adapter.state).rowSelection).toEqual({ "1": true });
+  });
+
+  it("accepts a Svelte readable options store", () => {
+    const options = writable<GridOptions<Person>>({
+      data,
+      columns,
+      getRowId: (row) => row.id,
+    });
+    const adapter = createGridStore(options);
+
+    expect(adapter.grid.getCoreRowModel().rows.map((row) => row.id)).toEqual(["1", "2"]);
+
+    options.update((previous) => ({
+      ...previous,
+      data: data.slice(0, 1),
+    }));
+
+    expect(adapter.grid.getCoreRowModel().rows.map((row) => row.id)).toEqual(["1"]);
+  });
+
+  it("exposes setOptions for static option sources", () => {
+    const adapter = createGridStore<Person>({
+      data,
+      columns,
+      getRowId: (row) => row.id,
+    });
+
+    adapter.setOptions((previous) => ({
+      ...previous,
+      data: [],
+    }));
+
+    expect(adapter.grid.getCoreRowModel().rows).toHaveLength(0);
+    expect(get(adapter.state).sorting).toEqual([]);
+  });
+
+  it("notifies selector stores only for relevant state until the last subscriber leaves", () => {
+    const adapter = createGridStore<Person>({
+      data,
+      columns,
+      getRowId: (row) => row.id,
+    });
+    const globalFilter = createGridSelectorStore(adapter.grid, (grid) => grid.getState().globalFilter);
+    const values: string[] = [];
+    const unsubscribe = globalFilter.subscribe((value) => values.push(value));
+
+    adapter.grid.setSorting([{ id: "age", desc: true }]);
+    expect(values).toEqual([""]);
+
+    adapter.grid.setGlobalFilter("active");
+    expect(values).toEqual(["", "active"]);
+
+    unsubscribe();
+    adapter.grid.setGlobalFilter("inactive");
+    expect(values).toEqual(["", "active"]);
+  });
+});

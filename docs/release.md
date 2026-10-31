@@ -1,0 +1,387 @@
+# Release Readiness
+
+Maintainer procedures live here. Start with the [verification guide](verification.md)
+for checks and manual UI evidence, or the [maintenance guide](maintaining.md) for
+contribution approval and support policy.
+
+Rowick prepares its first release, `0.1.0`, across twelve public `@rowick/*`
+packages. No Rowick package has been published yet. Dated candidate notes and
+local tarballs are preparation artifacts, not publication records.
+
+The target repository is `Goatshave/rowick`. Repository access, scope ownership,
+GitHub environments/rules, private vulnerability reporting and npm publishing
+configuration must be verified on the actual new repository before publication.
+The public documentation website is deferred and is not a prerequisite for npm
+publication. Repository guides remain available; see
+[repository documentation](maintaining.md#repository-documentation) for the scope.
+Complete the [issue-label setup](maintaining.md#issue-labels) so issue forms can
+apply their automatic labels in the new repository.
+Complete the [contributor approval setup](maintaining.md#new-repository-setup),
+including the Actions event policy and live approved/unapproved PR checks.
+
+npm scopes belong to user accounts or organizations. Public registry lookups
+alone cannot prove that an organization name is available. Create or verify the
+`rowick` npm organization under the maintainer's account before first publication.
+See npm's [organization setup](https://docs.npmjs.com/creating-an-organization/).
+
+Fresh package names also require a first-publication bootstrap. Configure npm
+Trusted Publishers for `Goatshave/rowick`, workflow `release-publish.yml`, environment
+`npm`, and the `npm publish` action after bootstrap, then use the protected OIDC
+workflow for subsequent releases. Publisher settings must identify the actual
+repository, and manual UI evidence must match the reviewed source. See
+[npm trusted publishing](https://docs.npmjs.com/trusted-publishers/).
+
+All publishable package versions align with the workspace root. Candidate code
+and automated checks do not replace the required manual release evidence.
+
+## Publishable Packages
+
+The public package set is:
+
+- `@rowick/core`
+- `@rowick/data`
+- `@rowick/export-xlsx`
+- `@rowick/react`
+- `@rowick/react-ui`
+- `@rowick/vue`
+- `@rowick/vue-ui`
+- `@rowick/svelte`
+- `@rowick/svelte-ui`
+- `@rowick/virtual`
+- `@rowick/primitives`
+- `@rowick/theme`
+
+All 16 example packages under `examples/*`, including the runnable Next.js, Nuxt, and SvelteKit server-export apps, are intentionally private and are not part of the publish set.
+The SvelteKit 3 example requires Node 22.17+ and uses its own TypeScript 6 dependency;
+the root Node engine, library tooling, and public framework peer ranges are unchanged.
+
+## Release Plan
+
+Use the local release plan command before a publish attempt:
+
+```bash
+pnpm release:plan
+pnpm release:plan -- --version 0.1.0
+pnpm release:plan -- --version 0.1.0 --json
+pnpm release:plan -- --version 0.1.0 --markdown
+```
+
+`pnpm release:plan` reads the publishable package manifests, validates the release version, computes a dependency-aware publish order, and reports every internal `workspace:*` dependency range that must be rewritten to the release version before packages are published. Its prepublish gate list includes the GitHub push preflight, first-publish status summary, npm Trusted Publisher setup plan, first-publish preflight, manual UI smoke checklist, manual UI inspection report, quick UI smoke test, and full e2e suite so first-publish preparation keeps the public repository push, commercialization readiness summary, external npm configuration, and browser UI checks visible from the release plan output. When `--version` is supplied explicitly, it must include a non-empty value. Use `--markdown` when publish order, prepublish gates, workspace dependency rewrites, or planning failures need to be pasted into release approval notes or handoff docs as a checklist. Non-JSON planning failure output reports the requested release version, root workspace version, package count, publish order count, prepublish gate count, and workspace dependency rewrite count before the failure list.
+
+## Release Stage
+
+Use the local staging command before a publish attempt:
+
+```bash
+pnpm release:stage
+pnpm release:stage -- --version 0.1.0
+pnpm release:stage -- --version 0.1.0 --json
+pnpm release:stage -- --version 0.1.0 --out-dir .release/0.1.0
+pnpm release:stage -- --version 0.1.0 --out-dir .release/0.1.0 --repository-url git+https://github.com/OWNER/REPO.git
+```
+
+`pnpm release:stage` creates publish-ready package directories in a temporary workspace, copies each package's `dist`, `README.md`, and `LICENSE`, rewrites publishable package versions and internal `workspace:*` dependency ranges to the release version, runs `npm pack` for every publishable package, reads each tarball's `package/package.json`, and verifies that no `workspace:` dependency range remains in the packed artifact. Staging fails before packing when either required metadata file is missing, and the final tarball boundary must contain `package.json`, `README.md`, `LICENSE`, and only exported `dist` artifacts. Passing `--repository-url` also injects publish metadata as `{ type: "git", url, directory }` so each tarball points back to the public monorepo and its package directory. Explicit `--version` and `--repository-url` flags must include non-empty values before staging validation runs. Without `--out-dir`, staged tarballs are removed after validation. With `--out-dir`, an explicit non-empty directory value is required and the output directory must be empty or absent; validation stops before any package is packed so existing artifacts are not overwritten. With `--json`, validation failures are reported in the JSON `failures` field so CI can parse stage blockers without scraping stderr. Non-JSON validation failure output reports the release version, repository URL when supplied, output directory, and package count before the failure list.
+
+## Publish Dry Run
+
+Use the local publish dry-run command after packages have been built:
+
+```bash
+pnpm release:publish-dry-run
+pnpm release:publish-dry-run -- --version 0.1.0
+pnpm release:publish-dry-run -- --version 0.1.0 --tag next
+pnpm release:publish-dry-run -- --version 0.1.0 --repository-url git+https://github.com/OWNER/REPO.git
+pnpm release:publish-dry-run -- --version 0.1.0 --json
+pnpm release:publish-dry-run -- --version 0.1.0 --repository-url git+https://github.com/OWNER/REPO.git --markdown
+```
+
+`pnpm release:publish-dry-run` validates the resolved release version and npm dist-tag before running child release gates, creates publish-ready staged tarballs, reads the dependency-aware publish order from `pnpm release:plan`, and runs `npm publish --dry-run --access public` for every tarball in that order. Passing `--repository-url` stages tarballs with public repository metadata and verifies that every packed manifest has the matching repository URL and package directory before the npm dry-run command executes. Passing `--out-dir` writes to a persistent staged tarball directory that must be empty or absent; existing tarballs are not reused. Explicit `--out-dir` values must be non-empty before release gates run. When release planning or staging validation fails under `--json`, the dry-run output preserves the child `failures` entries and stops before later release gates or npm dry-run commands run, so CI can report the original blocker. Use `--markdown` when the final dry-run publish order, exact npm dry-run commands, or preserved failures need to be pasted into release approval notes. The guarded `pnpm release:publish -- --dry-run --json` entrypoint preserves release-plan and release-stage failures the same way before staging, reading tarballs, or running npm dry-runs. Non-JSON failure output reports the release version, npm tag, repository URL when supplied, output directory, and provenance flag before the failure list. It does not publish to npm. Use this gate to verify the final publish command shape before approving a release candidate.
+
+## External Consumer Smoke
+
+Verify the staged artifacts from outside the monorepo before publishing:
+
+```bash
+pnpm release:consumer-smoke
+pnpm release:consumer-smoke -- --version 0.1.0 --json
+pnpm release:consumer-smoke -- --version 0.1.0 --tarball-dir .release/0.1.0 --json
+```
+
+The command installs all twelve currently public tarballs into a temporary external
+npm project, including `@rowick/data` and `@rowick/export-xlsx`. The expected
+package list is derived from public workspace manifests. It exercises installed
+mutation/transaction and unknown-total pagination contracts, checks ESM imports
+and source maps, typechecks independent strict TypeScript consumers of the new
+feature entry points, and builds the published Svelte components and CSS with
+Vite. It removes its temporary workspace on completion unless `--keep-temp` is
+supplied. Release Verification and Release Publish reuse staged tarballs and
+require this check to pass.
+
+External consumers must install the staged tarballs into an isolated npm project,
+with no workspace links. Run both configured peer matrices:
+
+```bash
+pnpm release:consumer-smoke -- --compatibility current --json
+pnpm release:consumer-smoke -- --compatibility minimum --json
+```
+
+The matrices are pinned in `scripts/release-consumer-smoke.mjs`; `minimum` is the
+configured lower-version compatibility fixture, not proof of every possible peer
+version. Each run stages and installs every public package, checks ESM imports,
+source maps and TypeScript declarations, builds the Svelte consumer, and exercises
+the optional editing/filtering/datasource/layout/analytics/locale/XLSX entries.
+React/Vue SSR checks include prefetched datasource rows and identical initial
+markup after cache restoration, with a new client query identity and no implicit
+fetch. These SSR assertions and the Svelte build do not replace real browser
+hydration or manual platform checks. Export checks generate real XLSX bytes;
+opening the workbook in Excel and Numbers is a separate required manual item.
+
+There is no published Rowick baseline for an upgrade test yet. After a release
+exists, `--upgrade-from <published-version>` installs all public `@rowick/*`
+packages from that exact version before installing a distinct staged candidate.
+The baseline version must exist for every public package. Record the requested
+version, matrix, `upgradeFrom`, completed checks and failures. This fixture does
+not prove migration of a product's saved state or custom adapters. Use
+`--tarball-dir <dir>` to reuse artifacts matching `--version`.
+
+## Actual Publish
+
+Use the guarded publish command only from the protected release workflow:
+
+```bash
+pnpm release:publish -- --version 0.1.0 --dry-run
+pnpm release:publish -- --version 0.1.0 --tag latest --out-dir .release/0.1.0 --repository-url git+https://github.com/OWNER/REPO.git --provenance --confirm publish-rowick
+```
+
+`pnpm release:publish` validates the resolved release version and npm dist-tag, then defaults to dry-run mode unless the exact confirmation phrase `publish-rowick` is supplied. Explicit `--confirm` and `--out-dir` flags must include non-empty values before release gates run. In dry-run mode it creates or reuses staged tarballs, follows the dependency-aware publish order, and runs `npm publish --dry-run --access public`. If `--repository-url` is supplied, dry-run mode also verifies that each packed package manifest has matching repository URL and package-directory metadata, then reports the verified repository URL in JSON, success text, and failure text output. Non-JSON failure output reports the release version, npm tag, repository URL when supplied, output directory, dry-run mode, and provenance flag before the failure list. In actual publish mode it requires both `--repository-url` and `--provenance`, refuses to continue if any packed package manifest is missing repository metadata or mismatches the supplied repository URL, then publishes the tarballs with `npm publish --access public --provenance` in publish order.
+
+For actual npm publishing, use GitHub Actions trusted publishing with OIDC rather than a long-lived npm token. Configure each publishable package on npm with the trusted publisher workflow filename `release-publish.yml`, the protected environment `npm`, and the allowed action `npm publish`. The workflow must run on a GitHub-hosted runner with `id-token: write`. Provenance publishing also requires the workflow `repository_url` input to match the public source repository.
+
+## Trusted Publishing Plan
+
+Use the trusted publishing plan command before configuring npm package settings:
+
+```bash
+pnpm release:trusted-publishing -- --repository-url git+https://github.com/OWNER/REPO.git
+pnpm release:trusted-publishing -- --version 0.1.0 --tag next --repository-url git+https://github.com/OWNER/REPO.git
+pnpm release:trusted-publishing -- --repository-url git+https://github.com/OWNER/REPO.git --json
+pnpm release:trusted-publishing -- --version 0.1.0 --tag latest --repository-url git+https://github.com/OWNER/REPO.git --markdown
+```
+
+`pnpm release:trusted-publishing` parses the public GitHub repository URL, validates the resolved release version and npm dist-tag, rejects placeholder owner/repo values, checks that `.github/workflows/release-publish.yml` has the required OIDC permission, protected `npm` environment, required `version`, `npm_tag`, `repository_url`, and `confirm_publish` inputs, release version validation, npm dist-tag validation, npm 11 installation, guarded `publish-rowick` confirmation, a JSON-mode release readiness check, a trusted-publishing preflight call that passes the resolved workflow `version`, `npm_tag`, and `repository_url` values, repository-verified publish dry-run, quick UI smoke testing before the full e2e suite, repository-verified actual publish command, provenance publish flag, and publish command, then prints the npm Trusted Publisher settings for every publishable package. It also prints the GitHub `npm` environment that must protect the publish job and the Release Publish workflow inputs to use for the first publish, including `version`, `repository_url`, `npm_tag`, and `confirm_publish`. `--version` defaults to the current workspace version and `--tag` defaults to `latest`; the resolved version is validated either way. The Trusted Publisher setup fields default to workflow filename `release-publish.yml`, environment `npm`, and allowed action `npm publish`; if `--workflow`, `--environment`, or `--allowed-action` is supplied explicitly, it must include a non-empty value before the workflow-shape checks run. Without `--json`, workflow-shape failure output still prints the repository URL, workflow filename, environment, allowed action, and Release Publish workflow input bundle before listing failures. Use `--markdown` when configuring npm package pages so the GitHub environment, Release Publish inputs, and per-package Trusted Publisher settings are available as a checkbox handoff. Pass explicit values when preparing a non-default first publish so this output matches the Release Publish workflow inputs exactly. Use the output to configure each package on npm with provider `GitHub Actions`, the canonical GitHub organization/user and repository, workflow filename `release-publish.yml`, environment `npm`, and allowed action `npm publish`.
+
+The root `pnpm test` command also runs `pnpm test:release`, which exercises the trusted publishing preflight against fixture workflows. The release tests verify that a guarded publish workflow produces package Trusted Publisher settings, that explicit Trusted Publisher setup overrides require values, and that missing npm dist-tag validation, confirmation, npm 11, JSON release readiness checks, provenance, confirm flags, or final publish repository URL fail before release-related pull requests merge.
+
+## GitHub Push Preflight
+
+Use the GitHub push preflight before the first real publish, after the release branch has been committed locally and before configuring npm Trusted Publisher settings:
+
+```bash
+pnpm release:github-push-preflight -- --repository-url git+https://github.com/OWNER/REPO.git
+pnpm release:github-push-preflight -- --repository-url git+https://github.com/OWNER/REPO.git --json
+pnpm release:github-push-preflight -- --repository-url git+https://github.com/OWNER/REPO.git --check-auth
+pnpm release:github-push-preflight -- --repository-url git+https://github.com/OWNER/REPO.git --check-auth --markdown
+pnpm release:github-push-preflight -- --remote origin --branch main --repository-url git+https://github.com/OWNER/REPO.git
+```
+
+`pnpm release:github-push-preflight` does not push to GitHub. It verifies that the current directory is a git worktree, resolves the release branch, checks that the configured remote matches the canonical public GitHub repository URL, reports the matched remote transport as `ssh`, `https`, or `unknown`, requires a clean working tree, compares the branch with its remote tracking ref, reports ahead/behind counts, prints the exact `git push -u <remote> <branch>` command, emits `nextVerificationCommands` for the push and follow-up status/preflight/trusted-publishing checks, and returns structured JSON when requested. Pass `--check-auth` when the remote uses `git@github.com:<owner>/<repo>.git`; the preflight then runs `ssh-add -l` to report loaded SSH identity fingerprints, scans public key files under `~/.ssh` with `ssh-keygen -lf` to report public-key candidates, reports the paired private-key `ssh-add <path>` load command when a matching non-`.pub` file exists next to the public key, exposes those commands as the top-level `sshKeyLoadCommands` array, exposes `sshPublicKeyReviewCommands` as safe `cat <public-key>.pub` commands for copying the public key into GitHub, exposes `githubSshKeySettingsUrl` (`https://github.com/settings/keys`) and `githubSshDocsUrl` for account-side key registration, runs `ssh -o BatchMode=yes -T git@github.com`, treats GitHub's successful-authentication/no-shell message as auth-ready, and fails early when no GitHub SSH key is available. SSH-auth failures print loaded-key, public-key candidate, paired private-key load, public-key review, or agent-unavailable diagnostics, key-loading/account-key setup guidance, the direct GitHub SSH auth command to rerun, GitHub's SSH key settings URL, GitHub's SSH setup docs URL, and prepend the relevant `ssh-add` plus SSH auth retry commands to `nextVerificationCommands` before the push and npm setup rerun commands. Use `--markdown` when push readiness, failures, remote transport, SSH agent diagnostics, public-key candidates, explicit SSH key load commands, public-key review commands, GitHub SSH setup links, external actions, and next verification commands need to be pasted into an issue, release note, or handoff. Protected branch settings and repository write permissions are still external actions that only the actual `git push` can prove. After this preflight passes, continue with `pnpm release:first-publish-status -- --repository-url <public-git-url> --check-auth` so local push readiness and first-publish readiness stay summarized before npm Trusted Publisher settings are configured.
+
+## First Publish Status
+
+Use the first-publish status command when you need one local summary of commercialization readiness before the first public release:
+
+```bash
+pnpm release:first-publish-status -- --repository-url git+https://github.com/OWNER/REPO.git
+pnpm release:first-publish-status -- --repository-url git+https://github.com/OWNER/REPO.git --check-auth
+pnpm release:first-publish-next-step -- --repository-url git+https://github.com/OWNER/REPO.git --check-auth
+pnpm release:first-publish-status -- --version 0.1.0 --tag latest --repository-url git+https://github.com/OWNER/REPO.git --json
+pnpm release:first-publish-status -- --version 0.1.0 --tag latest --repository-url git+https://github.com/OWNER/REPO.git --check-auth --markdown
+```
+
+`pnpm release:first-publish-status` runs the GitHub push preflight and first-publish preflight in JSON mode, then reports `githubPushSkipped`, `verificationReady`, `localReady`, `externalReady`, `ready`, `commercializationStatus`, `commercializationProgress`, `commercializationNextStep`, `trustedPublisherSetup`, `releasePublishWorkflowRun`, `externalSetupVerification`, any local blockers, `manualUiSmokeTargets`, the remaining external actions, and `nextVerificationCommands` to rerun after external GitHub/npm setup. It never pushes or publishes. Add `--next-step` or run the `pnpm release:first-publish-next-step` alias to print only the next incomplete commercialization stage, and add `--json` to emit just that stage for automation, including `completedStages`, `remainingStageCount`, `totalStages`, and `percent` so the compact output still states how much commercialization work remains. `commercializationProgress` tracks four stages: local first-publish gates, GitHub push readiness, external GitHub `npm` environment plus npm Trusted Publisher setup, and the manual `release-publish.yml` workflow run. It also exposes `currentStageId`, `nextRequiredActions`, `nextVerificationCommands`, `remainingStageCount`, and `remainingStages` with each stage's `requiredActions` and `verificationCommands`; `commercializationNextStep` lifts the first incomplete stage plus the same progress summary to the top level so release notes can state exactly how much commercialization work remains, what has to happen next, and which command proves the next stage without recalculating from the stage list. When the current stage is external GitHub/npm setup, its required actions include the GitHub environment settings URL, the Trusted Publisher package count, and the first npm package access URL to start from, and the deduplicated `remainingExternalActions` list uses the same detailed actions instead of the older generic setup placeholders. `trustedPublisherSetup` lifts the nested trusted-publishing GitHub environment, GitHub environment settings URL, Release Publish workflow inputs, package count, and per-package npm Trusted Publisher settings to the top-level status JSON; each package entry also includes the npm package URL and npm access-page URL for Trusted Publisher setup. Text output prints the environment, package count, and workflow name as a short setup summary. `releasePublishWorkflowRun` lifts the final manual workflow file, GitHub Actions URL, optional `gh workflow run` command, dispatch inputs, instruction, and workflow UI/e2e gates to the top-level status JSON; text output prints the workflow path, GitHub Actions URL, dispatch command, and confirmation input, while Markdown prints a dedicated protected workflow run checklist. `externalSetupVerification` pairs the rerun command list with success criteria to check after the GitHub push, protected GitHub environment, npm Trusted Publisher settings, and manual workflow setup are complete. `localReady: true` means the local release branch and release gates are ready; `externalReady` intentionally stays `false` because npm Trusted Publisher settings, the protected GitHub `npm` environment, repository visibility/permissions, and the manual Release Publish workflow run must be completed outside the local workspace. Use `--check-auth` to include the GitHub SSH BatchMode auth check in the local readiness summary; when SSH auth is blocked, the status command prepends the nested push preflight's `sshKeyLoadCommands` and SSH auth retry command to its own `nextVerificationCommands` before the release rerun commands. Text and Markdown output both print the React/Vue/Svelte manual UI smoke targets from first-publish preflight with each target's direct `pnpm preview:smoke-ui -- --framework <name> --open` command and default open wait timeout, so release approval can move from notes to the actual browser UI without rediscovering commands. Use `--markdown` when you need a checkbox report for release notes, PRs, or handoff docs; it also prints readiness, commercialization progress, local blockers, GitHub push SSH diagnostics, GitHub SSH key settings and setup docs links, loaded-key fingerprints, public-key candidates, public-key review commands, the trusted-publishing setup summary with GitHub environment settings and npm access-page URLs, the protected Release Publish workflow run checklist, the embedded UI checklist, deduplicated remaining external actions, next verification commands, and external setup verification success criteria in one checklist. Those next commands include `pnpm preview:smoke-ui -- --markdown` for copyable notes, `pnpm preview:smoke-ui -- --report --out-file .release/ui-smoke-report.md` for recording actual manual inspection evidence, and `pnpm preview:smoke-ui -- --open` for opening the React/Vue/Svelte UI targets locally. Release Verification uses `--skip-github-push` only with a synthetic repository URL so CI can verify the first-publish status and first-publish preflight contract without pretending a detached CI checkout proves real push readiness; do not use that skip mode for the final local first-publish readiness decision.
+When debugging SSH from a non-standard environment, `--ssh-command`, `--ssh-add-command`, `--ssh-dir`, and `--ssh-keygen-command` are forwarded to the nested GitHub push preflight so the status summary reports the same loaded-key diagnostics, public-key candidates, and explicit `sshKeyLoadCommands` as `pnpm release:github-push-preflight -- --check-auth`.
+
+## First Publish Preflight
+
+Use the first-publish preflight after packages have been built and after the canonical public repository URL is known:
+
+```bash
+pnpm release:first-publish-preflight -- --repository-url git+https://github.com/OWNER/REPO.git
+pnpm release:first-publish-preflight -- --repository-url git+https://github.com/OWNER/REPO.git --json
+pnpm release:first-publish-preflight -- --version 0.1.0 --tag latest --repository-url git+https://github.com/OWNER/REPO.git
+pnpm release:first-publish-preflight -- --version 0.1.0 --tag latest --repository-url git+https://github.com/OWNER/REPO.git --markdown
+```
+
+`pnpm release:first-publish-preflight` validates the resolved release version and npm dist-tag, then runs the trusted-publishing plan with the same `version`, `repository_url`, and `npm_tag` values, release policy, release readiness check in JSON mode, release plan, repository-metadata staging, and repository-verified publish dry-run in order. It stages temporary tarballs with `repository.url` and `repository.directory`, verifies the final `npm publish --dry-run --access public` command sequence from those tarballs, then reports the remaining external actions: create or confirm the protected GitHub `npm` environment, configure npm Trusted Publisher settings for every publishable package, and manually run `.github/workflows/release-publish.yml` with the generated `version`, `repository_url`, `npm_tag`, `confirm_publish`, and completed `ui_smoke_report` inputs.
+
+The preflight reports the Release Publish workflow UI gates for the manual checklist, Markdown notes, structured JSON report generation, browser-open inspection, structured report validation, quick UI smoke, and full e2e. Its `nextVerificationCommands` preserve the same order for the final local checks to rerun after external setup. Text, Markdown, and JSON output include the React/Vue/Svelte manual smoke targets with URL, build, preview, direct open command, default open wait timeout, smoke assertions, and manual checks. When `--out-dir` is supplied for persistent staged tarball inspection, it must include a non-empty directory value before the preflight runs child release gates. With `--json`, the workflow input bundle is available as `releaseWorkflowInputs`, the UI gate list as `releaseWorkflowGates`, the manual smoke targets as `manualUiSmokeTargets`, and the rerun command list as `nextVerificationCommands`. Use `--markdown` for a copyable verification report with verified steps, failures, Release Publish inputs, UI gates, the manual UI smoke checklist, remaining external actions, and next verification commands. Failed child steps that return JSON preserve their original failure details. Text failures still include workflow inputs, UI gates, targets, and next commands before the failures. The command never publishes packages.
+
+## Version and prerelease policy
+
+Rowick is pre-1.0, but a version such as `0.2.0` is still a stable public release.
+Before 1.0, minor releases are the documented compatibility boundary: patches contain
+compatible fixes, while breaking API changes require a minor release, changelog callout,
+and migration guidance.
+
+Use prereleases only when users should test a version before it becomes stable:
+
+| Stage | Version example | Meaning | npm dist-tag |
+| --- | --- | --- | --- |
+| Alpha | `0.1.0-alpha.1` | Scope and APIs may still change. | `next` |
+| Beta | `0.1.0-beta.1` | Planned features are complete; integration feedback may still cause changes. | `next` |
+| Release candidate | `0.1.0-rc.1` | Only release-blocking fixes are expected. | `next` |
+| Stable | `0.1.0` | Approved public release for the documented compatibility boundary. | `latest` |
+
+Increment the numeric suffix for another build in the same stage. Move forward from
+alpha to beta to release candidate as the release stabilizes; stages may be skipped
+when the change is low risk. Every published version, including a prerelease, gets its
+own dated changelog section and `rowick-v<version>` Git tag. Release commands reject
+undocumented prerelease identifiers and prevent a prerelease from using `latest`.
+
+## Release Policy
+
+Use the local policy command before a release candidate is tagged:
+
+```bash
+pnpm release:policy
+pnpm release:policy -- --version 0.1.0 --tag rowick-v0.1.0
+pnpm release:policy -- --version 0.1.0 --tag rowick-v0.1.0 --json
+```
+
+`pnpm release:policy` verifies that the release version is valid semver, the release tag follows `rowick-v<version>`, every publishable package stays aligned to the root workspace version, and `CHANGELOG.md` contains a dated `## <version> - YYYY-MM-DD` section with release notes. Explicit `--version` and `--tag` flags must include non-empty values before policy checks run. Non-JSON policy failure output reports the release version, supplied tag, expected tag, changelog date when present, and package count before the failure list.
+
+Future release versions must have their changelog section written before this command passes, and explicit `--version` or `--tag` flags must include values.
+
+## Release Verification Workflow
+
+The GitHub Actions workflow at `.github/workflows/release-verify.yml` verifies
+release artifacts and application behavior without publishing packages. It starts
+for every pull request, then checks whether release or API contracts, TypeScript
+configuration, packages, examples, E2E tests, release scripts and documentation,
+Playwright configuration, workspace manifests or either release workflow changed.
+Relevant changes use the workspace version; unrelated changes may skip the
+release jobs. Failed or invalid change detection fails the aggregate gate.
+
+General CI owns type checks, declaration contracts, unit/release tests,
+compatibility, example/documentation builds, package boundaries and browser smoke.
+After change detection, Release Verification runs two jobs in parallel:
+
+- `Artifacts`: package build, release policy/readiness, Trusted Publisher and
+  first-publish status plans, staging, publish dry-run, current/minimum-peer
+  tarball consumers and artifact upload.
+- `Full E2E`: the full application suite and Chromium/Firefox/WebKit integration.
+
+`Release Gate` requires both relevant jobs to succeed. Superseded runs on the same
+ref are cancelled. Manual `workflow_dispatch` runs execute the complete flow with
+an explicit semver version. Artifact checks use a synthetic GitHub URL for planning
+and never treat a detached CI checkout as proof of real push readiness. Require
+both `CI / Required Gate` and `Release Verification / Release Gate` before merging.
+
+## Release Publish Workflow
+
+Dispatch inputs are passed through environment variables, never interpolated
+into shell source. Version, tag, confirmation and the canonical public GitHub
+repository URL are checked before installing publication tooling. Release
+Verification validates its requested or manifest-derived version before writing
+it to `GITHUB_ENV`, rejecting multiline values and shell syntax as data.
+
+The GitHub Actions workflow at `.github/workflows/release-publish.yml` is a manual publish workflow. It requires and validates a semver `version`, validates the npm dist-tag, restricts prereleases to the documented alpha, beta, and release-candidate forms with npm tag `next`, requires the public git `repository_url`, requires the exact confirmation input `publish-rowick`, and requires the completed source-bound JSON report as `ui_smoke_report`; uses the protected `npm` environment; grants `id-token: write` for npm trusted publishing; installs npm CLI 11; materializes and validates the report without the development-only dirty-tree override; reruns the full release gates including API contracts and framework compatibility; stages tarballs with the supplied repository URL; runs a repository-verified publish dry-run and external consumer smoke against those staged tarballs; runs `pnpm e2e:smoke` before the full e2e suite; and only then calls `pnpm release:publish -- --out-dir .release/<version> --repository-url <repository_url> --provenance --confirm publish-rowick`.
+
+After completing the report on the clean reviewed revision, supply the file contents through GitHub CLI:
+
+```bash
+gh workflow run release-publish.yml --repo OWNER/REPO -f version=0.1.0 -f repository_url=git+https://github.com/OWNER/REPO.git -f npm_tag=latest -f confirm_publish=publish-rowick -F ui_smoke_report=@.release/ui-smoke-report.json
+```
+
+The workflow runs `pnpm release:trusted-publishing -- --version <version> --tag <npm_tag> --repository-url <repository_url> --json` as a preflight, but it cannot inspect npm-side package settings. It is not ready to publish until the public repository URL is known and the npm package settings have trusted publishing configured for `release-publish.yml`.
+
+## Release Gates
+
+Run the gates from the workspace root:
+
+```bash
+pnpm check
+pnpm test
+pnpm build
+pnpm api:check
+pnpm compatibility:check
+pnpm build:examples
+pnpm test:release
+pnpm release:policy
+pnpm release:check
+pnpm release:stage
+pnpm release:publish-dry-run
+pnpm release:consumer-smoke
+pnpm release:github-push-preflight -- --repository-url <public-git-url>
+pnpm release:first-publish-status -- --repository-url <public-git-url> --check-auth
+pnpm release:first-publish-preflight -- --repository-url <public-git-url>
+pnpm preview:smoke-ui -- --report --json --out-file .release/ui-smoke-report.json
+pnpm review:smoke-ui
+pnpm release:ui-smoke-report-check
+pnpm e2e:smoke
+pnpm preview:smoke-ui -- --json
+pnpm e2e
+```
+
+`pnpm release:check` should run after `pnpm build` because it verifies the workspace release environment, package manifests, built `dist` directories, npm package README and LICENSE files, and npm pack dry-run output. It checks that the workspace root stays private, pins `packageManager` to `pnpm@9.15.0`, declares `engines.node` as `^22.12.0 || >=24.0.0` to match the GitHub release workflows, and that publishable packages have aligned versions, descriptions, npm keywords for `data-grid`, `grid`, and `table`, package-specific GitHub Pages `homepage` links, public `bugs.url` links, `publishConfig.access: "public"`, MIT license metadata, ESM package type, explicit exports with `.d.ts` `types` conditions for JS exports, `files: ["dist", "LICENSE"]`, explicit `sideEffects`, required scripts, package-level `README.md` and `LICENSE` files, and existing build output. Every package README must identify its exact package name in the title and include an `npm install <package-name>` command so the npm page has a valid entry point. The check also runs `npm pack --dry-run --json` for every publishable package, checks that the dry-run artifact includes `package.json`, `LICENSE`, and `README.md`, includes only `dist/*`, `LICENSE`, `README.md`, and `package.json` package files, and contains every file referenced by the package `exports` map. It also checks that example packages remain private and buildable. Non-JSON readiness failure output reports the root workspace version, root package manager, root Node engine, publishable package count, example package count, and completed npm pack dry-run count before the failure list. With `--json`, the same readiness context is returned as `rootVersion`, `rootPackageManager`, `rootNodeEngine`, `publishablePackageCount`, `examplePackageCount`, and `packDryRunCount` alongside any `failures`.
+
+The full Playwright configuration uses ports 4173-4187 by default, and automated UI smoke uses 4193-4195. For local verification only, `ROWICK_E2E_PORT_OFFSET=<non-negative integer> pnpm e2e` moves every full-suite server, `baseURL`, and explicit framework test URL by the same amount; the same variable with `pnpm e2e:smoke` moves only the automated smoke servers and test URLs. This lets automated smoke run while the canonical manual preview remains active on 4193-4195. Invalid values and offsets that move the highest configured test port above 65535 fail before servers start. Manual preview/report targets and the canonical release workflow remain unchanged because those paths leave the variable unset.
+
+`pnpm preview:smoke-ui` starts the same React, Vue, and Svelte preview targets used by `pnpm e2e:smoke` for manual browser inspection. Add `--open` to wait for the preview servers and open all three stable URLs, or use `--framework React|Vue|Svelte` while iterating. The preview command, Playwright smoke servers, and smoke specs share `scripts/ui-smoke-targets.mjs`, so preview URLs, commands, assertions, state checks, connected product-workflow inputs, header-control policy, and manual checks cannot drift. The first-publish header contract hides repeated direct pin-button groups while retaining each leaf header's action menu; renderer-level direct controls remain covered in the React, Vue, and Svelte server-side examples. The automated workflow searches, commits a valid async edit, sorts the edited column, persists a product-managed column choice across reload, proves sorting/edit data remain transient, and resets preferences. Manual evidence also requires column management to start collapsed, open from `Manage columns`, and report the expected visible count; the 390px regression requires the grid in the first viewport and prevents document overflow when that panel opens. `--list`, `--markdown`, and `--json` expose that contract without starting servers. `--report` creates the manual inspection form; Markdown and JSON reports include the Git revision, workspace version, relevant source file count, dirty state, SHA-256 source fingerprint from `scripts/ui-smoke-source-state.mjs`, and exact workflow contract. Persist human notes at `.release/ui-smoke-report.md` and the approval artifact at `.release/ui-smoke-report.json`. Generate the approval artifact only after the final source commit, because `pnpm release:ui-smoke-report-check` requires an exact clean source match by default. Run `pnpm review:smoke-ui` while inspecting the real targets to record environment, target, functional, and accessibility evidence without hand-editing JSON; the command validates source and target identity before prompting and saves after every item. `.release/` remains ignored local evidence. The shared Release Publish UI command sequence lives in `scripts/release-ui-gates.mjs`.
+
+## Prepublish Notes
+
+The manual report requires **45 functional and 27 accessibility checks** across
+React, Vue and Svelte: 15 functional and 9 accessibility checks per renderer. These
+cover the base grid and all six optional feature routes. Every item starts at
+`todo` and needs evidence from the reviewed source. A base-only report or a report
+for a different source revision cannot approve publication.
+
+| Route | Required manual feature evidence |
+| --- | --- |
+| `/editing` | Consecutive saves and delayed acknowledgements, exact large amounts and leading-zero IDs, invalid raw input, undo/redo, conflict/retry and cancellation |
+| `/filtering` | Nested conditions, date/enum/facet controls, invalid input and reset, error recovery and matching local/server semantics |
+| `/server-data` | Page/offset/cursor and child scopes, unknown counts/ranks, bounded cache, query cancellation, read retry, whole-query exclusions, lost-response bulk retry and persistent restart recovery |
+| `/layout` | Row pin/details/merges/row reorder, scrolling, focus/selection/editor retention and RTL; sorted/grouped/tree/server reorder explicitly rejected. Check column resize/reorder/pin and group/tree expansion on the base route. Use real Excel/Numbers HTML/TSV clipboard exchange with exact multiline/ID/amount values: paste accepts valid cells and skips invalid/read-only cells; cut rejects atomically; verify undo/redo |
+| `/analytics` | Grouping/pivot/aggregate changes, limits/cancellation/error recovery and stale-response rejection; downloaded XLSX opened in both Excel and Numbers with exact text IDs/large amounts, typed dates/numbers, safe formula-like text and no workbook repair warning |
+| `/locale` | The seven declared locales, exact decimal/currency/date input, malformed grouping/unsafe Number/invalid date feedback, raw-draft retention and locale-change blocking throughout composition |
+
+For every renderer, record real macOS and Windows Korean/Japanese OS IME versions
+and candidate selection/cancellation, Enter, Tab/blur, delayed-save and reopen
+behavior at `/editing`, `/layout` and `/locale`, including composition start before
+the first input. Record VoiceOver with Safari and NVDA with a Windows browser
+across all six routes, including focus, validation/loading/retry announcements,
+hierarchy, unknown ranks and RTL operation. Also record physical touch and pen
+devices and keyboard alternatives for base column controls, editing and layout row controls. Repeat actual
+200% browser zoom, 390 CSS px reflow and platform high contrast on the optional
+routes. Put each OS/browser/IME/assistive-technology/device and Excel/Numbers
+version plus observed results in the individual check evidence when the matrix
+exceeds the report's shared environment fields. Synthetic composition, viewport
+or pointer emulation, axe, XLSX signatures and parser round-trips do not satisfy
+these real-platform items; unperformed checks remain `todo` or a documented
+follow-up and block release approval.
+
+The manual inspection report separates functional checks from accessibility checks. Record the reviewer, local-calendar `YYYY-MM-DD` date, OS, browser, exact browser zoom `200%`, exact viewport `390 CSS px`, screen reader, forced-colors/high-contrast setup, and `pass` plus non-empty evidence for every target and check. The guided command accepts `pass`/`p`, `follow-up`/`f`, and `todo`/`t`, requires evidence for pass or follow-up, clears stale evidence when an item returns to todo, supports `--framework`, `--file`, and read-only `--status [--json]`, and writes through an atomic temporary file so interruption leaves the last completed item resumable. Status lists each non-passing check, canonical target URL, and framework resume command; JSON exposes structured `pendingChecks`, and framework-scoped status narrows progress without treating partial completion as whole-report approval. It does not infer or bulk-approve results. `pnpm release:ui-smoke-report-check` requires all current React/Vue/Svelte targets, those exact display settings, the exact generated source identity, a clean relevant source tree, and a review date no more than seven days old. It rejects future dates and source, URL, smoke-contract, check-text, zoom, or viewport drift. It also reserves a 60,000-character and 60,000-byte encoded report budget below GitHub's 65,535-character workflow-dispatch input limit. In Release Publish, `--version`, `--tag`, and `--repository-url` are supplied together so the checker measures the exact complete input object and rejects either character or UTF-8 byte overflow before browser or publish work starts. Use `--max-age-days <days>` to make the freshness policy stricter. `--allow-dirty` is for development-time review/checker tests only and must not be used for release approval. First-publish plan/preflight/status output carries template generation, guided review, and validation commands in order. An unfilled, oversized, source-stale, or display-setting-stale template is not release evidence. See GitHub's [workflow dispatch input limits](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onworkflow_dispatchinputs) and [`gh workflow run -F` file input](https://cli.github.com/manual/gh_workflow_run).
+
+`pnpm e2e:smoke` first rebuilds all public packages so browser evidence cannot use stale shared primitives. It then runs Chromium accessibility-tree checks for the product-specific grid name, primary header, focused-cell value, and logical row/column count attributes; `@axe-core/playwright` WCAG A/AA scans; an actual CSV download with a non-empty Rowick filename; a product-header policy check that direct pinning groups are absent while the action menu remains visible; contrast-aware light/dark product-token inheritance checks for accent, focus, and radius values on the semantic grid; keyboard-only toolbar focus order, Tab entry into the grid root, header-menu open/close and trigger-focus return, grid movement, and edit-cancel cell-focus return with computed two-pixel visible-focus indicators; 390px document-reflow, expanded column-manager command-boundary, and internal-grid-scroll assertions; a dedicated 640x450 CSS pixel/DPR 2 context that approximates 200% reflow and verifies initial grid visibility, product-control boundaries and non-overlap, column-panel expansion, and internal horizontal scrolling; and forced-colors focus, selection, disabled-control, loading, error, retry, and invalid-edit checks against the React, Vue, and Svelte reference pages. The product-header policy, product-theme token map, zoom-equivalent viewport, state, and accessibility-tree target contract are included in preview, report, preflight, and status metadata, and reduced motion must stop spinner animation. Record actual browser zoom, 390 CSS pixel layout, keyboard-only operation, screen-reader output and platform high-contrast behavior for the current source separately.
+
+- Keep `examples/*` private.
+- Keep package versions aligned with the root workspace version.
+- Publish documented prereleases (`alpha.N`, `beta.N`, or `rc.N`) with npm tag `next`;
+  publish stable versions without a suffix using npm tag `latest`.
+- Keep internal workspace dependencies as `workspace:*` until the publish tool rewrites them for the published artifacts.
+- Use `pnpm release:policy -- --version <version> --tag rowick-v<version>` to require a matching changelog entry and tag name before release approval.
+- Use `pnpm release:plan -- --version <version>` to review the publish order and internal dependency rewrites before tagging or publishing.
+- Use `pnpm release:stage -- --version <version>` to verify publish-ready tarballs with rewritten internal dependency ranges before publishing.
+- Use `pnpm release:publish-dry-run -- --version <version>` to verify the final `npm publish --dry-run --access public` command sequence before approval; add `--markdown` when the dry-run command list needs to be pasted into release notes.
+- Use `pnpm release:github-push-preflight -- --repository-url <public-git-url>` to verify the local release branch, remote URL, clean worktree, and ahead/behind counts before pushing to GitHub; add `--check-auth --markdown` when SSH diagnostics and next actions need to be shared.
+- Use `pnpm release:first-publish-status -- --repository-url <public-git-url> --check-auth` to summarize local readiness, external publish blockers, and the remaining commercialization actions without pushing or publishing.
+- Use `pnpm release:first-publish-preflight -- --repository-url <public-git-url>` to run the trusted-publishing, policy, check, plan, repository staging, and repository-verified publish dry-run gates together before the first actual publish.
+- Use the Release Verification workflow before a release candidate is approved; it does not publish to npm.
+- Supply the public git repository URL when staging or publishing provenance-enabled tarballs so packed manifests include matching `repository.url` and `repository.directory` metadata.
+- Keep `--provenance` on every actual `pnpm release:publish` invocation; the command refuses actual publish mode without it.
+- Use `pnpm release:trusted-publishing -- --repository-url <public-git-url>` to generate and validate the npm Trusted Publisher settings for every publishable package.
+- Complete the first-publication bootstrap for each fresh package, then configure npm trusted publishing and use the protected Release Publish workflow with OIDC `id-token: write`. The protected workflow remains blocked until npm-side setup is complete.
+- Do not publish `examples/shared-server` or the Next.js/Nuxt/SvelteKit server-export apps; they are private framework integration, recipe, and browser-test workspaces.
+- Treat `npm pack --dry-run --json` failures as release blockers; they mean the published artifact would be incomplete or would include unintended source files.
+- Update `CHANGELOG.md` and the relevant support or migration guides when release readiness or supported behavior changes.

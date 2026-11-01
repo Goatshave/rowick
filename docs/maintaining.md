@@ -16,6 +16,14 @@ version policy in [API stability](api-stability.md), migration guidance and a
 release note. A private example dependency update does not silently alter public
 peer support.
 
+`compatibility/versions.json` records the reviewed exact versions for each
+minimum-version fixture. `pnpm compatibility:versions` checks every external
+dependency against its manifest declaration, pnpm lockfile specifier/resolution
+and the package actually installed from that fixture. `pnpm compatibility:check`
+runs this guard before building, and release artifact verification runs it too.
+Keep this policy separate from automatic example updates. Changing a fixture's
+minimum version requires reviewing the policy and support contract together.
+
 ## Issue labels
 
 Issue forms apply labels when an issue is created:

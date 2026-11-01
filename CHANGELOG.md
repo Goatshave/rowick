@@ -4,6 +4,13 @@ Notable Rowick changes are recorded here before tagging or publication.
 
 ## Unreleased
 
+- Verify minimum-version compatibility fixtures against reviewed manifest,
+  lockfile and installed dependency versions before compatibility and release checks.
+- Update maintained example tooling to Svelte 5.57.3 and Vite 8.3.5 while
+  retaining the reviewed React 18, Vue 3.4 and Svelte 4 compatibility fixtures.
+- Release outgoing React locale forms after the replacement commits, preventing
+  a late subscription to an already disposed form during a fast locale change.
+
 The initial `0.1.0` release is in preparation. Publication is pending.
 
 - Preserve protected column positions when restoring partial or equivalent saved

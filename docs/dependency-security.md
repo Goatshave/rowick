@@ -98,3 +98,26 @@ Weekly dependency update groups are configured in `.github/dependabot.yml`.
 Enable alerts and security updates when completing the
 [repository setup](maintaining.md#new-repository-setup). Compatibility fixture
 pins are excluded from automatic version updates and require explicit review.
+The shared root lockfile can still be rewritten by security updates despite the
+manifest exclusions. Run `pnpm compatibility:versions` after every lockfile change;
+CI rejects resolutions that silently replace a reviewed minimum-version fixture.
+Update maintained examples with workspace filters rather than applying a recursive
+security upgrade to pinned compatibility fixtures.
+
+### Pinned fixtures and security update failures
+
+An automatic transitive update can fail with `NoChangeError` when its parent is
+intentionally pinned, such as `@vue/server-renderer` under the typecheck-only
+Vue 3.4 fixture. Do not raise the fixture's framework version to clear that job.
+First run the policy audit and confirm that every finding for the alert's package
+and advisory matches an unexpired exact-version fixture exception. A shared root
+lockfile path alone is not enough evidence to dismiss an alert.
+
+If the vulnerable code is unused in the reviewed fixture, a maintainer may dismiss
+that individual GitHub alert as `not_used`, recording the advisory, exact version,
+fixture path, usage restriction and exception expiry in its dismissal comment.
+This triages the fixture alert; it does not install an upstream security fix or
+turn a failed updater run into a successful one. The dated policy audit remains
+mandatory, so a new dependency path or expiry still blocks CI. Reopen and reassess
+the alert if usage changes or the exception expires. Do not add package-wide
+ignores or dismiss unrelated findings in the shared lockfile.

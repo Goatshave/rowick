@@ -15,7 +15,8 @@ Notable Rowick changes are recorded here before tagging or publication.
 - Release outgoing React locale forms after the replacement commits, preventing
   a late subscription to an already disposed form during a fast locale change.
 
-The initial `0.1.0` release is in preparation. Publication is pending.
+Publication records are available in
+[GitHub Releases](https://github.com/Goatshave/rowick/releases).
 
 - Preserve protected column positions when restoring partial or equivalent saved
   orders, and enforce export header budgets when the data set is empty.

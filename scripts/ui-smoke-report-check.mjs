@@ -4,6 +4,7 @@ import process from "node:process";
 import { isDeepStrictEqual } from "node:util";
 import { getUiSmokeSourceState } from "./ui-smoke-source-state.mjs";
 import { uiSmokeTargets } from "./ui-smoke-targets.mjs";
+import { createHash } from "node:crypto";
 
 const defaultReportFile = ".release/ui-smoke-report.json";
 const defaultMaxAgeDays = 7;
@@ -54,6 +55,8 @@ const workflowDispatchPayload = reportText === undefined || args.releaseContext 
       npm_tag: args.releaseContext.tag,
       confirm_publish: "publish-rowick",
       ui_smoke_report: reportText,
+      bootstrap_first_publish: "true",
+      initial_release_exceptions: args.allowInitialReleaseExceptions ? "true" : "false",
     }));
 if (workflowDispatchPayload !== undefined) {
   if (
@@ -86,13 +89,20 @@ const result = {
   targetCount: uiSmokeTargets.length,
   functionalCheckCount: uiSmokeTargets.reduce((count, target) => count + target.manualChecks.length, 0),
   accessibilityCheckCount: uiSmokeTargets.reduce((count, target) => count + target.accessibilityChecks.length, 0),
+  initialReleaseExceptionApplied: failures.length === 0 && Boolean(report?.initialReleaseException),
+  notTestedCheckCount: (Array.isArray(report?.targets) ? report.targets : []).flatMap(target => [
+    ...(Array.isArray(target?.manualChecks) ? target.manualChecks : []),
+    ...(Array.isArray(target?.accessibilityChecks) ? target.accessibilityChecks : []),
+  ]).filter(check => check?.result === "not-tested").length,
   failures,
 };
 
 if (args.json) {
   console.log(JSON.stringify(result, null, 2));
 } else if (result.ready) {
-  console.log(
+  if (result.initialReleaseExceptionApplied) {
+    console.log(`Initial 0.1.0 release evidence accepted with ${result.notTestedCheckCount} manual checks explicitly not tested; see docs/initial-release-validation.md.`);
+  } else console.log(
     `UI smoke report check passed for ${result.targetCount} targets, ${result.functionalCheckCount} functional checks, and ${result.accessibilityCheckCount} accessibility checks.`,
   );
   console.log(`Report file: ${result.reportFile}`);
@@ -137,8 +147,35 @@ function validateReport(value, expectedSource, options, output) {
   }
 
   validateSource(value.source, expectedSource, options, output);
-  validateReviewEnvironment(value.reviewEnvironment, options.maxAgeDays, output);
-  validateTargets(value.targets, output);
+  const initialException = validateInitialException(value, expectedSource, options, output);
+  validateReviewEnvironment(value.reviewEnvironment, options.maxAgeDays, output, initialException);
+  validateTargets(value.targets, output, initialException);
+}
+
+function validateInitialException(report, source, options, output) {
+  const exception = report.initialReleaseException;
+  if (exception === undefined) return false;
+  const start = output.length;
+  const context = options.releaseContext;
+  if (!options.allowInitialReleaseExceptions || source.workspaceVersion !== "0.1.0" ||
+      context?.version !== "0.1.0" || context?.tag !== "latest" ||
+      context?.repositoryUrl !== "git+https://github.com/Goatshave/rowick.git") {
+    output.push("initial release exceptions require explicit opt-in and canonical 0.1.0/latest release context");
+  }
+  if (!isRecord(exception) || exception.version !== "0.1.0" || exception.approvedBy !== "fabric0de" ||
+      exception.approvedOn !== report.reviewEnvironment?.date || !isNonEmptyString(exception.reason) ||
+      exception.policy !== "docs/initial-release-validation.md") {
+    output.push("initial release exception must record the release owner, date, reason and public 0.1.0 policy");
+  }
+  try {
+    const digest = createHash("sha256").update(readFileSync("docs/initial-release-validation.md")).digest("hex");
+    if (exception?.policySha256 !== digest) output.push("initial release exception policy hash must match the public committed policy");
+  } catch { output.push("initial release exception public policy must exist"); }
+  if (!Array.isArray(report.observations) || report.observations.length === 0 ||
+      report.observations.some(item => !isRecord(item) || !isNonEmptyString(item.scope) || !isNonEmptyString(item.evidence))) {
+    output.push("initial release evidence must preserve concrete observed results separately from untested checks");
+  }
+  return output.length === start;
 }
 
 function validateSource(value, expected, options, output) {
@@ -161,7 +198,7 @@ function validateSource(value, expected, options, output) {
   }
 }
 
-function validateReviewEnvironment(value, maxAgeDays, output) {
+function validateReviewEnvironment(value, maxAgeDays, output, initialException = false) {
   const fields = [
     ["reviewer", "reviewer"],
     ["date", "date"],
@@ -184,10 +221,10 @@ function validateReviewEnvironment(value, maxAgeDays, output) {
     }
   }
 
-  if (isNonEmptyString(value.browserZoom) && value.browserZoom.trim() !== "200%") {
+  if (isNonEmptyString(value.browserZoom) && value.browserZoom.trim() !== "200%" && !(initialException && value.browserZoom === "not-tested")) {
     output.push('reviewEnvironment.browserZoom must equal "200%"');
   }
-  if (isNonEmptyString(value.viewport) && value.viewport.trim() !== "390 CSS px") {
+  if (isNonEmptyString(value.viewport) && value.viewport.trim() !== "390 CSS px" && !(initialException && value.viewport === "not-tested")) {
     output.push('reviewEnvironment.viewport must equal "390 CSS px"');
   }
 
@@ -207,7 +244,7 @@ function validateReviewEnvironment(value, maxAgeDays, output) {
   }
 }
 
-function validateTargets(value, output) {
+function validateTargets(value, output, initialException = false) {
   if (!Array.isArray(value)) {
     output.push("targets must be an array");
     return;
@@ -237,11 +274,11 @@ function validateTargets(value, output) {
       output.push(`${expected.framework}: target is required`);
       continue;
     }
-    validateTarget(matches[0], expected, output);
+    validateTarget(matches[0], expected, output, initialException);
   }
 }
 
-function validateTarget(value, expected, output) {
+function validateTarget(value, expected, output, initialException = false) {
   const prefix = expected.framework;
 
   if (value.url !== expected.url) {
@@ -257,12 +294,16 @@ function validateTarget(value, expected, output) {
     output.push(`${prefix}: workflowCheck must match the current smoke target contract`);
   }
 
-  validatePassedEvidence(value, prefix, output);
-  validateCheckCollection(value.manualChecks, expected.manualChecks, `${prefix} functional checks`, output);
-  validateCheckCollection(value.accessibilityChecks, expected.accessibilityChecks, `${prefix} accessibility checks`, output);
+  validatePassedEvidence(value, prefix, output, initialException);
+  validateCheckCollection(value.manualChecks, expected.manualChecks, `${prefix} functional checks`, output, initialException);
+  validateCheckCollection(value.accessibilityChecks, expected.accessibilityChecks, `${prefix} accessibility checks`, output, initialException);
+  if (initialException && value.result === "pass" && [value.manualChecks, value.accessibilityChecks]
+    .some(items => Array.isArray(items) && items.some(item => item?.result !== "pass"))) {
+    output.push(`${prefix}: a partially tested target cannot be recorded as pass`);
+  }
 }
 
-function validateCheckCollection(value, expectedChecks, prefix, output) {
+function validateCheckCollection(value, expectedChecks, prefix, output, initialException = false) {
   if (!Array.isArray(value)) {
     output.push(`${prefix}: checks must be an array`);
     return;
@@ -282,12 +323,12 @@ function validateCheckCollection(value, expectedChecks, prefix, output) {
     if (item.check !== expectedChecks[index]) {
       output.push(`${itemPrefix}: check text must match the current UI smoke contract`);
     }
-    validatePassedEvidence(item, itemPrefix, output);
+    validatePassedEvidence(item, itemPrefix, output, initialException);
   }
 }
 
-function validatePassedEvidence(value, prefix, output) {
-  if (value.result !== "pass") {
+function validatePassedEvidence(value, prefix, output, initialException = false) {
+  if (value.result !== "pass" && !(initialException && value.result === "not-tested")) {
     output.push(`${prefix}: result must be "pass"; got ${JSON.stringify(value.result)}`);
   }
   if (!isNonEmptyString(value.evidence)) {
@@ -304,6 +345,7 @@ function parseArgs(argv) {
     repositoryUrl: undefined,
     tag: undefined,
     version: undefined,
+    allowInitialReleaseExceptions: process.env.ROWICK_INITIAL_RELEASE_EXCEPTIONS === "true",
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -313,6 +355,8 @@ function parseArgs(argv) {
       continue;
     } else if (arg === "--allow-dirty") {
       parsed.allowDirty = true;
+    } else if (arg === "--allow-initial-release-exceptions") {
+      parsed.allowInitialReleaseExceptions = true;
     } else if (arg === "--file") {
       parsed.file = requireArgValue(argv, index, "--file");
       index += 1;

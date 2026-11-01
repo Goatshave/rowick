@@ -117,6 +117,10 @@ jobs:
     name: UI Integration
     uses: ./.github/workflows/browser-integration.yml
 
+  windows-smoke:
+    name: Windows Smoke
+    uses: ./.github/workflows/windows-smoke.yml
+
   required-gate:
     name: Required Gate
     runs-on: ubuntu-latest
@@ -125,6 +129,7 @@ jobs:
       - quality
       - browser-smoke
       - browser-integration
+      - windows-smoke
 
     steps:
       - name: Verify required CI jobs
@@ -132,7 +137,9 @@ jobs:
           QUALITY_RESULT: ${{ needs.quality.result }}
           UI_SMOKE_RESULT: ${{ needs.browser-smoke.result }}
           UI_INTEGRATION_RESULT: ${{ needs.browser-integration.result }}
+          WINDOWS_SMOKE_RESULT: ${{ needs.windows-smoke.result }}
         run: |
           test "$QUALITY_RESULT" = "success"
           test "$UI_SMOKE_RESULT" = "success"
           test "$UI_INTEGRATION_RESULT" = "success"
+          test "$WINDOWS_SMOKE_RESULT" = "success"

@@ -51,8 +51,10 @@ jobs:
               .github/workflows/release-publish.yml|\
               .github/workflows/release-verify.yml|\
               .github/workflows/browser-integration.yml|\
+              .github/workflows/windows-smoke.yml|\
               docs/api-stability.md|\
               docs/release.md|\
+              docs/initial-release-validation.md|\
               e2e/*|\
               examples/*|\
               package.json|\

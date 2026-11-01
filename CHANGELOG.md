@@ -4,6 +4,10 @@ Notable Rowick changes are recorded here before tagging or publication.
 
 ## Unreleased
 
+- Require Windows Chromium UI and remote-editing smoke tests in CI and before
+  publication. Document the owner-approved first-release manual validation scope,
+  preserving untested checks explicitly without approving later releases.
+
 - Verify minimum-version compatibility fixtures against reviewed manifest,
   lockfile and installed dependency versions before compatibility and release checks.
 - Update maintained example tooling to Svelte 5.57.3 and Vite 8.3.5 while

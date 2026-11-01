@@ -27,6 +27,11 @@ on:
         required: false
         default: false
         type: boolean
+      initial_release_exceptions:
+        description: "Accept explicitly recorded untested manual checks for 0.1.0 only, per docs/initial-release-validation.md."
+        required: false
+        default: false
+        type: boolean
       ui_smoke_report:
         description: "Completed .release/ui-smoke-report.json content. Use gh -F ui_smoke_report=@.release/ui-smoke-report.json."
         required: true
@@ -41,11 +46,16 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  windows-smoke:
+    name: Windows Smoke
+    uses: ./.github/workflows/windows-smoke.yml
+
   publish:
     name: Publish release packages
     runs-on: ubuntu-latest
     timeout-minutes: 45
     environment: npm
+    needs: windows-smoke
     env:
       RELEASE_VERSION: ${{ github.event.inputs.version }}
       NPM_TAG: ${{ github.event.inputs.npm_tag }}
@@ -102,6 +112,8 @@ jobs:
           printf '%s' "$UI_SMOKE_REPORT" > .release/ui-smoke-report.json
 
       - name: Validate manual UI evidence
+        env:
+          ROWICK_INITIAL_RELEASE_EXCEPTIONS: ${{ github.event.inputs.initial_release_exceptions }}
         run: pnpm release:ui-smoke-report-check -- --version "$RELEASE_VERSION" --tag "$NPM_TAG" --repository-url "$REPOSITORY_URL" --json
 
       - name: Trusted publishing setup plan

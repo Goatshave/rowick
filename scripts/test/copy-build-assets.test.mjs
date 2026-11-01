@@ -3,6 +3,7 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, write
 import { tmpdir } from 'node:os';
 import { basename, join } from 'node:path';
 import test from 'node:test';
+import { spawnSync } from 'node:child_process';
 import { copyBuildAssets } from '../copy-build-assets.mjs';
 
 function exportTargets(value) {
@@ -40,4 +41,21 @@ test('unknown asset sets are rejected before touching the filesystem', () => {
     assert.throws(() => copyBuildAssets('../unexpected', root), /Unknown package/);
     assert.equal(existsSync(join(root, 'unexpected')), false);
   } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
+test('recursive package filters use cross-platform quoting and fail on empty selections', () => {
+  const manifest = JSON.parse(readFileSync('package.json', 'utf8'));
+  for (const name of ['build', 'check', 'test', 'lint', 'build:examples', 'compatibility:check']) {
+    assert.ok(manifest.scripts[name].includes('--fail-if-no-match'), name);
+    assert.doesNotMatch(manifest.scripts[name], /'\.\//, name);
+    assert.match(manifest.scripts[name], /--filter "\.\/(packages|examples|compatibility)\/\*"/, name);
+  }
+  const command = process.env.npm_execpath;
+  const args = ['-r', '--fail-if-no-match', '--filter', '@rowick/nonexistent-build-selection', 'list', '--depth', '-1'];
+  const run = command
+    ? spawnSync(process.execPath, [command, ...args], { encoding: 'utf8' })
+    : spawnSync('pnpm', args, { encoding: 'utf8', shell: process.platform === 'win32' });
+  assert.equal(run.error, undefined);
+  assert.notEqual(run.status, 0);
+  assert.match(run.stdout + run.stderr, /No projects matched/);
 });

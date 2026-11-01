@@ -4,6 +4,9 @@ Notable Rowick changes are recorded here before tagging or publication.
 
 ## Unreleased
 
+- Verify minimum-version compatibility fixtures against reviewed manifest,
+  lockfile and installed dependency versions before compatibility and release checks.
+
 The initial `0.1.0` release is in preparation. Publication is pending.
 
 - Preserve protected column positions when restoring partial or equivalent saved

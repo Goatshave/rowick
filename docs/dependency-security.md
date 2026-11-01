@@ -98,3 +98,8 @@ Weekly dependency update groups are configured in `.github/dependabot.yml`.
 Enable alerts and security updates when completing the
 [repository setup](maintaining.md#new-repository-setup). Compatibility fixture
 pins are excluded from automatic version updates and require explicit review.
+The shared root lockfile can still be rewritten by security updates despite the
+manifest exclusions. Run `pnpm compatibility:versions` after every lockfile change;
+CI rejects resolutions that silently replace a reviewed minimum-version fixture.
+Update maintained examples with workspace filters rather than applying a recursive
+security upgrade to pinned compatibility fixtures.

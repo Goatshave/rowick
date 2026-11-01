@@ -31,6 +31,38 @@ workflow for subsequent releases. Publisher settings must identify the actual
 repository, and manual UI evidence must match the reviewed source. See
 [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/).
 
+For the initial `0.1.0` registration, the same protected Release Publish workflow
+accepts the optional boolean `bootstrap_first_publish` input (default `false`).
+When enabled, it requires the canonical `Goatshave/rowick` `main` branch,
+version `0.1.0`, tag `latest`, and all twelve package names to return an explicit
+404 from the public npm registry. Existing packages, partial publication,
+authentication errors, rate limits and registry failures stop the bootstrap.
+The check runs again immediately before publication. All normal release gates,
+manual evidence, environment approval and provenance requirements still apply.
+
+Create a granular npm token with the shortest practical expiry (one day),
+**Packages and scopes** read/write (publish and stage) permission limited to the
+`@rowick` scope, and **Bypass 2FA** for non-interactive publishing. Organization
+administration permission is unnecessary and does not grant package publishing.
+Creating this credential and completing its 2FA challenge requires the account
+owner. Store it directly as `NPM_BOOTSTRAP_TOKEN` in the repository's protected
+`npm` environment; never paste it into an issue, PR, workflow input or chat.
+For example, run `gh secret set NPM_BOOTSTRAP_TOKEN --repo Goatshave/rowick --env npm`
+and enter the value at its hidden prompt. See npm's
+[granular token instructions](https://docs.npmjs.com/creating-and-viewing-access-tokens/).
+
+Only the final publish step receives the token, and only when bootstrap is
+explicitly enabled. Its temporary npm configuration has owner-only permissions,
+contains an environment reference rather than the credential, and is deleted
+on success or failure. The default path continues to use OIDC without the token.
+After verifying all twelve `0.1.0` packages and their provenance, revoke the
+bootstrap token on npm and delete the GitHub environment secret. Configure each
+package's Trusted Publisher when ready to use it: newly created configurations
+must complete their first successful publish within npm's two-day binding window.
+If publication was partial, inspect the recorded results and registry state before
+choosing recovery; do not republish successful immutable versions or bypass the
+all-unregistered bootstrap guard.
+
 All publishable package versions align with the workspace root. Candidate code
 and automated checks do not replace the required manual release evidence.
 

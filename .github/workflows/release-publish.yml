@@ -22,6 +22,11 @@ on:
         required: true
         default: "false"
         type: string
+      bootstrap_first_publish:
+        description: "Use the protected npm environment's temporary NPM_BOOTSTRAP_TOKEN for first registration of 0.1.0 only."
+        required: false
+        default: false
+        type: boolean
       ui_smoke_report:
         description: "Completed .release/ui-smoke-report.json content. Use gh -F ui_smoke_report=@.release/ui-smoke-report.json."
         required: true
@@ -46,6 +51,7 @@ jobs:
       NPM_TAG: ${{ github.event.inputs.npm_tag }}
       REPOSITORY_URL: ${{ github.event.inputs.repository_url }}
       CONFIRM_PUBLISH: ${{ github.event.inputs.confirm_publish }}
+      BOOTSTRAP_FIRST_PUBLISH: ${{ github.event.inputs.bootstrap_first_publish }}
 
     steps:
       - name: Checkout
@@ -79,6 +85,9 @@ jobs:
         run: |
           [[ "$REPOSITORY_URL" =~ ^git\+https://github\.com/[A-Za-z0-9-]+/[A-Za-z0-9._-]+\.git$ ]] || exit 1
           test "$REPOSITORY_URL" != "git+https://github.com/OWNER/REPO.git"
+
+      - name: Check first publication target
+        run: node scripts/release-bootstrap-auth.mjs
 
       - name: Install npm 11 CLI
         run: |
@@ -172,4 +181,16 @@ jobs:
         run: pnpm e2e:integration
 
       - name: Publish to npm
-        run: pnpm release:publish -- --version "$RELEASE_VERSION" --tag "$NPM_TAG" --out-dir .release/"$RELEASE_VERSION" --repository-url "$REPOSITORY_URL" --provenance --confirm publish-rowick --json
+        env:
+          NODE_AUTH_TOKEN: ${{ inputs.bootstrap_first_publish && secrets.NPM_BOOTSTRAP_TOKEN || '' }}
+        run: |
+          if [[ "$BOOTSTRAP_FIRST_PUBLISH" == "true" ]]; then
+            node scripts/release-bootstrap-auth.mjs
+            test -n "$NODE_AUTH_TOKEN" || { echo "NPM_BOOTSTRAP_TOKEN is required in the protected npm environment." >&2; exit 1; }
+            umask 077
+            export NPM_CONFIG_USERCONFIG
+            NPM_CONFIG_USERCONFIG="$(mktemp "$RUNNER_TEMP/rowick-bootstrap.XXXXXX")"
+            printf '%s\n' '//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}' > "$NPM_CONFIG_USERCONFIG"
+            trap 'rm -f "$NPM_CONFIG_USERCONFIG"' EXIT
+          fi
+          pnpm release:publish -- --version "$RELEASE_VERSION" --tag "$NPM_TAG" --out-dir .release/"$RELEASE_VERSION" --repository-url "$REPOSITORY_URL" --provenance --confirm publish-rowick --json

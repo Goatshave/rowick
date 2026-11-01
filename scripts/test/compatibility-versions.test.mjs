@@ -8,6 +8,10 @@ import { verifyCompatibilityVersions } from "../compatibility-versions.mjs";
 
 const policy = JSON.parse(readFileSync(new URL("../../compatibility/versions.json", import.meta.url), "utf8"));
 
+test("repository fixtures keep their reviewed versions in the general test suite", () => {
+  assert.doesNotThrow(() => verifyCompatibilityVersions());
+});
+
 function workspace(t) {
   const root = mkdtempSync(join(tmpdir(), "rowick-compatibility-versions-"));
   t.after(() => rmSync(root, { recursive: true, force: true }));

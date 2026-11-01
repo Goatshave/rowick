@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@rowick/data": "workspace:*",
-    "@lucide/svelte": "^1.57.0",
+    "@lucide/svelte": "^1.64.0",
     "@rowick/core": "workspace:*",
     "@rowick/svelte": "workspace:*",
     "@rowick/svelte-ui": "workspace:*",

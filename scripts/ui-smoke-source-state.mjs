@@ -22,6 +22,7 @@ const sourcePaths = [
   "scripts/ui-smoke-targets.mjs",
   "docs/initial-release-validation.md",
   "scripts/vite-production.mjs",
+  "scripts/copy-build-assets.mjs",
   "scripts/vite-production.d.mts",
 ];
 

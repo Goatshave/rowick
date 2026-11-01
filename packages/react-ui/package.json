@@ -70,7 +70,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup src/index.tsx src/virtual.tsx src/editing.tsx src/filtering.tsx src/server-data.tsx src/analytics.tsx src/layout.tsx --format esm --dts --clean --external react --external react/jsx-runtime --external react-dom && mkdir -p dist && cp src/index.css src/virtual.css src/editing.css src/filtering.css dist/ && cp src/analytics.css dist/analytics.css && cp src/layout.css dist/layout.css",
+    "build": "tsup src/index.tsx src/virtual.tsx src/editing.tsx src/filtering.tsx src/server-data.tsx src/analytics.tsx src/layout.tsx --format esm --dts --clean --external react --external react/jsx-runtime --external react-dom && node ../../scripts/copy-build-assets.mjs react-ui",
     "check": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "lint": "tsc --noEmit"

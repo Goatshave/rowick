@@ -69,6 +69,7 @@ jobs:
               scripts/vite-production.*|\
               scripts/api-contract.mjs|\
               scripts/compatibility-versions.mjs|\
+              scripts/copy-build-assets.mjs|\
               tsconfig*.json)
                 release=true
                 break

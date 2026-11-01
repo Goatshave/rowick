@@ -2,7 +2,13 @@
   "name": "@rowick/theme",
   "version": "0.1.0",
   "description": "CSS variables, base themes, and typed product token adapters for Rowick.",
-  "keywords": ["data-grid", "grid", "table", "css", "theme"],
+  "keywords": [
+    "data-grid",
+    "grid",
+    "table",
+    "css",
+    "theme"
+  ],
   "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/theme#readme",
   "bugs": {
     "url": "https://github.com/Goatshave/rowick/issues"
@@ -12,7 +18,10 @@
   },
   "license": "MIT",
   "type": "module",
-  "sideEffects": ["dist/index.css", "src/index.css"],
+  "sideEffects": [
+    "dist/index.css",
+    "src/index.css"
+  ],
   "exports": {
     ".": "./dist/index.css",
     "./css": "./dist/index.css",
@@ -21,12 +30,15 @@
       "import": "./dist/tokens.js"
     }
   },
-  "files": ["dist", "LICENSE"],
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
   "scripts": {
-    "build": "tsup src/tokens.ts --format esm --dts --clean && cp src/index.css dist/index.css",
-    "check": "tsc --noEmit && test -f src/index.css",
+    "build": "tsup src/tokens.ts --format esm --dts --clean && node ../../scripts/copy-build-assets.mjs theme",
+    "check": "tsc --noEmit && node -e \"require('node:fs').accessSync('src/index.css')\"",
     "test": "pnpm build && node --test test/*.test.mjs",
-    "lint": "tsc --noEmit && test -f src/index.css"
+    "lint": "tsc --noEmit && node -e \"require('node:fs').accessSync('src/index.css')\""
   },
   "devDependencies": {
     "tsup": "^8.3.5",

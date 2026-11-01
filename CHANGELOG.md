@@ -7,6 +7,8 @@ Notable Rowick changes are recorded here before tagging or publication.
 - Require Windows Chromium UI and remote-editing smoke tests in CI and before
   publication. Document the owner-approved first-release manual validation scope,
   preserving untested checks explicitly without approving later releases.
+- Copy package CSS and Svelte assets with Node filesystem APIs so repeated
+  builds do not depend on Unix shell commands on Windows.
 
 - Verify minimum-version compatibility fixtures against reviewed manifest,
   lockfile and installed dependency versions before compatibility and release checks.

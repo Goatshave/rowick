@@ -5,8 +5,12 @@ import "@rowick/react-ui/editing.css";
 import { createLocaleExample, localeExampleLocales, type LocaleExample } from "@rowick/example-shared-server/locale-client";
 export default function Locale() {
   const [example, setExample] = useState<LocaleExample>(), [, redraw] = useState(0);
-  useEffect(() => { const session = createLocaleExample(), stop = session.subscribe(() => redraw((value) => value + 1)); setExample(session); return () => { stop(); session.dispose(); }; }, []);
-  if (!example) return <main><h1>Locale input</h1></main>;
+  useEffect(() => { const session = createLocaleExample("en-US", { deferFormDisposal: true }), stop = session.subscribe(() => redraw((value) => value + 1)); setExample(session); return () => { stop(); session.dispose(); }; }, []);
+  const form = example?.getForm();
+  // An older commit's passive effect can run before the replacement commits.
+  // Keep that commit's rendered form alive until a newer effect releases it.
+  useEffect(() => { example?.releaseRetiredForms(form); }, [example, form]);
+  if (!example || !form) return <main><h1>Locale input</h1></main>;
   const samples = example.getSamples();
   return <main dir={example.getDirection()} style={{ padding: 24, overflowWrap: "anywhere" }}><h1>Locale input</h1><p>Explicit locale parsing preserves exact canonical values. Composition events here are automated fixtures; real OS IME checks remain separate.</p>
     <label htmlFor="locale-picker">Locale</label><select id="locale-picker" value={example.getLocale()} onChange={(event) => { example.setLocale(event.currentTarget.value); event.currentTarget.value = example.getLocale(); }}>{localeExampleLocales.map((locale) => <option key={locale} value={locale}>{locale}</option>)}</select>
@@ -17,6 +21,6 @@ export default function Locale() {
     <p>Calendar pattern: <bdi>{samples.datePattern}</bdi></p><p><bdi>{example.getProjectedRows()[0]?.name}</bdi></p>
     <DataGrid ariaLabel="Locale records" data={example.getProjectedRows()} columns={example.getColumns()} getRowId={(row) => row.id} style={{ height: "200px" }} />
     <output aria-label="Canonical accepted values"><bdi dir="ltr">{JSON.stringify(example.getRows())}</bdi></output>
-    <RowEditingPanel form={example.getForm()} labels={example.getLabels()} />
+    <RowEditingPanel form={form} labels={example.getLabels()} />
   </main>;
 }

@@ -52,9 +52,11 @@ for (const target of getPlaywrightUiSmokeTargets()) {
     const result = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze(); expect(result.violations).toEqual([]);
   });
   test(`${framework} keeps default ASCII editing opt-in boundaries after using localized editors`, async ({ page }) => {
+    const pageErrors: string[] = []; page.on("pageerror", (error) => pageErrors.push(error.message));
     await page.goto(url); await page.getByLabel("Locale", { exact: true }).selectOption("ar-EG"); await expect(page.getByLabel("Money", { exact: true })).not.toHaveValue("-9007199254740993.12");
     await page.goto(new URL("editing", target.url).toString()); await page.getByRole("button", { name: "Edit a", exact: true }).click(); await page.getByLabel("Money", { exact: true }).fill("1,20"); await expect(page.getByLabel("Money", { exact: true })).toHaveAttribute("aria-invalid", "true");
     await page.getByLabel("Money", { exact: true }).fill("1.20"); await page.getByRole("button", { name: "Save row", exact: true }).click(); await expect(page.getByRole("status", { name: "Accepted data" })).toContainText('"money":"1.20"');
+    expect(pageErrors).toEqual([]);
   });
   test(`${framework} exposes translated RTL controls and preserves bidi text with keyboard alternatives`, async ({ page }) => {
     await page.goto(url); await page.getByLabel("Locale", { exact: true }).selectOption("ar-EG"); await expect(page.getByRole("button", { name: "حفظ الصف", exact: true })).toBeVisible();

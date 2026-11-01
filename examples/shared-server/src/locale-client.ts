@@ -34,9 +34,13 @@ function translatedLabels(locale: string): Partial<EditingLabels> {
     summary: (dirty, pending, invalid) => `${dirty} مسودات، ${pending} قيد الحفظ، ${invalid} حقول غير صالحة` };
   return {};
 }
-export function createLocaleExample(initialLocale = "en-US") {
+export function createLocaleExample(initialLocale = "en-US", options: { deferFormDisposal?: boolean } = {}) {
   let current = profile(initialLocale), rows: readonly LocaleRecord[] = [{ ...initial }], message = "Ready", disposed = false;
   const listeners = new Set<() => void>(), publish = () => { if (!disposed) for (const listener of listeners) listener(); };
+  const retiredForms = new Set<RowEditingForm<LocaleRecord>>();
+  const releaseRetiredForms = (renderedForm?: RowEditingForm<LocaleRecord>) => {
+    for (const retired of retiredForms) if (retired !== renderedForm) { retired.dispose(); retiredForms.delete(retired); }
+  };
   const editor = createRowEditingController<LocaleRecord>({ getRow: (id) => rows.find((row) => row.id === id), getRowId: (row) => row.id, getVersion: (row) => row.revision,
     getValue: (row, id) => row[id as keyof LocaleRecord], applyValues: (row, values) => ({ ...row, ...values }),
     accept: (id, row) => { rows = rows.map((record) => record.id === id ? row : record); publish(); },
@@ -60,13 +64,16 @@ export function createLocaleExample(initialLocale = "en-US") {
       if (disposed) throw new Error("Locale example is disposed");
       if (form.getState().invalidFieldCount) { message = "Finish composition or correct invalid raw input before changing locale"; publish(); return false; }
       try {
-        const next = profile(locale), nextForm = createRowEditingForm(editor, next.fields); stopForm(); form.dispose(); current = next; form = nextForm; stopForm = form.subscribe(publish);
+        const next = profile(locale), nextForm = createRowEditingForm(editor, next.fields), previousForm = form;
+        stopForm(); current = next; form = nextForm; stopForm = form.subscribe(publish);
+        if (options.deferFormDisposal) retiredForms.add(previousForm); else previousForm.dispose();
         message = "Locale changed; canonical drafts preserved"; publish(); return true;
       } catch (error) { message = error instanceof Error ? error.message : "Unsupported locale"; publish(); return false; }
     },
     edit: () => editor.begin("a"),
+    releaseRetiredForms,
     subscribe: (listener: () => void) => { if (disposed) throw new Error("Locale example is disposed"); listeners.add(listener); return () => { listeners.delete(listener); }; },
-    dispose: () => { if (disposed) return; disposed = true; stopForm(); stopEditor(); form.dispose(); editor.dispose(); listeners.clear(); },
+    dispose: () => { if (disposed) return; disposed = true; stopForm(); stopEditor(); releaseRetiredForms(); form.dispose(); editor.dispose(); listeners.clear(); },
   };
 }
 export type LocaleExample = ReturnType<typeof createLocaleExample>;

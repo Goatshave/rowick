@@ -4,9 +4,10 @@ Maintainer procedures live here. Start with the [verification guide](verificatio
 for checks and manual UI evidence, or the [maintenance guide](maintaining.md) for
 contribution approval and support policy.
 
-Rowick prepares its first release, `0.1.0`, across twelve public `@rowick/*`
-packages. No Rowick package has been published yet. Dated candidate notes and
-local tarballs are preparation artifacts, not publication records.
+Rowick's initial version is `0.1.0` across twelve public `@rowick/*` packages.
+Use [GitHub Releases](https://github.com/Goatshave/rowick/releases) and the npm
+registry to verify publication. Dated candidate notes and local tarballs are
+preparation artifacts, not publication records.
 
 The target repository is `Goatshave/rowick`. Repository access, scope ownership,
 GitHub environments/rules, private vulnerability reporting and npm publishing
@@ -65,6 +66,18 @@ all-unregistered bootstrap guard.
 
 All publishable package versions align with the workspace root. Candidate code
 and automated checks do not replace the required manual release evidence.
+
+The release owner approved a [limited manual validation scope for the first
+0.1.0 release](initial-release-validation.md). To use it, preserve every manual
+check and record unperformed or incomplete checks as `not-tested` with reasons,
+retain actual observations separately, and include the documented, hashed policy
+and release-owner approval in the source-bound report. Set the publish workflow's
+`initial_release_exceptions` input to `true`. Local validation also requires
+`--allow-initial-release-exceptions` together with version `0.1.0`, tag `latest`
+and the canonical repository URL. Source/freshness/contract/size checks and all
+automated gates remain required. This option is rejected for later versions.
+Windows smoke runs through the shared `windows-smoke.yml` workflow in both CI
+and Release Publish; the publish job cannot start until it succeeds.
 
 ## Publishable Packages
 

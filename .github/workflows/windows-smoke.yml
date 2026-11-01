@@ -1,0 +1,43 @@
+name: Windows Smoke
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Windows browser smoke
+    runs-on: windows-2025
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Enable pnpm
+        run: corepack enable
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm check
+      - name: Install Chromium
+        run: pnpm exec playwright install chromium
+      - name: Verify React, Vue, and Svelte UI workflows on Windows
+        run: pnpm e2e:smoke
+      - name: Verify Windows remote editing and recovery
+        run: pnpm e2e:server-data
+      - name: Retain failed Windows diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-smoke-failure-${{ github.workflow }}-${{ github.run_attempt }}
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7

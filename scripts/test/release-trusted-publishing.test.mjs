@@ -1049,8 +1049,9 @@ test("Required Gate preserves type/unit/API/security/XLSX and browser requiremen
   assert.match(workflowJob(workflow, "required-gate"), /name: Required Gate/);
   for (const command of ["pnpm security:audit", "pnpm check", "pnpm build", "pnpm api:check", "pnpm compatibility:check", "pnpm test", "pnpm test:xlsx:independent", "pnpm build:examples", "pnpm e2e:smoke", "pnpm e2e:server-data"]) assert.ok(workflow.includes(`run: ${command}\n`), command);
   assert.match(workflowJob(workflow, "browser-integration"), /uses: \.\/\.github\/workflows\/browser-integration\.yml/);
-  const contract = gateContract(workflow, ["quality", "browser-smoke", "browser-integration"]);
-  const success = { quality: "success", "browser-smoke": "success", "browser-integration": "success" };
+  assert.match(workflowJob(workflow, "windows-smoke"), /uses: \.\/\.github\/workflows\/windows-smoke\.yml/);
+  const contract = gateContract(workflow, ["quality", "browser-smoke", "browser-integration", "windows-smoke"]);
+  const success = { quality: "success", "browser-smoke": "success", "browser-integration": "success", "windows-smoke": "success" };
   assert.equal(runRequiredGate(contract, success), 0);
   for (const job of Object.keys(success)) for (const state of ["failure", "cancelled", "skipped"]) assert.notEqual(runRequiredGate(contract, { ...success, [job]: state }), 0, `${job}=${state}`);
 });

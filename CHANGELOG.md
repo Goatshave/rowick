@@ -4,6 +4,14 @@ Notable Rowick changes are recorded here before tagging or publication.
 
 ## Unreleased
 
+- Require Windows Chromium UI and remote-editing smoke tests in CI and before
+  publication. Document the owner-approved first-release manual validation scope,
+  preserving untested checks explicitly without approving later releases.
+- Copy package CSS and Svelte assets with Node filesystem APIs so repeated
+  builds do not depend on Unix shell commands on Windows.
+- Use cross-platform workspace-filter quoting and fail empty package selections
+  instead of silently skipping build or check commands on Windows.
+
 - Verify minimum-version compatibility fixtures against reviewed manifest,
   lockfile and installed dependency versions before compatibility and release checks.
 - Update maintained example tooling to Svelte 5.57.3 and Vite 8.3.5 while
@@ -11,7 +19,8 @@ Notable Rowick changes are recorded here before tagging or publication.
 - Release outgoing React locale forms after the replacement commits, preventing
   a late subscription to an already disposed form during a fast locale change.
 
-The initial `0.1.0` release is in preparation. Publication is pending.
+Publication records are available in
+[GitHub Releases](https://github.com/Goatshave/rowick/releases).
 
 - Preserve protected column positions when restoring partial or equivalent saved
   orders, and enforce export header budgets when the data set is empty.

@@ -95,6 +95,12 @@ workbook in both Excel and Numbers remains a separate manual release check.
 
 ## Manual UI review
 
+The owner-approved [initial 0.1.0 validation scope](initial-release-validation.md)
+allows explicitly documented `not-tested` manual checks only for that first
+release and only with the publish workflow's separate opt-in. It does not count
+them as passing or replace the automated gates. The full policy below remains
+the default and is required for later versions.
+
 Generate evidence only after the final source commit. Reports are bound to the
 source fingerprint, revision and exact smoke contract. Changed source requires a
 fresh report; older reviews do not approve a new release candidate.

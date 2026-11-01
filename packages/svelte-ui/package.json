@@ -67,7 +67,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/editing.ts src/filtering.ts src/server-data.ts src/analytics.ts src/layout.ts --format esm --dts --clean --external ./DataGrid.svelte --external ./RowEditingPanel.svelte --external ./ServerDataPanel.svelte --external ./AnalyticsPanel.svelte --external ./LayoutGrid.svelte --external ./FilterPanel.svelte && mkdir -p dist && cp src/DataGrid.svelte src/RenderValue.svelte src/ColumnFilter.svelte src/RowEditingPanel.svelte src/ServerDataPanel.svelte src/AnalyticsPanel.svelte src/LayoutGrid.svelte src/FilterPanel.svelte dist/ && cp src/DataGrid.svelte.d.ts src/RowEditingPanel.svelte.d.ts src/ServerDataPanel.svelte.d.ts src/AnalyticsPanel.svelte.d.ts src/LayoutGrid.svelte.d.ts src/FilterPanel.svelte.d.ts dist/ && cp ../react-ui/src/index.css dist/index.css && cp ../react-ui/src/editing.css dist/editing.css && cp ../react-ui/src/filtering.css dist/filtering.css && cp ../react-ui/src/analytics.css dist/analytics.css && cp ../react-ui/src/layout.css dist/layout.css",
+    "build": "tsup src/index.ts src/editing.ts src/filtering.ts src/server-data.ts src/analytics.ts src/layout.ts --format esm --dts --clean --external ./DataGrid.svelte --external ./RowEditingPanel.svelte --external ./ServerDataPanel.svelte --external ./AnalyticsPanel.svelte --external ./LayoutGrid.svelte --external ./FilterPanel.svelte && node ../../scripts/copy-build-assets.mjs svelte-ui",
     "check": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "lint": "tsc --noEmit"

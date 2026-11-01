@@ -51,8 +51,10 @@ jobs:
               .github/workflows/release-publish.yml|\
               .github/workflows/release-verify.yml|\
               .github/workflows/browser-integration.yml|\
+              .github/workflows/windows-smoke.yml|\
               docs/api-stability.md|\
               docs/release.md|\
+              docs/initial-release-validation.md|\
               e2e/*|\
               examples/*|\
               package.json|\
@@ -67,6 +69,7 @@ jobs:
               scripts/vite-production.*|\
               scripts/api-contract.mjs|\
               scripts/compatibility-versions.mjs|\
+              scripts/copy-build-assets.mjs|\
               tsconfig*.json)
                 release=true
                 break

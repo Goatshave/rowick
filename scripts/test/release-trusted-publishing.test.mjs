@@ -1020,7 +1020,7 @@ test("release workflows preserve release safety and artifact/E2E gates without b
   assert.ok(publish.includes(workflowUiSmokeValidationCommand));
   assert.doesNotMatch(publish, /--allow-dirty/);
   assert.match(publish, /run: test "\$CONFIRM_PUBLISH" = "publish-rowick"/);
-  const finalPublish = publish.lastIndexOf("run: pnpm release:publish");
+  const finalPublish = publish.lastIndexOf("pnpm release:publish --");
   assert.ok(finalPublish > 0);
   for (const command of ["pnpm security:audit", "pnpm check", "pnpm build", "pnpm api:check", "pnpm compatibility:check", "pnpm test", "pnpm test:xlsx:independent", "pnpm build:examples", "pnpm e2e:smoke", "pnpm e2e", "pnpm e2e:integration"]) {
     assert.ok(publish.includes(`run: ${command}\n`), command);

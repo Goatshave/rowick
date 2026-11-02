@@ -1,7 +1,7 @@
 # Pivot, typed files and export jobs
 
-The `/analytics` entries and `@rowick/export-xlsx` are part of the unpublished
-Rowick 0.1.0 candidate.
+The `/analytics` entries and `@rowick/export-xlsx` are available in the published
+Rowick 0.1.0 release.
 
 ## Client pivot and saved configuration
 

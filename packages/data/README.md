@@ -27,7 +27,7 @@ before returning and never changes grid options or state. Commit rejects a stale
 source data/schema/identity configuration. Remote writes, permission checks,
 database transactions and server undo are product responsibilities.
 
-This package is part of the unpublished Rowick 0.1.0 candidate. Its entries are:
+This package is published as `@rowick/data@0.1.0`. Its entries are:
 
 | Entry | Purpose |
 | --- | --- |

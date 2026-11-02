@@ -18,7 +18,15 @@ test("public repository documentation and community files stay complete", () => 
     "docs/getting-started.md",
     "docs/packages.md",
     "docs/api-stability.md",
-    "docs/maintaining.md",
+    "docs/maintainers/maintaining.md",
+    "docs/maintainers/README.md",
+    "docs/maintainers/verification.md",
+    "docs/maintainers/release.md",
+    "docs/maintainers/dependency-security.md",
+    "docs/index.md",
+    "docs/examples.md",
+    "website/README.md",
+    "website/.vitepress/config.ts",
     "api-contract/README.md",
     ".github/ISSUE_TEMPLATE/bug.yml",
     ".github/ISSUE_TEMPLATE/feature.yml",
@@ -34,13 +42,17 @@ test("public repository documentation and community files stay complete", () => 
   assert.match(readme, /^## Install$/m);
   assert.match(readme, /\[the documentation\]\(docs\/README\.md\)/);
 
-  for (const file of ["docs/.vitepress", "docs/public", "docs/index.md", ".github/workflows/pages.yml"]) {
-    assert.equal(existsSync(path.join(repoRoot, file)), false, `website-only path in initial repository: ${file}`);
-  }
   const manifest = JSON.parse(readFileSync(path.join(repoRoot, "package.json"), "utf8"));
+  const website = JSON.parse(readFileSync(path.join(repoRoot, "website/package.json"), "utf8"));
+  assert.equal(website.private, true, "the docs website must never be published as an npm package");
+  for (const name of ["@rowick/vue-ui", "@rowick/theme"]) {
+    assert.equal(website.dependencies[name], manifest.version, "the demo must consume the documented public release");
+  }
   assert.equal(manifest.devDependencies?.vitepress, undefined);
   assert.equal(manifest.pnpm?.overrides?.["vitepress>vite"], undefined);
-  assert.deepEqual(Object.keys(manifest.scripts).filter((name) => /^docs:(?:dev|build|preview)$/.test(name)), []);
+  for (const command of ["dev", "build", "preview"]) {
+    assert.equal(manifest.scripts[`docs:${command}`], `pnpm --filter @rowick/docs ${command}`);
+  }
 
   for (const directory of readdirSync(path.join(repoRoot, "packages"))) {
     const packageDirectory = path.join(repoRoot, "packages", directory);
@@ -66,6 +78,7 @@ test("general CI and dependency updates cover the public repository", () => {
   assert.match(workflow, /run: pnpm api:check/);
   assert.match(workflow, /run: pnpm compatibility:check/);
   assert.match(workflow, /run: pnpm build:examples/);
+  assert.match(workflow, /run: pnpm docs:build/);
   assert.match(workflow, /run: pnpm release:check -- --json/);
   assert.match(workflow, /playwright install --with-deps chromium/);
   assert.match(workflow, /run: pnpm e2e:smoke/);
@@ -89,7 +102,7 @@ test("general CI and dependency updates cover the public repository", () => {
 
 test("repository Markdown documentation links resolve without a site generator", () => {
   const files = ["README.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "SECURITY.md", "api-contract/README.md",
-    ...readdirSync(path.join(repoRoot, "docs")).filter((name) => name.endsWith(".md")).map((name) => `docs/${name}`),
+    ...readdirSync(path.join(repoRoot, "docs"), { recursive: true }).filter((name) => name.endsWith(".md")).map((name) => `docs/${name}`),
     ...readdirSync(path.join(repoRoot, "packages")).map((name) => `packages/${name}/README.md`)];
   for (const name of files) {
     const file = path.join(repoRoot, name);

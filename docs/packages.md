@@ -1,8 +1,8 @@
 # Packages
 
-Rowick prepares twelve public packages for its first `0.1.0` release. They use one
-fixed release version and have not been published under `@rowick` yet. Start with
-a maintained UI package unless your product needs to own the entire renderer.
+Rowick publishes twelve public packages at version `0.1.0` under the
+[`@rowick` npm scope](https://www.npmjs.com/org/rowick). Keep their versions aligned.
+Start with a maintained UI package unless your product needs to own the entire renderer.
 
 The 0.1 framework contract supports React 18.2 through 19, Vue 3.4 and later
 Vue 3 releases, and Svelte 4.2.20 through 5. All packages are ESM and
@@ -23,7 +23,7 @@ Optional [row transactions](transactions.md), [row/batch editing](row-editing.md
 [locale codecs](localization.md). The root import contains transactions; features
 have separate `/editing`, `/filtering`, `/server-data`, `/layout`, `/analytics`,
 and `/locale` entry points. Products own authoritative data, transport and permissions.
-This package is part of the first Rowick release candidate.
+This package is available in Rowick 0.1.0.
 
 <a id="export-xlsx"></a>
 ## `@rowick/export-xlsx`
@@ -32,7 +32,7 @@ Optional typed XLSX writer with no third-party runtime dependency. It consumes
 the analytics export contract, preserving explicit cell types, formats, Unicode
 and verified merge ranges. The base grid does not import it. ZIP integrity and
 values/formats are checked with an independent spreadsheet reader. See
-[analytics and export](analytics-export.md). This package is not yet published.
+[analytics and export](analytics-export.md). This package is published as `@rowick/export-xlsx@0.1.0`.
 
 <a id="react"></a>
 ## `@rowick/react`
@@ -43,7 +43,7 @@ Thin React adapter for controlled and uncontrolled core state. Pair it with `@ro
 ## `@rowick/react-ui`
 
 Maintained styled React renderer. See the [React UI guide](./react-ui.md).
-Development features also expose `/editing`, `/filtering`, `/server-data`,
+Optional feature entries expose `/editing`, `/filtering`, `/server-data`,
 `/layout`, `/analytics` and their documented optional CSS entries.
 
 <a id="vue"></a>
@@ -55,7 +55,7 @@ Vue adapter exposing the shared core through reactive framework contracts.
 ## `@rowick/vue-ui`
 
 Maintained styled Vue renderer. See the [Vue UI guide](./vue-ui.md).
-The same optional development feature entries are available as the React UI.
+The same optional feature entries are available as the React UI.
 
 <a id="svelte"></a>
 ## `@rowick/svelte`
@@ -66,7 +66,7 @@ Svelte store adapter for the shared framework-agnostic engine.
 ## `@rowick/svelte-ui`
 
 Maintained styled Svelte renderer. See the [Svelte UI guide](./svelte-ui.md).
-The same optional development feature entries retain Svelte 4/5 component contracts.
+The same optional feature entries retain Svelte 4/5 component contracts.
 
 <a id="virtual"></a>
 ## `@rowick/virtual`

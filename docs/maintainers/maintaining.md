@@ -12,7 +12,7 @@ example requirements are recorded in their manifests.
 
 Svelte 4 remains supported for the initial Rowick release. Removing a framework family or
 raising its documented lower bound is a compatibility change and requires the
-version policy in [API stability](api-stability.md), migration guidance and a
+version policy in [API stability](../api-stability.md), migration guidance and a
 release note. A private example dependency update does not silently alter public
 peer support.
 
@@ -181,10 +181,16 @@ Privately coordinated security work follows
 
 ## Repository documentation
 
-The initial repository contains README files and Markdown guides. It excludes
-website source, site-generator dependencies and website deployment workflows.
-Documentation links are checked by `pnpm test:release`, which also runs within
-`pnpm test`. A public website can be added later as a separate reviewed change.
+User guides live directly in `docs/` and are the source for the documentation
+website. Public maintainer procedures live in `docs/maintainers/`, with their own
+[maintainer index](README.md). Read these procedures directly on GitHub; the
+website excludes this entire folder and the repository-only `docs/README.md`
+from page generation and search.
+
+Documentation links, including nested maintainer guides, are checked by
+`pnpm test:release`, which also runs within `pnpm test`. CI builds the website
+and rejects broken page links. Website publication is a separate deployment
+from npm package releases.
 
 ## Triage and fixes
 
@@ -251,6 +257,6 @@ Applications own the lifetime of imperative grid, editing, layout and datasource
 controllers. Dispose them when their owner is removed, abort obsolete requests
 and unsubscribe product listeners. Bound datasource caches and retained edit
 history for the application's workload; virtualization bounds mounted cells,
-not the entire loaded dataset. See [state and lifecycle](state-lifecycle.md),
-[transactions](transactions.md#cost), [layout](layout.md) and
-[server datasource](datasource.md) for the corresponding contracts.
+not the entire loaded dataset. See [state and lifecycle](../state-lifecycle.md),
+[transactions](../transactions.md#cost), [layout](../layout.md) and
+[server datasource](../datasource.md) for the corresponding contracts.

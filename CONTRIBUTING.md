@@ -39,7 +39,7 @@ not another account approval. Keep each PR focused and reference relevant issues
 
 Privately coordinated security fixes follow [SECURITY.md](SECURITY.md); do not
 publish vulnerability details to request approval. Maintainers and configured
-Dependabot maintenance follow the [maintenance process](docs/maintaining.md#contribution-approval).
+Dependabot maintenance follow the [maintenance process](docs/maintainers/maintaining.md#contribution-approval).
 
 ## Local development
 
@@ -53,7 +53,7 @@ pnpm test
 ```
 
 Run `pnpm dev:react`, `pnpm dev:vue` or `pnpm dev:svelte` to inspect a maintained
-example. See the [verification guide](docs/verification.md) for browser tests,
+example. See the [verification guide](docs/maintainers/verification.md) for browser tests,
 compatibility checks and the full validation commands.
 
 ## Prepare a PR
@@ -80,5 +80,5 @@ do not replace maintainer review.
 
 Discuss dependency changes in the issue before implementation. Run
 `pnpm security:audit` after changes and follow the dated, path-scoped policy in
-[Dependency security](docs/dependency-security.md). Compatibility fixtures pin the
+[Dependency security](docs/maintainers/dependency-security.md). Compatibility fixtures pin the
 supported framework lower bounds; do not upgrade them just to suppress a finding.

@@ -1,6 +1,6 @@
 # @rowick/export-xlsx
 
-Optional Rowick XLSX exporter, part of the unpublished Rowick 0.1.0 candidate.
+Optional Rowick XLSX exporter, published as `@rowick/export-xlsx@0.1.0`.
 
 ```sh
 npm install @rowick/export-xlsx @rowick/data @rowick/core

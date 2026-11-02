@@ -79,8 +79,7 @@ instance overrides merge with defaults. See [typed filters](filters.md).
 
 ## Locale input, exact values and composition
 
-The optional `@rowick/data/locale` entry is part of the unpublished Rowick 0.1.0
-candidate. Locale parsing is field-owned and opt-in. It does not change the default
+The optional `@rowick/data/locale` entry is available in Rowick 0.1.0. Locale parsing is field-owned and opt-in. It does not change the default
 ASCII parsers, detect numeric-looking IDs or alter the browser's global locale.
 
 ```ts

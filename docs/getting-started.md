@@ -1,10 +1,10 @@
 # Getting started
 
-> **First release in preparation**
+> **Rowick 0.1.0 is available on npm.**
 >
-> These pages describe the working source for Rowick `0.1.0`. The `@rowick/*`
-> packages have not been published yet. Run the workspace examples locally until
-> publication; installation commands below describe the intended public packages.
+> Install the published `@rowick/*` packages using the commands below. Keep all
+> Rowick packages on the same version. See the [release notes](https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.0)
+> and [initial validation scope](initial-release-validation.md) for tested coverage and deferred manual checks.
 
 Rowick separates its framework-agnostic engine, framework adapters, styled UI renderers, virtualization primitives, and theme tokens. Most applications should start with the maintained UI package for their framework.
 
@@ -48,9 +48,9 @@ UI renderer are not part of the 0.1 support contract.
 
 | Integration | Supported range | Release validation |
 | --- | --- | --- |
-| React | `>=18.2.0 <20` | React 18.3.1 and 19.2.8 |
-| Vue | `>=3.4.0 <4` | Vue 3.4.38 and 3.5.41 |
-| Svelte | `>=4.2.20 <6` | Svelte 4.2.20 and 5.56.8 |
+| React | `>=18.2.0 <20` | React 18.3.1 and 19.3.1 |
+| Vue | `>=3.4.0 <4` | Vue 3.4.38 and 3.5.44 |
+| Svelte | `>=4.2.20 <6` | Svelte 4.2.20 and 5.57.3 |
 | TypeScript | Type declarations included | TypeScript 5.7 and 5.9 workspace builds |
 | JavaScript | Modern ESM | Same compiled runtime APIs without static typing |
 

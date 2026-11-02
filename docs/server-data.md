@@ -1,6 +1,6 @@
 # Server data
 
-Sorting/filter/grouping setters reset page index by default in the Rowick candidate. A controlled server query that owns its paging policy can set
+Sorting/filter/grouping setters reset page index by default in Rowick 0.1.0. A controlled server query that owns its paging policy can set
 `autoResetPageIndex: false` and apply its own reset in `onStateChange`. The three
 server-grouping examples use this option to preserve the committed server page
 while sorting; it is separate from manual pagination and total-count metadata.

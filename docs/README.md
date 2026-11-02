@@ -1,12 +1,17 @@
 # Rowick Documentation
 
-Use this index to read the guides directly in the repository. The first release
-contains the library and Markdown documentation; website source and deployment
-configuration will be added in a separate change.
+These guides cover the published Rowick `0.1.0` packages. Use this index to read
+them directly in the repository, visit the
+[documentation website](https://goatshave.github.io/rowick/), or run
+`pnpm docs:dev` to preview it locally.
+
+See the [release notes](https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.0)
+and [initial validation scope](initial-release-validation.md).
 
 ## Getting Started
 
 - [Getting started](getting-started.md)
+- [Live example](examples.md)
 - [Package selection](packages.md)
 - [Localization](localization.md)
 - [Custom rendering](custom-rendering.md)
@@ -31,12 +36,10 @@ configuration will be added in a separate change.
 - [DOM primitives](packages.md#primitives)
 - [Theme and tokens](packages.md#theme)
 
-## Design and Operations
+## Concepts and Features
 
 - [Architecture](architecture.md)
 - [API stability](api-stability.md)
-- [Maintenance and support](maintaining.md)
-- [Maintainer verification](verification.md)
 - [Data, state, and lifecycle ownership](state-lifecycle.md)
 - [Immutable row transactions](transactions.md)
 - [Row and batch editing](row-editing.md)
@@ -46,7 +49,6 @@ configuration will be added in a separate change.
 - [Pivot, XLSX, print, and custom export](analytics-export.md)
 - [Locale input and exact formatting](localization.md)
 - [Feature, configuration, and distribution boundaries](feature-boundaries.md)
-- [Release process](release.md)
 
 ## Community
 
@@ -54,3 +56,10 @@ configuration will be added in a separate change.
 - [Code of conduct](https://github.com/Goatshave/rowick/blob/main/CODE_OF_CONDUCT.md)
 - [Security policy](https://github.com/Goatshave/rowick/blob/main/SECURITY.md)
 - [Changelog](https://github.com/Goatshave/rowick/blob/main/CHANGELOG.md)
+
+## Maintainers
+
+Repository operations, contribution approval, verification, releases and dependency
+security are covered by the [maintainer guides](maintainers/README.md).
+This repository index and the maintainer guides are read directly on GitHub;
+the website presents the user guides and public support/validation scope.

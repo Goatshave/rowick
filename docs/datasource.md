@@ -1,6 +1,6 @@
 # Remote datasource and persistent recovery
 
-This optional feature is part of the unpublished Rowick 0.1.0 candidate.
+This optional feature is available in Rowick 0.1.0.
 `@rowick/data/server-data` provides a bounded remote row model;
 transport, authentication, database execution and final authorization remain in
 the product. The default core still consumes only the rows the owner supplies.

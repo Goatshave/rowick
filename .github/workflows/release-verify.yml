@@ -53,7 +53,7 @@ jobs:
               .github/workflows/browser-integration.yml|\
               .github/workflows/windows-smoke.yml|\
               docs/api-stability.md|\
-              docs/release.md|\
+              docs/maintainers/*|\
               docs/initial-release-validation.md|\
               e2e/*|\
               examples/*|\

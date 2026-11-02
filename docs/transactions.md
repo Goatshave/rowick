@@ -1,7 +1,6 @@
 # Immutable row transactions
 
-The optional `@rowick/data` package is part of the unpublished Rowick 0.1.0
-candidate. It prepares add/update/remove operations as one
+The optional `@rowick/data` package is available in Rowick 0.1.0. It prepares add/update/remove operations as one
 validated immutable data proposal. Importing core or a renderer does not import
 this package. Core remains the owner of sorting, filtering, grouping, selection,
 focus and row models; the product remains the owner of its authoritative data.

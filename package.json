@@ -10,6 +10,10 @@
     "node": "^22.12.0 || >=24.0.0"
   },
   "scripts": {
+    "docs:dev": "pnpm --filter @rowick/docs dev",
+    "docs:build": "pnpm --filter @rowick/docs build",
+    "docs:check": "node scripts/docs-site-check.mjs",
+    "docs:preview": "pnpm --filter @rowick/docs preview",
     "build": "pnpm -r --fail-if-no-match --filter \"./packages/*\" build",
     "api:check": "node scripts/api-contract.mjs",
     "api:update": "node scripts/api-contract.mjs --write",

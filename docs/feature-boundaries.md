@@ -21,7 +21,10 @@ Public entry points are declared by package `exports` and tracked in
 unsupported. Changes require updated declarations, external tarball consumption,
 tests, migration guidance and changelog entries. New packages use the fixed
 workspace version and MIT license; development manifests are not proof of npm
-publication. The `@rowick/*` namespace has not been published yet.
+publication. All twelve `@rowick/*` packages are published at `0.1.0`; the
+[npm scope](https://www.npmjs.com/org/rowick) and
+[GitHub release](https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.0)
+record availability.
 
 ## Saved configuration
 

@@ -1,6 +1,6 @@
 # Row and batch editing
 
-This feature is part of the unpublished Rowick 0.1.0 candidate.
+This feature is available in Rowick 0.1.0.
 A row editing form can be placed beside an
 existing grid or inside a product drawer; it does not take ownership of transport.
 

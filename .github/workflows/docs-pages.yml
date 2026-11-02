@@ -1,0 +1,128 @@
+name: Documentation Pages
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Verify deployment source
+    if: >-
+      github.repository == 'Goatshave/rowick' &&
+      ((github.event_name == 'workflow_run' &&
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.event == 'push' &&
+        github.event.workflow_run.head_repository.full_name == github.repository) ||
+       (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      sha: ${{ steps.source.outputs.sha }}
+      current: ${{ steps.source.outputs.current }}
+    steps:
+      - name: Require successful CI for the current main commit
+        id: source
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const { data: branch } = await github.rest.git.getRef({ owner, repo, ref: 'heads/main' });
+            const sha = branch.object.sha;
+            const trigger = context.payload.workflow_run;
+            if (trigger && trigger.head_sha !== sha) {
+              core.notice('A newer main commit exists; skip this outdated deployment.');
+              core.setOutput('current', 'false');
+              return;
+            }
+            const { data } = await github.rest.actions.listWorkflowRuns({
+              owner, repo, workflow_id: 'ci.yml', branch: 'main', event: 'push', head_sha: sha, per_page: 1,
+            });
+            const run = data.workflow_runs[0];
+            if (!run || run.status !== 'completed' || run.conclusion !== 'success') {
+              throw new Error('The current main commit must pass CI before documentation can deploy.');
+            }
+            core.setOutput('sha', sha);
+            core.setOutput('current', 'true');
+
+  build:
+    name: Build documentation
+    needs: verify
+    if: needs.verify.outputs.current == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout verified source
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.verify.outputs.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build documentation
+        run: pnpm docs:build
+
+      - name: Check public pages and local assets
+        run: pnpm docs:check
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: website/.vitepress/dist
+
+  deploy:
+    name: Deploy documentation
+    needs: [verify, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Confirm the built commit is still current
+        id: source
+        uses: actions/github-script@v9
+        env:
+          VERIFIED_SHA: ${{ needs.verify.outputs.sha }}
+        with:
+          script: |
+            const { data } = await github.rest.git.getRef({ ...context.repo, ref: 'heads/main' });
+            const current = data.object.sha === process.env.VERIFIED_SHA;
+            if (!current) core.notice('Main changed during the build; wait for its own CI and deployment.');
+            core.setOutput('current', String(current));
+
+      - name: Configure Pages
+        if: steps.source.outputs.current == 'true'
+        uses: actions/configure-pages@v5
+
+      - name: Deploy to GitHub Pages
+        if: steps.source.outputs.current == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4

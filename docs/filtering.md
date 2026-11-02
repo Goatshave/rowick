@@ -1,6 +1,6 @@
 # Advanced filters, candidates and saved views
 
-These features are part of the unpublished Rowick 0.1.0 candidate.
+These features are available in Rowick 0.1.0.
 The core evaluates a bounded, versioned expression;
 optional `/filtering` entries provide condition-building and settings UI.
 

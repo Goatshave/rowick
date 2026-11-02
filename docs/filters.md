@@ -1,6 +1,6 @@
 # Typed column filters
 
-The following contracts are part of the unpublished Rowick 0.1.0 candidate.
+The following contracts are available in Rowick 0.1.0.
 
 `columnFilters` keeps its existing `{ id, value }` shape. Text values remain
 case-insensitive substring searches. A `value` can also be a serializable condition:

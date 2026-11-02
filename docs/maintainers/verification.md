@@ -34,7 +34,7 @@ Inspect failures before rerunning; a successful retry does not explain a failure
 
 To inspect full-stack server-export examples locally, run `pnpm dev:nextjs`,
 `pnpm dev:nuxt` or `pnpm dev:sveltekit` after building the packages. Their manifests
-record any additional runtime requirements; the [server data guide](server-data.md)
+record any additional runtime requirements; the [server data guide](../server-data.md)
 describes their query, route and export contracts.
 
 ## Browser checks
@@ -95,7 +95,7 @@ workbook in both Excel and Numbers remains a separate manual release check.
 
 ## Manual UI review
 
-The owner-approved [initial 0.1.0 validation scope](initial-release-validation.md)
+The owner-approved [initial 0.1.0 validation scope](../initial-release-validation.md)
 allows explicitly documented `not-tested` manual checks only for that first
 release and only with the publish workflow's separate opt-in. It does not count
 them as passing or replace the automated gates. The full policy below remains

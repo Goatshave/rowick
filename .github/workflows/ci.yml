@@ -72,6 +72,12 @@ jobs:
       - name: Build examples
         run: pnpm build:examples
 
+      - name: Build documentation and check page links
+        run: pnpm docs:build
+
+      - name: Check public documentation artifact
+        run: pnpm docs:check
+
       - name: Verify publishable package boundaries
         run: pnpm release:check -- --json
 

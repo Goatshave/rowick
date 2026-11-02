@@ -6,14 +6,15 @@
 </picture>
 
 [![CI](https://github.com/Goatshave/rowick/actions/workflows/ci.yml/badge.svg)](https://github.com/Goatshave/rowick/actions/workflows/ci.yml)
-[![Docs](https://img.shields.io/badge/docs-source-087f5b)](docs/README.md)
+[![Docs](https://img.shields.io/badge/docs-website-91582e)](https://goatshave.github.io/rowick/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Typed data grids for React, Vue, and Svelte. Use the styled UI for your framework,
 or build a custom renderer with the shared headless engine.
 
-> Check [GitHub Releases](https://github.com/Goatshave/rowick/releases) for release
-> availability. The install commands below apply to published `@rowick/*` packages.
+> **Rowick 0.1.0 is available on [npm](https://www.npmjs.com/org/rowick).**
+> See the [release notes](https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.0)
+> and keep all `@rowick/*` packages on the same version.
 >
 > Review the [initial 0.1.0 validation scope](docs/initial-release-validation.md),
 > including the explicitly deferred manual platform and assistive-technology checks.
@@ -74,8 +75,9 @@ Continue with the [React](docs/react-ui.md), [Vue](docs/vue-ui.md), or
 - Keyboard navigation, localization, theme tokens, and framework-native rendering hooks.
 
 Features have explicit ownership and limits. See [feature boundaries](docs/feature-boundaries.md)
-and [the documentation](docs/README.md). The public documentation website will be
-published separately; all guides are available in this repository.
+and [the documentation](docs/README.md). Explore the
+[documentation website](https://goatshave.github.io/rowick/) and
+[live grid](https://goatshave.github.io/rowick/examples).
 
 ## Try the examples
 
@@ -93,6 +95,10 @@ analytics, and locale feature pages.
 
 ## Documentation
 
+Read the [documentation website](https://goatshave.github.io/rowick/) or run
+`pnpm docs:dev` to preview it locally. The Markdown guides below are also
+available directly in this repository.
+
 - [Getting started](docs/getting-started.md) and [packages](docs/packages.md)
 - [Custom rendering](docs/custom-rendering.md) and [themes](packages/theme/README.md)
 - [Server data](docs/server-data.md) and [datasource](docs/datasource.md)
@@ -108,7 +114,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Report vulnerabilities privately through [SECURITY.md](SECURITY.md). Participation
 follows the [code of conduct](CODE_OF_CONDUCT.md). Maintainers can find validation
-and release procedures in the [maintenance guide](docs/maintaining.md).
+and release procedures in the [maintenance guide](docs/maintainers/maintaining.md).
 
 ## License
 

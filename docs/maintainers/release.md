@@ -68,7 +68,7 @@ All publishable package versions align with the workspace root. Candidate code
 and automated checks do not replace the required manual release evidence.
 
 The release owner approved a [limited manual validation scope for the first
-0.1.0 release](initial-release-validation.md). To use it, preserve every manual
+0.1.0 release](../initial-release-validation.md). To use it, preserve every manual
 check and record unperformed or incomplete checks as `not-tested` with reasons,
 retain actual observations separately, and include the documented, hashed policy
 and release-owner approval in the source-bound report. Set the publish workflow's

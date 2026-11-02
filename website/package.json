@@ -1,0 +1,20 @@
+{
+  "name": "@rowick/docs",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev . --host 127.0.0.1 --port 4290 --strictPort",
+    "build": "vitepress build .",
+    "preview": "vitepress preview . --host 127.0.0.1 --port 4290 --strictPort"
+  },
+  "dependencies": {
+    "@fontsource-variable/instrument-sans": "5.3.0",
+    "@rowick/theme": "0.1.0",
+    "@rowick/vue-ui": "0.1.0",
+    "vue": "^3.5.44"
+  },
+  "devDependencies": {
+    "vitepress": "2.0.0-alpha.21"
+  }
+}

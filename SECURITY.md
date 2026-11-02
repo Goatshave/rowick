@@ -31,6 +31,6 @@ reporting channel. Do not include vulnerability details in the initial email.
 
 CI and Release Publish run `pnpm security:audit`. Known compatibility-fixture and
 unpatched upstream findings require dated, path-scoped review as described in
-[Dependency security](docs/dependency-security.md). Enable automatic Dependabot security
+[Dependency security](docs/maintainers/dependency-security.md). Enable automatic Dependabot security
 update pull requests and private vulnerability reporting on the target repository
 before it opens for public contributions.

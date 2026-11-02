@@ -4,6 +4,7 @@ coverage
 .release
 .turbo
 .DS_Store
+website/.vitepress/cache
 *.tsbuildinfo
 test-results
 .playwright-cli

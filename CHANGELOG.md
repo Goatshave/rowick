@@ -4,6 +4,9 @@ Notable Rowick changes are recorded here before tagging or publication.
 
 ## Unreleased
 
+- Add the public documentation website with framework guides, local search and
+  a live grid. Keep maintainer procedures in the repository and deploy GitHub
+  Pages only from the current main commit after successful CI.
 - Require Windows Chromium UI and remote-editing smoke tests in CI and before
   publication. Document the owner-approved first-release manual validation scope,
   preserving untested checks explicitly without approving later releases.

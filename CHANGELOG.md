@@ -4,7 +4,8 @@ Notable Rowick changes are recorded here before tagging or publication.
 
 ## Unreleased
 
-- Refresh selector subscriptions after external Vue/Svelte option changes.
+- Refresh selector subscriptions after external Vue/Svelte option changes,
+  without retriggering notifications for equivalent render options or callbacks.
 
 - Add the public documentation website with framework guides, local search and
   a live grid. Keep maintainer procedures in the repository and deploy GitHub

@@ -36,7 +36,7 @@ jobs:
         run: pnpm exec playwright install --with-deps "${{ matrix.browser }}"
 
       - name: Run integration shard
-        run: pnpm e2e:integration --project "${{ matrix.browser }}" --shard "${{ matrix.shard }}/2"
+        run: pnpm e2e:integration --project "${{ matrix.browser }}" --shard "${{ matrix.shard }}/2" --reporter=line
 
       - name: Retain failed browser diagnostics
         if: failure()

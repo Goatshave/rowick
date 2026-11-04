@@ -20,6 +20,20 @@ const data: Person[] = [
 
 describe("useGrid", () => {
 
+  it("does not notify again when a subscriber reconstructs equivalent render options", async () => {
+    const scope = effectScope(), revision = ref(0);
+    const adapter = scope.run(() => useGrid<Person>(() => {
+      revision.value;
+      return { data, columns, onStateChange: () => {} };
+    }))!;
+    const stop = adapter.grid.subscribe(() => { revision.value++; });
+    adapter.grid.setGlobalFilter("Mina");
+    await nextTick(); await nextTick();
+    expect(revision.value).toBe(1);
+    expect(adapter.grid.getFilteredRowModel().rows).toHaveLength(1);
+    stop(); scope.stop();
+  });
+
   it("refreshes selectors for external controlled state and data without duplicate notifications", async () => {
     const options = ref<GridOptions<Person>>({ data, columns, state: { globalFilter: "" } });
     const scope = effectScope();

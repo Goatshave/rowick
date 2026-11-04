@@ -1346,7 +1346,12 @@ export function createGrid<TData>(options: GridOptions<TData>): Grid<TData> {
         currentOptions.manualFiltering !== previousOptions.manualFiltering || resolvedState.columnFilters !== previousResolved.columnFilters ||
         resolvedState.globalFilter !== previousResolved.globalFilter || resolvedState.filterExpression !== previousResolved.filterExpression) facetCaches.clear();
       trimCellEditHistory();
-      pendingOptionsNotification = true;
+      // Renderers may reconstruct equivalent options in response to a notification.
+      // Callback/initial-state identity alone must not start another commit cycle.
+      const optionKeys = new Set([...Object.keys(previousOptions), ...Object.keys(currentOptions)]);
+      const valuesChanged = [...optionKeys].some((key) => key !== "state" && key !== "initialState" && !key.startsWith("on")
+        && previousOptions[key as keyof GridOptions<TData>] !== currentOptions[key as keyof GridOptions<TData>]);
+      pendingOptionsNotification ||= valuesChanged || !areGridStatesShallowEqual(previousResolved, resolvedState);
       if (options?.notify !== false) {
         const changed = pendingOptionsStateChange;
         pendingOptionsNotification = false;

@@ -8,6 +8,18 @@ const cell = (rowId = "a") => ({ rowId, columnId: "name" });
 const makeGrid = () => createGrid<Item>({ data, columns, getRowId: (row) => row.id, editHistoryLimit: 5 });
 
 describe("data/schema reconciliation", () => {
+  it("settles notifications when a subscriber renders equivalent options again", () => {
+    const grid = makeGrid();
+    let notifications = 0;
+    grid.subscribe(() => {
+      notifications++;
+      grid.setOptions(previous => ({ ...previous, state: { globalFilter: "accepted" }, onStateChange: () => {} }), { notify: false });
+    });
+    grid.setOptions(previous => ({ ...previous, state: { globalFilter: "accepted" } }), { notify: false });
+    for (let commit = 0; commit < 5; commit++) grid.reconcileState();
+    expect(notifications).toBe(1);
+  });
+
   it("flushes externally accepted state and data to selectors once without proposing a state change", () => {
     const grid = makeGrid(), onStateChange = vi.fn(), filters: string[] = [], counts: number[] = [];
     grid.setOptions(p => ({ ...p, onStateChange }));

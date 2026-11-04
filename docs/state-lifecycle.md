@@ -53,7 +53,12 @@ applies options, sends any cleanup proposal, then notifies subscribers.
 
 `setOptions(..., { notify: false })` silently applies internal cleanup and defers
 callbacks. React flushes proposals in an effect after render; Vue/Svelte flush
-after synchronizing options. A custom adapter should call `reconcileState()` in
+after synchronizing options. Reconciliation also flushes deferred option notifications
+so selector subscriptions see accepted controlled state and replaced data. A later
+state notification consumes this pending notification, and repeated reconciliation
+does not notify again. Recreating equivalent options or callbacks alone does not
+schedule a notification; changed data, schema, processing policies or resolved
+state does. This prevents subscription-driven render loops. A custom adapter should call `reconcileState()` in
 its safe commit phase. Later state changes supersede deferred proposals so old
 coordinates are never replayed. Server rendering does not run React effects.
 

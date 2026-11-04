@@ -92,6 +92,7 @@ export function createGrid<TData>(options: GridOptions<TData>): Grid<TData> {
   let notifying = false;
   let notificationPending = false;
   let pendingOptionsStateChange = false;
+  let pendingOptionsNotification = false;
   let editIntent = 0;
   const allColumnsCache = createCacheEntry<Column<TData, unknown>[]>("allColumns");
   const allLeafColumnsCache = createCacheEntry<Column<TData, unknown>[]>("allLeafColumns");
@@ -150,6 +151,7 @@ export function createGrid<TData>(options: GridOptions<TData>): Grid<TData> {
       try { currentOptions.onStateChange?.(proposal); } catch (error) { failures.push(error); }
     }
     if (notify) {
+      pendingOptionsNotification = false;
       try { notifyListeners(); } catch (error) { failures.push(error); }
     }
     throwCallbackFailures(failures);
@@ -1309,7 +1311,11 @@ export function createGrid<TData>(options: GridOptions<TData>): Grid<TData> {
     }
     if (options?.notify !== false && pendingOptionsStateChange) {
       pendingOptionsStateChange = false;
+      pendingOptionsNotification = false;
       publishState(next);
+    } else if (options?.notify !== false && pendingOptionsNotification) {
+      pendingOptionsNotification = false;
+      notifyListeners();
     }
     return next;
   };
@@ -1340,8 +1346,15 @@ export function createGrid<TData>(options: GridOptions<TData>): Grid<TData> {
         currentOptions.manualFiltering !== previousOptions.manualFiltering || resolvedState.columnFilters !== previousResolved.columnFilters ||
         resolvedState.globalFilter !== previousResolved.globalFilter || resolvedState.filterExpression !== previousResolved.filterExpression) facetCaches.clear();
       trimCellEditHistory();
+      // Renderers may reconstruct equivalent options in response to a notification.
+      // Callback/initial-state identity alone must not start another commit cycle.
+      const optionKeys = new Set([...Object.keys(previousOptions), ...Object.keys(currentOptions)]);
+      const valuesChanged = [...optionKeys].some((key) => key !== "state" && key !== "initialState" && !key.startsWith("on")
+        && previousOptions[key as keyof GridOptions<TData>] !== currentOptions[key as keyof GridOptions<TData>]);
+      pendingOptionsNotification ||= valuesChanged || !areGridStatesShallowEqual(previousResolved, resolvedState);
       if (options?.notify !== false) {
         const changed = pendingOptionsStateChange;
+        pendingOptionsNotification = false;
         pendingOptionsStateChange = false;
         publishState(changed ? proposal : undefined);
       }

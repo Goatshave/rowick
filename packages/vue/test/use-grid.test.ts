@@ -19,6 +19,24 @@ const data: Person[] = [
 ];
 
 describe("useGrid", () => {
+
+  it("refreshes selectors for external controlled state and data without duplicate notifications", async () => {
+    const options = ref<GridOptions<Person>>({ data, columns, state: { globalFilter: "" } });
+    const scope = effectScope();
+    const { adapter, filter, count } = scope.run(() => {
+      const adapter = useGrid(options);
+      return { adapter, filter: useGridSelector(adapter.grid, g => g.getState().globalFilter), count: useGridSelector(adapter.grid, g => g.getFilteredRowModel().rows.length) };
+    })!;
+    let calls = 0; watch(filter.selected, () => calls++);
+    options.value = { ...options.value, state: { globalFilter: "Mina" } };
+    await nextTick();
+    expect(filter.selected.value).toBe("Mina"); expect(count.selected.value).toBe(1);
+    options.value = { ...options.value, data: [] }; await nextTick();
+    expect(count.selected.value).toBe(0); expect(calls).toBe(1);
+    scope.stop(); options.value = { ...options.value, state: { globalFilter: "Joon" } }; await nextTick();
+    expect(filter.selected.value).toBe("Mina"); adapter.dispose();
+  });
+
   it("cleans removed coordinates through reactive options and stops on scope disposal", async () => {
     const options = ref<GridOptions<Person>>({ data, columns, getRowId: (row) => row.id });
     const scope = effectScope(), adapter = scope.run(() => useGrid(options))!;

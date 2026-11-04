@@ -19,6 +19,20 @@ const data: Person[] = [
 ];
 
 describe("createGridStore", () => {
+
+  it("refreshes live selectors for external options and stops on disposal", () => {
+    const options = writable<GridOptions<Person>>({ data, columns, state: { globalFilter: "" } });
+    const adapter = createGridStore(options), filters: string[] = [], counts: number[] = [];
+    const stopFilter = createGridSelectorStore(adapter.grid, g => g.getState().globalFilter).subscribe(v => filters.push(v));
+    const stopCount = createGridSelectorStore(adapter.grid, g => g.getFilteredRowModel().rows.length).subscribe(v => counts.push(v));
+    options.update(previous => ({ ...previous, state: { globalFilter: "Mina" } }));
+    expect(filters).toEqual(["", "Mina"]); expect(counts).toEqual([2, 1]);
+    options.update(previous => ({ ...previous, data: [] }));
+    expect(filters).toEqual(["", "Mina"]); expect(counts).toEqual([2, 1, 0]);
+    adapter.dispose(); options.update(previous => ({ ...previous, state: { globalFilter: "Joon" } }));
+    expect(filters).toEqual(["", "Mina"]); stopFilter(); stopCount();
+  });
+
   it("disposes options and active state subscriptions while leaving the core usable", () => {
     const options = writable<GridOptions<Person>>({ data, columns, getRowId: (row) => row.id });
     const adapter = createGridStore(options), values: string[] = [];

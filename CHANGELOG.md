@@ -4,6 +4,8 @@ Notable Rowick changes are recorded here before tagging or publication.
 
 ## Unreleased
 
+- Refresh selector subscriptions after external Vue/Svelte option changes.
+
 - Add the public documentation website with framework guides, local search and
   a live grid. Keep maintainer procedures in the repository and deploy GitHub
   Pages only from the current main commit after successful CI.

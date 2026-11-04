@@ -8,6 +8,18 @@ const cell = (rowId = "a") => ({ rowId, columnId: "name" });
 const makeGrid = () => createGrid<Item>({ data, columns, getRowId: (row) => row.id, editHistoryLimit: 5 });
 
 describe("data/schema reconciliation", () => {
+  it("flushes externally accepted state and data to selectors once without proposing a state change", () => {
+    const grid = makeGrid(), onStateChange = vi.fn(), filters: string[] = [], counts: number[] = [];
+    grid.setOptions(p => ({ ...p, onStateChange }));
+    grid.subscribeSelector(g => g.getState().globalFilter, v => filters.push(v));
+    grid.subscribeSelector(g => g.getCoreRowModel().rows.length, v => counts.push(v));
+    grid.setOptions(p => ({ ...p, state: { globalFilter: "Mina" }, data: [] }), { notify: false });
+    expect(filters).toEqual([]); expect(counts).toEqual([]);
+    grid.reconcileState(); grid.reconcileState();
+    expect(filters).toEqual(["Mina"]); expect(counts).toEqual([0]);
+    expect(onStateChange).not.toHaveBeenCalled();
+  });
+
   it("does not start an editor for a row deleted inside the start callback", () => {
     const grid = makeGrid();
     grid.setOptions((previous) => ({ ...previous, onCellEdit: (event) => {

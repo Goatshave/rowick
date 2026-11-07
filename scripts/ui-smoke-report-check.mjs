@@ -4,7 +4,7 @@ import process from "node:process";
 import { isDeepStrictEqual } from "node:util";
 import { getUiSmokeSourceState } from "./ui-smoke-source-state.mjs";
 import { uiSmokeTargets } from "./ui-smoke-targets.mjs";
-import { createHash } from "node:crypto";
+import { validateReleaseException } from "./ui-smoke-release-exception.mjs";
 
 const defaultReportFile = ".release/ui-smoke-report.json";
 const defaultMaxAgeDays = 7;
@@ -57,6 +57,7 @@ const workflowDispatchPayload = reportText === undefined || args.releaseContext 
       ui_smoke_report: reportText,
       bootstrap_first_publish: "true",
       initial_release_exceptions: args.allowInitialReleaseExceptions ? "true" : "false",
+      ...(args.allowPatchReleaseExceptions ? { patch_release_exceptions: "true" } : {}),
     }));
 if (workflowDispatchPayload !== undefined) {
   if (
@@ -90,6 +91,7 @@ const result = {
   functionalCheckCount: uiSmokeTargets.reduce((count, target) => count + target.manualChecks.length, 0),
   accessibilityCheckCount: uiSmokeTargets.reduce((count, target) => count + target.accessibilityChecks.length, 0),
   initialReleaseExceptionApplied: failures.length === 0 && Boolean(report?.initialReleaseException),
+  patchReleaseExceptionApplied: failures.length === 0 && Boolean(report?.patchReleaseException),
   notTestedCheckCount: (Array.isArray(report?.targets) ? report.targets : []).flatMap(target => [
     ...(Array.isArray(target?.manualChecks) ? target.manualChecks : []),
     ...(Array.isArray(target?.accessibilityChecks) ? target.accessibilityChecks : []),
@@ -102,6 +104,8 @@ if (args.json) {
 } else if (result.ready) {
   if (result.initialReleaseExceptionApplied) {
     console.log(`Initial 0.1.0 release evidence accepted with ${result.notTestedCheckCount} manual checks explicitly not tested; see docs/initial-release-validation.md.`);
+  } else if (result.patchReleaseExceptionApplied) {
+    console.log(`0.1.1 release evidence accepted with ${result.notTestedCheckCount} manual checks explicitly not tested; see docs/0.1.1-validation.md.`);
   } else console.log(
     `UI smoke report check passed for ${result.targetCount} targets, ${result.functionalCheckCount} functional checks, and ${result.accessibilityCheckCount} accessibility checks.`,
   );
@@ -147,35 +151,9 @@ function validateReport(value, expectedSource, options, output) {
   }
 
   validateSource(value.source, expectedSource, options, output);
-  const initialException = validateInitialException(value, expectedSource, options, output);
+  const initialException = validateReleaseException(value, expectedSource, options, output);
   validateReviewEnvironment(value.reviewEnvironment, options.maxAgeDays, output, initialException);
   validateTargets(value.targets, output, initialException);
-}
-
-function validateInitialException(report, source, options, output) {
-  const exception = report.initialReleaseException;
-  if (exception === undefined) return false;
-  const start = output.length;
-  const context = options.releaseContext;
-  if (!options.allowInitialReleaseExceptions || source.workspaceVersion !== "0.1.0" ||
-      context?.version !== "0.1.0" || context?.tag !== "latest" ||
-      context?.repositoryUrl !== "git+https://github.com/Goatshave/rowick.git") {
-    output.push("initial release exceptions require explicit opt-in and canonical 0.1.0/latest release context");
-  }
-  if (!isRecord(exception) || exception.version !== "0.1.0" || exception.approvedBy !== "fabric0de" ||
-      exception.approvedOn !== report.reviewEnvironment?.date || !isNonEmptyString(exception.reason) ||
-      exception.policy !== "docs/initial-release-validation.md") {
-    output.push("initial release exception must record the release owner, date, reason and public 0.1.0 policy");
-  }
-  try {
-    const digest = createHash("sha256").update(readFileSync("docs/initial-release-validation.md")).digest("hex");
-    if (exception?.policySha256 !== digest) output.push("initial release exception policy hash must match the public committed policy");
-  } catch { output.push("initial release exception public policy must exist"); }
-  if (!Array.isArray(report.observations) || report.observations.length === 0 ||
-      report.observations.some(item => !isRecord(item) || !isNonEmptyString(item.scope) || !isNonEmptyString(item.evidence))) {
-    output.push("initial release evidence must preserve concrete observed results separately from untested checks");
-  }
-  return output.length === start;
 }
 
 function validateSource(value, expected, options, output) {
@@ -346,6 +324,7 @@ function parseArgs(argv) {
     tag: undefined,
     version: undefined,
     allowInitialReleaseExceptions: process.env.ROWICK_INITIAL_RELEASE_EXCEPTIONS === "true",
+    allowPatchReleaseExceptions: process.env.ROWICK_PATCH_RELEASE_EXCEPTIONS === "true",
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -357,6 +336,8 @@ function parseArgs(argv) {
       parsed.allowDirty = true;
     } else if (arg === "--allow-initial-release-exceptions") {
       parsed.allowInitialReleaseExceptions = true;
+    } else if (arg === "--allow-patch-release-exceptions") {
+      parsed.allowPatchReleaseExceptions = true;
     } else if (arg === "--file") {
       parsed.file = requireArgValue(argv, index, "--file");
       index += 1;

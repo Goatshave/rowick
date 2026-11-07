@@ -1,6 +1,6 @@
 {
   "name": "@rowick/svelte",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Svelte adapter for Rowick.",
   "keywords": ["data-grid", "grid", "table", "svelte", "adapter"],
   "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/svelte#readme",

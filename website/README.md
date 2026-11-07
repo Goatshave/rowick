@@ -48,7 +48,10 @@ Both general CI and the deployment workflow run it before publication.
 The React, Vue and Svelte previews deliberately install the public `0.1.0`
 runtime packages from npm. Their CSS comes from the repository's current shared
 theme and grid styles, so the website can preview the next stylesheet changes.
-Package versions and public runtime APIs remain aligned with the public release.
+The private website version and all five runtime dependency pins track the
+currently published release documented in README, independently of a pending
+workspace release candidate. Update them only after npm publication succeeds.
+Public runtime APIs remain aligned with that release.
 The examples' data and edits stay in memory; reset restores rows and grid state.
 
 ## Feature previews and source viewer

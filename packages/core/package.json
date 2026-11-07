@@ -1,6 +1,6 @@
 {
   "name": "@rowick/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Framework-agnostic data grid engine.",
   "keywords": ["data-grid", "grid", "table", "headless", "typescript"],
   "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/core#readme",

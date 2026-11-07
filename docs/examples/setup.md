@@ -18,7 +18,8 @@ original data; reloading clears changes.
 
 Install your framework’s maintained UI package and import its styles. This is a
 minimal Vue setup; pass the ready grid instance to the functions on each example
-page. The live previews use the published `@rowick/vue-ui@0.1.0` package.
+page. The previews use the published `0.1.0` core and matching UI package for the
+selected framework.
 
 ```vue
 <script setup lang="ts">

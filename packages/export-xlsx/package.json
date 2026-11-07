@@ -1,6 +1,6 @@
 {
   "name": "@rowick/export-xlsx",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Optional dependency-free typed XLSX exporter for Rowick.",
   "keywords": ["data-grid", "grid", "table", "xlsx", "export"],
   "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/export-xlsx#readme",

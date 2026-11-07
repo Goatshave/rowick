@@ -30,5 +30,5 @@ The repository’s server examples run with a local service. This static site do
 not host a backend. See the [0.1.0 validation scope](initial-release-validation.md)
 for platform checks deferred in the initial release.
 
-The previews use `@rowick/vue-ui@0.1.0`. The same grid methods work across
-React, Vue and Svelte. See [shared setup](examples/setup.md) for framework wiring.
+The previews run the published `0.1.0` core and UI packages for the selected
+React, Vue or Svelte framework. See [shared setup](examples/setup.md) for framework wiring.

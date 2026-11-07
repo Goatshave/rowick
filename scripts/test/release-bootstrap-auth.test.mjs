@@ -21,8 +21,10 @@ test('bootstrap is opt-in and rejects other versions, repositories and branches'
   }
 });
 
-test('bootstrap reads the complete real public package set', () => {
-  assert.equal(readBootstrapPackages(process.cwd()).length, 12);
+test('bootstrap cannot be reused after the initial workspace version', () => {
+  const version = JSON.parse(readFileSync('package.json', 'utf8')).version;
+  if (version === '0.1.0') assert.equal(readBootstrapPackages(process.cwd()).length, 12);
+  else assert.throws(() => readBootstrapPackages(process.cwd()), /Workspace version must be 0.1.0/);
 });
 
 test('bootstrap refuses an incomplete or mismatched package set', () => {

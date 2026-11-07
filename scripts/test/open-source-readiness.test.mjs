@@ -45,8 +45,11 @@ test("public repository documentation and community files stay complete", () => 
   const manifest = JSON.parse(readFileSync(path.join(repoRoot, "package.json"), "utf8"));
   const website = JSON.parse(readFileSync(path.join(repoRoot, "website/package.json"), "utf8"));
   assert.equal(website.private, true, "the docs website must never be published as an npm package");
-  for (const name of ["@rowick/vue-ui", "@rowick/theme"]) {
-    assert.equal(website.dependencies[name], manifest.version, "the demo must consume the documented public release");
+  const publishedVersion = readme.match(/Rowick (\d+\.\d+\.\d+) is available/)?.[1];
+  assert.ok(publishedVersion, "README must identify the currently published release");
+  assert.equal(website.version, publishedVersion, "website version tracks the published runtime, not an unpublished candidate");
+  for (const name of ["@rowick/core", "@rowick/react-ui", "@rowick/vue-ui", "@rowick/svelte-ui", "@rowick/theme"]) {
+    assert.equal(website.dependencies[name], publishedVersion, "every preview must consume the documented public release");
   }
   assert.equal(manifest.devDependencies?.vitepress, undefined);
   assert.equal(manifest.pnpm?.overrides?.["vitepress>vite"], undefined);

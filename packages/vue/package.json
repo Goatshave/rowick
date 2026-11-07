@@ -1,6 +1,6 @@
 {
   "name": "@rowick/vue",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue adapter for Rowick.",
   "keywords": ["data-grid", "grid", "table", "vue", "adapter"],
   "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/vue#readme",

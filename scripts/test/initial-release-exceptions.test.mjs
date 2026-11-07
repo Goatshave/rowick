@@ -37,8 +37,14 @@ function check(report, { optIn = true, version = '0.1.0', tag = 'latest', reposi
   } finally { rmSync(dir, { recursive: true, force: true }); }
 }
 
-test('0.1.0 exception accepts explicit untested records without claiming they passed', () => {
+test('0.1.0 exception remains confined to the original workspace version', () => {
   const result = check(reportFixture());
+  const version = JSON.parse(readFileSync("package.json", "utf8")).version;
+  if (version !== "0.1.0") {
+    assert.equal(result.status, 1);
+    assert.ok(result.failures.some(f => f.includes("canonical 0.1.0/latest")));
+    return;
+  }
   assert.equal(result.status, 0, JSON.stringify(result.failures));
   assert.equal(result.initialReleaseExceptionApplied, true);
   assert.equal(result.notTestedCheckCount, 72);

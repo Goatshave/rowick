@@ -1,6 +1,6 @@
 {
   "name": "@rowick/primitives",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Unstyled primitive prop helpers for Rowick.",
   "keywords": ["data-grid", "grid", "table", "primitives", "accessibility"],
   "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/primitives#readme",

@@ -1,7 +1,7 @@
 {
   "name": "rowick-workspace",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MIT open-source, multi-framework data grid foundation.",
   "license": "MIT",
   "type": "module",

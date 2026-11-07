@@ -430,3 +430,12 @@ The manual inspection report separates functional checks from accessibility chec
 - Do not publish `examples/shared-server` or the Next.js/Nuxt/SvelteKit server-export apps; they are private framework integration, recipe, and browser-test workspaces.
 - Treat `npm pack --dry-run --json` failures as release blockers; they mean the published artifact would be incomplete or would include unintended source files.
 - Update `CHANGELOG.md` and the relevant support or migration guides when release readiness or supported behavior changes.
+
+## Limited 0.1.1 manual validation scope
+
+The release owner separately approved the public [0.1.1 validation scope](../0.1.1-validation.md).
+Use the explicit `patch_release_exceptions` workflow input only for `0.1.1/latest`
+with a matching, fresh, clean-source report containing `patchReleaseException`.
+The default full manual policy and the original 0.1.0-only exception are unchanged.
+The new flag cannot approve later versions or reuse an initial-release exception.
+All automatic release gates remain required.

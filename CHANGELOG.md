@@ -4,15 +4,28 @@ Notable Rowick changes are recorded here before tagging or publication.
 
 ## Unreleased
 
-- Refine the shared grid theme, headers, cell interactions and native checkbox styling.
-- Add consistent interactive React, Vue and Svelte feature examples with formatted source files and matching live previews.
+## 0.1.1 - 2026-11-07
 
-- Refresh selector subscriptions after external Vue/Svelte option changes,
-  without retriggering notifications for equivalent render options or callbacks.
+- Refresh selector subscriptions after external Vue/Svelte option changes without repeated notifications for equivalent render options.
+- Refine shared grid colors, headers, cell interactions, focus states, native checkboxes and pinned-column separators in all styled framework packages.
+- Add consistent interactive React, Vue and Svelte documentation examples with formatted source files, native live previews and a file explorer.
+- Record the owner-approved 0.1.1 manual validation limits explicitly; automated gates remain required.
+- Publish the official documentation website with user guides and framework examples while excluding maintainer procedures from public pages and search.
 
-- Add the public documentation website with framework guides, local search and
-  a live grid. Keep maintainer procedures in the repository and deploy GitHub
-  Pages only from the current main commit after successful CI.
+## 0.1.0 - 2026-11-01
+
+First public release.
+
+- Provide twelve aligned `@rowick/*` packages: a framework-independent grid engine,
+  virtualization, primitives, themes, React/Vue/Svelte adapters and UI renderers,
+  optional data controllers and an XLSX exporter.
+- Include typed filters and saved views, row transactions and batch editing,
+  server data, layout and selection ranges, pivot/export and locale codecs.
+- Supply guides, framework examples, declaration contracts, package-consumption
+  checks, browser tests and independent XLSX verification.
+- Define contribution approval, issue classification, private security reporting
+  and protected release procedures.
+
 - Require Windows Chromium UI and remote-editing smoke tests in CI and before
   publication. Document the owner-approved first-release manual validation scope,
   preserving untested checks explicitly without approving later releases.
@@ -28,9 +41,6 @@ Notable Rowick changes are recorded here before tagging or publication.
 - Release outgoing React locale forms after the replacement commits, preventing
   a late subscription to an already disposed form during a fast locale change.
 
-Publication records are available in
-[GitHub Releases](https://github.com/Goatshave/rowick/releases).
-
 - Preserve protected column positions when restoring partial or equivalent saved
   orders, and enforce export header budgets when the data set is empty.
 - Supply Rowick favicons for the maintained framework examples.
@@ -38,17 +48,3 @@ Publication records are available in
   to prevent intermittent heading overflow in WebKit on narrow screens.
 - Ship repository Markdown guides and GitHub documentation links. Website source,
   generator dependencies and deployment configuration are excluded from the initial repository.
-
-## 0.1.0 - 2026-10-30
-
-Initial release candidate prepared on this date; this is not a publication record.
-
-- Provide twelve aligned `@rowick/*` packages: a framework-independent grid engine,
-  virtualization, primitives, themes, React/Vue/Svelte adapters and UI renderers,
-  optional data controllers and an XLSX exporter.
-- Include typed filters and saved views, row transactions and batch editing,
-  server data, layout and selection ranges, pivot/export and locale codecs.
-- Supply guides, framework examples, declaration contracts, package-consumption
-  checks, browser tests and independent XLSX verification.
-- Define contribution approval, issue classification, private security reporting
-  and protected release procedures.

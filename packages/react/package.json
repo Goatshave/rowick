@@ -1,6 +1,6 @@
 {
   "name": "@rowick/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React adapter for Rowick.",
   "keywords": ["data-grid", "grid", "table", "react", "adapter"],
   "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/react#readme",

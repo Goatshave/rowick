@@ -1,6 +1,6 @@
 {
   "name": "@rowick/theme",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CSS variables, base themes, and typed product token adapters for Rowick.",
   "keywords": [
     "data-grid",

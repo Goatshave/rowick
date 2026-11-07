@@ -1,6 +1,6 @@
 {
   "name": "@rowick/virtual",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Framework-agnostic virtualization primitives for Rowick.",
   "keywords": ["data-grid", "grid", "table", "virtualization", "typescript"],
   "homepage": "https://github.com/Goatshave/rowick/tree/main/packages/virtual#readme",

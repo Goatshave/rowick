@@ -49,7 +49,7 @@ for (const example of getPlaywrightUiSmokeTargets()) {
     await expect(darkThemeButton).toBeVisible();
     await darkThemeButton.click();
     await expect(appShell).toHaveAttribute("data-rowick-theme", "dark");
-    await expect.poll(() => page.locator("[data-rowick]").evaluate((element) => getComputedStyle(element).getPropertyValue("--rowick-surface").trim())).toBe("#171c25");
+    await expect.poll(() => page.locator("[data-rowick]").evaluate((element) => getComputedStyle(element).getPropertyValue("--rowick-surface").trim())).toBe("#191c1f");
     await expectThemeTokens(grid, example.smokeCheck.productThemeTokens.dark);
     await expectSemanticMarkers(page, example.smokeCheck.semanticMarkers);
 

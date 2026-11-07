@@ -1,0 +1,20 @@
+import { useLayoutEffect, useRef, useState } from 'react';
+import type { CellEditorContext } from '@rowick/core';
+import type { Person } from './people';
+import { errorId } from './model';
+import { createInlineEditor, focusEditor } from './inline-editor';
+export default function CellEditor({context,onValidation}:{context:CellEditorContext<Person>;onValidation:(message:string)=>void}) {
+  const input=useRef<HTMLInputElement|HTMLSelectElement|null>(null);
+  const [draft,setDraft]=useState(String(context.value ?? ''));
+  const [error,setError]=useState('');
+  const [editor]=useState(()=>createInlineEditor(context,message=>{
+    setError(message);onValidation(message?`${String(context.column.columnDef.header)}: ${message}`:'');
+  }));
+  useLayoutEffect(()=>{if(input.current)focusEditor(input.current);return()=>onValidation('');},[]);
+  const choices=context.column.columnDef.editOptions;
+  const attrs={value:draft,'aria-label':`Edit ${context.column.id}`,'aria-invalid':!!error,'aria-describedby':error?errorId:undefined,onBlur:(event:React.FocusEvent<HTMLInputElement|HTMLSelectElement>)=>{editor.save(draft,event.nativeEvent);},onChange:(event:React.ChangeEvent<HTMLInputElement|HTMLSelectElement>)=>{setDraft(event.currentTarget.value);editor.clear();}};
+  return <div className={`ce ${error?'ce-invalid':''} ${choices?'ce-select':''} ${context.column.id==='score'?'ce-number':''}`} onKeyDown={event=>{if(['Enter','Tab','Escape'].includes(event.key))event.stopPropagation();editor.keydown(event.nativeEvent,draft);}}>
+    {choices?<select {...attrs} ref={element=>{input.current=element;}}>{choices.map(choice=><option key={String(choice.value)} value={String(choice.value)} disabled={choice.disabled}>{choice.label}</option>)}</select>:
+      <input {...attrs} ref={element=>{input.current=element;}} type="text" inputMode={context.column.id==='score'?'decimal':'text'} autoComplete="off" spellCheck={false} onCompositionStart={editor.compositionStart} onCompositionEnd={editor.compositionEnd}/>}
+  </div>;
+}

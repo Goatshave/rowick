@@ -4,17 +4,33 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vitepress dev . --host 127.0.0.1 --port 4290 --strictPort",
-    "build": "vitepress build .",
-    "preview": "vitepress preview . --host 127.0.0.1 --port 4290 --strictPort"
+    "dev": "node ../scripts/build-doc-examples.mjs && vitepress dev . --host 127.0.0.1 --port 4290 --strictPort",
+    "build": "node ../scripts/build-doc-examples.mjs && vitepress build .",
+    "preview": "vitepress preview . --host 127.0.0.1 --port 4290 --strictPort",
+    "test": "vitest run .vitepress/theme/components/feature-examples.test.ts .vitepress/theme/examples/example-model.test.ts"
   },
   "dependencies": {
     "@fontsource-variable/instrument-sans": "5.3.0",
+    "@rowick/core": "0.1.0",
+    "@rowick/react-ui": "0.1.0",
+    "@rowick/svelte-ui": "0.1.0",
     "@rowick/theme": "0.1.0",
     "@rowick/vue-ui": "0.1.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "svelte": "5.57.3",
     "vue": "^3.5.44"
   },
   "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "7.3.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "@vitejs/plugin-vue": "6.0.10",
+    "prettier": "3.9.10",
+    "prettier-plugin-svelte": "4.1.1",
+    "shiki": "4.6.0",
+    "vite": "8.3.5",
     "vitepress": "2.0.0-alpha.21"
   }
 }

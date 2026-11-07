@@ -17,10 +17,13 @@ const features = [
   <main class="rowick-home">
     <section class="home-hero" aria-labelledby="home-title">
       <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-copy">
       <a class="release-note" href="https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.0">
         <span class="release-version">0.1.0</span> A new home for your data <span aria-hidden="true">↗</span>
       </a>
       <h1 id="home-title">Make your data<br /><span>feel at home.</span></h1>
+      </div>
+      <div class="hero-intro">
       <p class="hero-description">A typed data grid for React, Vue, and Svelte.<br class="desktop-break" /> One shared engine. The freedom to make it yours.</p>
       <div class="hero-actions">
         <a class="home-button primary" :href="withBase('/getting-started')">Start building <span aria-hidden="true">↗</span></a>
@@ -32,10 +35,11 @@ const features = [
         <a :href="withBase('/vue-ui')">Vue</a><span class="framework-divider" aria-hidden="true">/</span>
         <a :href="withBase('/svelte-ui')">Svelte</a>
       </div>
+      </div>
     </section>
 
     <section id="try-the-grid" class="home-demo-section" aria-labelledby="demo-title">
-      <div class="demo-section-caption"><h2 id="demo-title">A real grid. Ready to explore.</h2><a :href="withBase('/examples')">Open the example <span aria-hidden="true">↗</span></a></div>
+      <div class="demo-section-caption"><h2 id="demo-title">A real grid. Ready to explore.</h2><a :href="withBase('/examples')">Explore examples <span aria-hidden="true">↗</span></a></div>
       <div class="demo-stage">
         <ClientOnly>
           <RowickDemo />
@@ -45,7 +49,7 @@ const features = [
       <div class="demo-hints"><span><kbd>↕</kbd> Click a header to sort</span><span><kbd>⌕</kbd> Search across your rows</span><span><kbd>↵</kbd> Double-click a name to edit</span></div>
     </section>
 
-    <section class="home-quickstart" aria-labelledby="quickstart-title">
+    <section id="quickstart" class="home-quickstart" aria-labelledby="quickstart-title">
       <div class="quickstart-copy">
         <p class="eyebrow">A FAMILIAR STARTING POINT</p>
         <h2 id="quickstart-title">Your first grid.<br />Your next idea.</h2>

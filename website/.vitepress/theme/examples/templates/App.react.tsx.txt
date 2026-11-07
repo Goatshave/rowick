@@ -1,0 +1,29 @@
+import {useCallback,useLayoutEffect,useMemo,useRef,useState} from 'react';
+import {DataGrid} from '@rowick/react-ui';
+import type {Grid} from '@rowick/core';
+import {createExampleModel,type Density,errorId} from './model';
+import type {Person} from './people';
+import {theme} from './theme';
+import './styles/rowick-theme.css';
+import './styles/rowick-grid.css';
+import './styles/controls.css';
+import './styles/example.css';
+__RENDER_IMPORTS__
+export default function App() {
+const model=useMemo(()=>createExampleModel('__FEATURE__'),[]);
+const [state,setState]=useState(()=>model.getSnapshot());
+const [rows,setRows]=useState(()=>state.rows);
+const frame=useRef<HTMLElement|null>(null);
+useLayoutEffect(()=>{const unsubscribe=model.subscribe(next=>{setState(next);setRows(previous=>previous===next.rows?previous:next.rows);});return()=>{unsubscribe();};},[model]);
+const ready=useCallback((grid:Grid<Person>)=>model.attach(grid,()=>frame.current),[model]);
+return <section ref={frame} className="sample" data-rowick data-rowick-theme={theme} aria-label="__FEATURE__ example">
+<header className="sample-heading"><div className="sample-title"><strong>People</strong><span>{rows.length} total records</span></div><div className="sample-options"><label>Rows<select aria-label="Grid density" value={state.density} onChange={event=>model.setDensity(event.currentTarget.value as Density)}><option value="compact">Compact</option><option value="standard">Standard</option><option value="comfortable">Comfortable</option></select></label><button className="sample-reset" onClick={model.reset}>Reset example</button></div></header>
+<div className="sample-toolbar">__TOOLBAR__</div>
+<DataGrid<Person> key={state.generation} data={rows} columns={model.columns} getRowId={row=>row.id} initialState={model.initialState} onCellEdit={model.onCellEdit} onGridReady={ready} density={state.density} className="rowick-grid--enterprise" ariaLabel="__FEATURE__ sample data" rowVirtualization={false} columnVirtualization={false} getCellClassName={model.cellClass} __RENDER_PROPS__/>
+{state.editError&&<p id={errorId} className="sample-alert" role="alert">{state.editError}</p>}
+<footer className="sample-footer"><span><span>{state.count} {state.count===1?'record':'records'}</span><span className="sample-footer-note">__FOOTER_NOTE__</span></span>__PAGER__</footer>
+<details className="sample-state"><summary>__INSPECT_LABEL__</summary><pre><code>{state.stateText}</code></pre></details>
+{state.csvRequested&&<section className="sample-csv" aria-label="CSV output"><strong>CSV output</strong>{state.csv?<pre><code>{state.csv}</code></pre>:<p>No matching rows to export. Clear the filters to include data.</p>}</section>}
+<p className="sample-announcement" role="status">{state.announcement}</p>
+</section>;
+}

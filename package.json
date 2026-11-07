@@ -18,7 +18,7 @@
     "api:check": "node scripts/api-contract.mjs",
     "api:update": "node scripts/api-contract.mjs --write",
     "check": "pnpm -r --fail-if-no-match --filter \"./packages/*\" --filter @rowick/example-shared-server check",
-    "test": "pnpm test:release && pnpm -r --fail-if-no-match --filter \"./packages/*\" --filter @rowick/example-shared-server test",
+    "test": "pnpm test:release && pnpm test:docs && pnpm -r --fail-if-no-match --filter \"./packages/*\" --filter @rowick/example-shared-server test",
     "test:xlsx:independent": "pnpm --filter @rowick/export-xlsx test:independent",
     "test:release": "node --test scripts/test/*.test.mjs",
     "lint": "pnpm -r --fail-if-no-match --filter \"./packages/*\" lint",
@@ -59,7 +59,8 @@
     "e2e:smoke": "pnpm build && playwright test --config playwright.smoke.config.ts",
     "security:audit": "node scripts/dependency-audit.mjs",
     "e2e:server-data": "pnpm build && playwright test --config playwright.server-data.config.ts",
-    "e2e:integration": "pnpm build && playwright test --config playwright.integration.config.ts"
+    "e2e:integration": "pnpm build && playwright test --config playwright.integration.config.ts",
+    "test:docs": "pnpm --filter @rowick/docs test"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

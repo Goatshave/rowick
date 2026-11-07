@@ -1,0 +1,19 @@
+<script lang="ts">
+import {onDestroy} from 'svelte';
+import type {CellEditorContext} from '@rowick/core';
+import type {Person} from './people';
+import {errorId} from './model';
+import {createInlineEditor,focusEditor} from './inline-editor';
+export let context:CellEditorContext<Person>;
+export let onValidation:(message:string)=>void;
+let draft=String(context.value ?? '');
+let error='';
+const choices=context.column.columnDef.editOptions;
+const editor=createInlineEditor(context,message=>{error=message;onValidation(message?`${String(context.column.columnDef.header)}: ${message}`:'');});
+onDestroy(()=>onValidation(''));
+</script>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div class="ce" class:ce-invalid={!!error} class:ce-select={!!choices} class:ce-number={context.column.id==='score'} onkeydown={event=>editor.keydown(event,draft)}>
+{#if choices}<select use:focusEditor bind:value={draft} aria-label={`Edit ${context.column.id}`} aria-invalid={!!error} aria-describedby={error?errorId:undefined} onchange={editor.clear} onblur={event=>editor.save(draft,event)}>{#each choices as choice}<option value={String(choice.value)} disabled={choice.disabled}>{choice.label}</option>{/each}</select>
+{:else}<input use:focusEditor bind:value={draft} type="text" inputmode={context.column.id==='score'?'decimal':'text'} aria-label={`Edit ${context.column.id}`} aria-invalid={!!error} aria-describedby={error?errorId:undefined} autocomplete="off" spellcheck={false} oninput={editor.clear} onblur={event=>editor.save(draft,event)} oncompositionstart={editor.compositionStart} oncompositionend={editor.compositionEnd}/>{/if}
+</div>

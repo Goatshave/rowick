@@ -121,3 +121,8 @@ turn a failed updater run into a successful one. The dated policy audit remains
 mandatory, so a new dependency path or expiry still blocks CI. Reopen and reassess
 the alert if usage changes or the exception expires. Do not add package-wide
 ignores or dismiss unrelated findings in the shared lockfile.
+
+The documentation preview compiler uses the same patched `deepmerge@4.3.1` via
+`website > @sveltejs/vite-plugin-svelte@7.3.1`. Its exact-path audit exception
+shares the existing expiry and is covered by the installed-package exploit
+and ordinary merge compatibility regressions.

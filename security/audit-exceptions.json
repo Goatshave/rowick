@@ -201,6 +201,14 @@
       "path": "examples/sveltekit-server-export > @sveltejs/vite-plugin-svelte@7.3.1 > deepmerge@4.3.1",
       "expires": "2026-11-22",
       "reason": "No patched upstream version on 2026-10-30. pnpm patchedDependencies deepmerge@4.3.1 applies patches/deepmerge@4.3.1.patch to source and both CJS/UMD distributions (lock patch hash djkursnltbasccsuuew3zwz2ya). Installed-package exploit and ordinary merge compatibility regressions in scripts/test/dependency-audit-installed.test.mjs cover this exact dependency chain. Audit reports the unchanged upstream version despite the local fix; remove this exception and patch when an upstream fixed version is verified."
+    },
+    {
+      "advisory": "GHSA-gcqx-w48m-w2h4",
+      "package": "deepmerge",
+      "version": "4.3.1",
+      "path": "website > @sveltejs/vite-plugin-svelte@7.3.1 > deepmerge@4.3.1",
+      "expires": "2026-11-22",
+      "reason": "Revalidated on 2026-11-07 for the documentation preview compiler. No patched upstream version on 2026-10-30. pnpm patchedDependencies deepmerge@4.3.1 applies patches/deepmerge@4.3.1.patch to source and both CJS/UMD distributions (lock patch hash djkursnltbasccsuuew3zwz2ya). Installed-package exploit and ordinary merge compatibility regressions in scripts/test/dependency-audit-installed.test.mjs cover this exact dependency chain. Audit reports the unchanged upstream version despite the local fix; remove this exception and patch when an upstream fixed version is verified."
     }
   ]
 }

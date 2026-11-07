@@ -1,5 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitepress";
+import { previewExamples } from "./preview-examples.ts";
 
 export default defineConfig({
   title: "Rowick",
@@ -16,9 +17,16 @@ export default defineConfig({
     ["meta", { name: "theme-color", content: "#f6f4ef" }],
   ],
   vite: {
-    publicDir: fileURLToPath(new URL("../../assets/brand", import.meta.url)),
+    plugins: [previewExamples()],
+    publicDir: fileURLToPath(new URL("../.generated/public", import.meta.url)),
     resolve: {
-      alias: { vue: fileURLToPath(new URL("../node_modules/vue", import.meta.url)) },
+      // Build and development share the repository's current CSS. Runtime APIs
+      // still come from the published packages pinned in website/package.json.
+      alias: {
+        vue: fileURLToPath(new URL("../node_modules/vue", import.meta.url)),
+        "@rowick/theme/css": fileURLToPath(new URL("../../packages/theme/src/index.css", import.meta.url)),
+        "@rowick/vue-ui/css": fileURLToPath(new URL("../../packages/react-ui/src/index.css", import.meta.url)),
+      },
       dedupe: ["vue"],
     },
     ssr: { noExternal: ["@rowick/vue-ui", "@rowick/vue", "@rowick/core", "@rowick/primitives", "@rowick/virtual"] },
@@ -40,7 +48,17 @@ export default defineConfig({
       { text: "Start here", items: [
         { text: "Getting started", link: "/getting-started" },
         { text: "Choose your packages", link: "/packages" },
-        { text: "Live example", link: "/examples" },
+        { text: "Examples", link: "/examples" },
+      ] },
+      { text: "Feature examples", collapsed: false, items: [
+        { text: "Shared setup", link: "/examples/setup" },
+        { text: "Sorting", link: "/examples/sorting" },
+        { text: "Filtering", link: "/examples/filtering" },
+        { text: "Row selection", link: "/examples/selection" },
+        { text: "Pagination", link: "/examples/pagination" },
+        { text: "Cell editing", link: "/examples/editing" },
+        { text: "Column visibility & pinning", link: "/examples/columns" },
+        { text: "CSV export", link: "/examples/export" },
       ] },
       { text: "Your framework", items: [
         { text: "React", link: "/react-ui" },

@@ -4,6 +4,9 @@ Notable Rowick changes are recorded here before tagging or publication.
 
 ## Unreleased
 
+- Refine the shared grid theme, headers, cell interactions and native checkbox styling.
+- Add consistent interactive React, Vue and Svelte feature examples with formatted source files and matching live previews.
+
 - Refresh selector subscriptions after external Vue/Svelte option changes,
   without retriggering notifications for equivalent render options or callbacks.
 

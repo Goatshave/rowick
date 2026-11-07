@@ -1,0 +1,5 @@
+import type {CellContext} from '@rowick/core';
+import type {Person} from './people';
+export default function RowCheckbox({context,selected}:{context:CellContext<Person,unknown>;selected:boolean}) {
+  return <label className="sample-row-check"><input type="checkbox" className="rowick-checkbox" aria-label={`Select ${context.row.original?.name}`} checked={selected} onPointerDown={event=>event.stopPropagation()} onClick={event=>event.stopPropagation()} onKeyDown={event=>event.stopPropagation()} onChange={event=>context.grid.toggleRowSelected(context.row.id,event.currentTarget.checked)}/>{String(context.value)}</label>;
+}

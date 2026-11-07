@@ -1,0 +1,42 @@
+/* Native control states shared by the homepage demo and feature examples. */
+:is(.fx, .rowick-demo) :is(input:not([type="checkbox"]), select) {
+  color: var(--rowick-text);
+  -webkit-text-fill-color: currentColor;
+  caret-color: var(--rowick-text);
+}
+:is(.fx, .rowick-demo) input:not([type="checkbox"])::placeholder {
+  color: var(--rowick-text-muted);
+  -webkit-text-fill-color: currentColor;
+  opacity: 1;
+}
+:is(.fx, .rowick-demo) input::selection {
+  background: var(--rowick-focus);
+  color: var(--rowick-surface);
+  -webkit-text-fill-color: currentColor;
+}
+:is(.fx, .rowick-demo) select option {
+  background: var(--rowick-surface-raised);
+  color: var(--rowick-text);
+}
+:is(.fx, .rowick-demo) select option:disabled { color: var(--rowick-text-muted); }
+:is(.fx, .rowick-demo) :is(input:not([type="checkbox"]),select):disabled {
+  opacity: 1;
+  background: var(--rowick-surface-muted);
+  color: var(--rowick-text-muted);
+  cursor: not-allowed;
+}
+.rowick-demo .rowick-grid__cell-editor {
+  height: calc(var(--rowick-row-height) - 1px);
+  padding-inline: 20px;
+  border: 0;
+  border-radius: 0;
+  background: var(--rowick-surface-raised);
+  box-shadow: inset 0 0 0 1.5px var(--rowick-focus);
+}
+.rowick-demo .rowick-grid__cell[data-editing="true"] { padding: 0; outline: none; }
+.rowick-demo .rowick-grid__cell-editor:focus { box-shadow: inset 0 0 0 1.5px var(--rowick-focus); }
+.rowick-demo .rowick-grid__cell-editor[aria-invalid="true"] { color: var(--rowick-danger); box-shadow: inset 0 0 0 1.5px var(--rowick-danger); }
+@media (forced-colors: active) {
+  :is(.fx, .rowick-demo) :is(input:not([type="checkbox"]),select) { background: Field; color: FieldText; caret-color: FieldText; }
+  :is(.fx, .rowick-demo) input::selection { background: Highlight; color: HighlightText; }
+}

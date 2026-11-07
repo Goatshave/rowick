@@ -13,5 +13,5 @@
   "files": ["dist", "LICENSE"],
   "scripts": { "build": "tsup src/index.ts --format esm --dts --clean", "check": "tsc --noEmit", "test": "vitest run", "test:independent": "vitest run --config vitest.independent.config.ts", "lint": "tsc --noEmit" },
   "dependencies": { "@rowick/data": "workspace:*" },
-  "devDependencies": { "tsup": "^8.3.5", "typescript": "^5.7.2", "vitest": "^4.1.11" }
+  "devDependencies": { "tsup": "^9.0.0", "typescript": "^5.7.2", "vitest": "^4.1.11" }
 }

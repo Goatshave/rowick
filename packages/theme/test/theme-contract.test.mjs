@@ -44,6 +44,6 @@ test("lets styled grids inherit root overrides while preserving standalone seman
   assert.match(themeSource, /\[data-rowick-theme="dark"\]\s+\.rowick-grid/);
   assert.match(themeSource, /\[data-rowick-theme="dark"\]\s+\[data-rowick\]:not\(\.rowick-grid \[data-rowick\]\)/);
   assert.match(themeSource, /color-scheme:\s*dark/);
-  assert.match(themeSource, /--rowick-surface:\s*#171c25/);
-  assert.match(themeSource, /--rowick-text:\s*#edf1f7/);
+  assert.match(themeSource, /--rowick-surface:\s*#191c1f/);
+  assert.match(themeSource, /--rowick-text:\s*#edf0f2/);
 });

@@ -9,6 +9,7 @@ import { evaluateAudit } from "../dependency-audit.mjs";
 const policy = JSON.parse(readFileSync(new URL("../../security/audit-exceptions.json", import.meta.url), "utf8"));
 const deepmergeExceptions = policy.exceptions.filter((item) => item.advisory === "GHSA-gcqx-w48m-w2h4");
 const expectedPaths = [
+  "website > @sveltejs/vite-plugin-svelte@7.3.1 > deepmerge@4.3.1",
   "compatibility/svelte-4 > @sveltejs/vite-plugin-svelte@3.1.2 > deepmerge@4.3.1",
   "examples/nuxt-server-export > nuxt@4.6.3 > @nuxt/nitro-server@4.6.3 > nitropack@2.13.5 > @rollup/plugin-node-resolve@16.0.3 > deepmerge@4.3.1",
   "examples/svelte-grouped > @sveltejs/vite-plugin-svelte@7.3.1 > deepmerge@4.3.1",
@@ -54,7 +55,7 @@ const implementations = entries.flatMap((entry, index) => [
   { name: `installed UMD ${index + 1}`, merge: require(join(dirname(entry), "umd.js")) },
 ]);
 
-test("all nine reviewed chains resolve the installed version-scoped pnpm patch", () => {
+test("all ten reviewed chains resolve the installed version-scoped pnpm patch", () => {
   assert.deepEqual(deepmergeExceptions.map((item) => item.path).sort(), [...expectedPaths].sort());
   const manifest = JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8"));
   assert.equal(manifest.pnpm.patchedDependencies["deepmerge@4.3.1"], "patches/deepmerge@4.3.1.patch");

@@ -2,7 +2,8 @@
 
 The website uses the Markdown files in `../docs` as its source. VitePress
 configuration, the theme, and interactive components live in `.vitepress`.
-Brand assets come directly from `../assets/brand`.
+The example build copies brand assets from `../assets/brand` into the ignored
+`website/.generated/public` directory.
 Instrument Sans is self-hosted through the pinned `@fontsource-variable/instrument-sans`
 package under the SIL Open Font License; the site does not request a remote font CDN.
 
@@ -44,10 +45,29 @@ no deployment token is stored as a secret.
 and rejects maintainer routes or maintainer titles in the local search index.
 Both general CI and the deployment workflow run it before publication.
 
-The live Vue example deliberately installs the public `0.1.0` packages from
-npm rather than a workspace build. Keep its package versions and documentation
-aligned with the public release. The example's data and edits stay in memory;
-reset restores the sample rows and grid state.
+The React, Vue and Svelte previews deliberately install the public `0.1.0`
+runtime packages from npm. Their CSS comes from the repository's current shared
+theme and grid styles, so the website can preview the next stylesheet changes.
+Package versions and public runtime APIs remain aligned with the public release.
+The examples' data and edits stay in memory; reset restores rows and grid state.
+
+## Feature previews and source viewer
+
+`pnpm docs:dev` and `pnpm docs:build` first run
+`scripts/build-doc-examples.mjs`. It assembles all seven examples for each
+framework from `.vitepress/theme/examples/`, formats their sources with two-space
+indentation, and builds 21 native framework apps. The source viewer reads the
+same formatted files through the generated, deduplicated catalog. Generated
+sources, catalog and built previews stay under the ignored `.generated` folder.
+
+Behavior lives in `example-model.ts`, with shared inline-edit keyboard handling
+in `inline-editor.ts`. Framework templates own mounting and rendering; shared
+styles keep controls, editors and light/dark themes consistent. The development
+watcher rebuilds previews and reloads the page when those inputs change.
+
+Run `pnpm test:docs` for the shared behavior and editing regressions. Before
+publishing, exercise each feature in all three frameworks and both themes,
+including actual CSV downloads and edit validation/keyboard navigation.
 
 VitePress is pinned to `2.0.0-alpha.21` for its current Vite 8 toolchain. Its
 `1.6.4` stable line depends on Vite 5, whose accepted minimum-version exceptions

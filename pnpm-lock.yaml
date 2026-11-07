@@ -874,16 +874,61 @@ importers:
       '@fontsource-variable/instrument-sans':
         specifier: 5.3.0
         version: 5.3.0
+      '@rowick/core':
+        specifier: 0.1.0
+        version: 0.1.0
+      '@rowick/react-ui':
+        specifier: 0.1.0
+        version: 0.1.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@rowick/svelte-ui':
+        specifier: 0.1.0
+        version: 0.1.0(svelte@5.57.3)
       '@rowick/theme':
         specifier: 0.1.0
         version: 0.1.0
       '@rowick/vue-ui':
         specifier: 0.1.0
         version: 0.1.0(vue@3.5.44(typescript@6.0.3))
+      react:
+        specifier: 19.3.1
+        version: 19.3.1
+      react-dom:
+        specifier: 19.3.1
+        version: 19.3.1(react@19.3.1)
+      svelte:
+        specifier: 5.57.3
+        version: 5.57.3
       vue:
         specifier: ^3.5.44
         version: 3.5.44(typescript@6.0.3)
     devDependencies:
+      '@sveltejs/vite-plugin-svelte':
+        specifier: 7.3.1
+        version: 7.3.1(svelte@5.57.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.0))
+      '@types/react':
+        specifier: 19.3.0
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: 19.3.0
+        version: 19.3.0(@types/react@19.3.0)
+      '@vitejs/plugin-react':
+        specifier: 6.1.2
+        version: 6.1.2(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.0))
+      '@vitejs/plugin-vue':
+        specifier: 6.0.10
+        version: 6.0.10(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.0))(vue@3.5.44(typescript@6.0.3))
+      prettier:
+        specifier: 3.9.10
+        version: 3.9.10
+      prettier-plugin-svelte:
+        specifier: 4.1.1
+        version: 4.1.1(prettier@3.9.10)(svelte@5.57.3)
+      shiki:
+        specifier: 4.6.0
+        version: 4.6.0
+      vite:
+        specifier: 8.3.5
+        version: 8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.0)
       vitepress:
         specifier: 2.0.0-alpha.21
         version: 2.0.0-alpha.21(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(postcss@8.5.32)(terser@5.51.2)(typescript@6.0.3)(yaml@2.9.0)
@@ -1698,9 +1743,6 @@ packages:
   '@jridgewell/source-map@0.3.11':
     resolution: {integrity: sha512-ZMp1V8ZFcPG5dIWnQLr3NSI1MiCU7UETdS/A0G8V/XWHvJv3ZsFqutJn1Y5RPmAPX6F3BiE397OqveU/9NCuIA==}
 
-  '@jridgewell/sourcemap-codec@1.5.5':
-    resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
-
   '@jridgewell/sourcemap-codec@1.6.0':
     resolution: {integrity: sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw==}
 
@@ -2328,6 +2370,27 @@ packages:
 
   '@rowick/primitives@0.1.0':
     resolution: {integrity: sha512-fubXqRzCegOrRM9HGRY7GOTlml0/sleJ9pBk5SWLfI35qybzTAhgUuMJHxmOGb52LFOnMHQWGRdiC8WMy45Erw==}
+
+  '@rowick/react-ui@0.1.0':
+    resolution: {integrity: sha512-cw0QEqHIRT6QAbIBe6fzMoWkqYOgfCSk1SHi1K6NXL6EKdzr974JXxPMgShxeKqEGKZoXZetP8jrP9uRsTEQvw==}
+    peerDependencies:
+      react: ^18.2.0 || ^19.0.0
+      react-dom: ^18.2.0 || ^19.0.0
+
+  '@rowick/react@0.1.0':
+    resolution: {integrity: sha512-vfNfGF44+4ORa8zyKwU78vVedpZ8HHpdLqwKt/PJ/ceeqhBMy+OWx25Ue/xlM94uBfqyoU9RYRI9klEUrngwRg==}
+    peerDependencies:
+      react: ^18.2.0 || ^19.0.0
+
+  '@rowick/svelte-ui@0.1.0':
+    resolution: {integrity: sha512-T794lrEOfSKwX8R4ni9AaYsBGe5ahTHtinTqEiWzxfOhdeF+bDzl7dANdwKQuZdhaBZJ52hkT7tVZEbfHmq9cQ==}
+    peerDependencies:
+      svelte: ^4.2.20 || ^5.0.0
+
+  '@rowick/svelte@0.1.0':
+    resolution: {integrity: sha512-7YRcjBtP5H5Yo4Oq7ZiLD/px/DRNJoQKcXhez50R7xb0Eh7e8ATU94sEbLDWEP46ry4MXoHk3rIMUgQA7M5opA==}
+    peerDependencies:
+      svelte: ^4.2.20 || ^5.0.0
 
   '@rowick/theme@0.1.0':
     resolution: {integrity: sha512-c1KI/OGjMzXLn5dNimpNzhC3bQlnceqmSQMY0EO0kKIpVJmeUeqyNnUqjqr0RUXoS2W8Fxe+hoHw/ruwAist7A==}
@@ -3766,9 +3829,6 @@ packages:
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
-  magic-string@1.3.1:
-    resolution: {integrity: sha512-rm91zr2Ou+XueDTohjQQjdQEcYM6zVi8KVUCG8Ec3vHwUEKrhSdCNyfuIywkA6hcCAteIn0ZOtAHA6eGpiX+Pg==}
-
   magic-string@1.4.3:
     resolution: {integrity: sha512-z12OxmaPGE0F4xlpGdjuAUckipLpQlTAuAmyGhNoD7ODpYUzvDfvtxUbjM/jwznyP178oju/KDdyi220wNJ0RQ==}
 
@@ -4141,6 +4201,18 @@ packages:
   powershell-utils@0.2.1:
     resolution: {integrity: sha512-C+y9x90UElAddDZmV4qOx9W53B61PO7cIqWz2dQsWlwswuq4mr8NEwytdGKboYbQlGZ3awrkTeNvcZiZNHnQ8A==}
     engines: {node: '>=20'}
+
+  prettier-plugin-svelte@4.1.1:
+    resolution: {integrity: sha512-wXvbXMjSvb4C9ENWTHXyd+ihakKCsJ6rJhLP6/8HFNj4GkZr48jqL9PoKsl2sk7SyCZRTnJ7O2TTowUpOxP/KA==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      prettier: ^3.0.0
+      svelte: ^5.0.0
+
+  prettier@3.9.10:
+    resolution: {integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==}
+    engines: {node: '>=14'}
+    hasBin: true
 
   pretty-bytes@7.2.0:
     resolution: {integrity: sha512-T2kroepGB5DRVbkN/nOpW03+VRWqdtJhZNuCW3wYk3chdPjgi4GcTBOaxWfHq1MIM0ypidxsSWbQaAiRpxnXmg==}
@@ -5822,14 +5894,12 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
 
-  '@jridgewell/sourcemap-codec@1.5.5': {}
-
   '@jridgewell/sourcemap-codec@1.6.0': {}
 
   '@jridgewell/trace-mapping@0.3.31':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
 
   '@lucide/svelte@1.57.0(svelte@5.57.3)':
     dependencies:
@@ -6451,7 +6521,7 @@ snapshots:
 
   '@rollup/pluginutils@5.4.0(rollup@4.64.9)':
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       estree-walker: 2.0.2
       picomatch: 4.0.7
     optionalDependencies:
@@ -6541,6 +6611,35 @@ snapshots:
   '@rowick/primitives@0.1.0':
     dependencies:
       '@rowick/core': 0.1.0
+
+  '@rowick/react-ui@0.1.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+    dependencies:
+      '@rowick/core': 0.1.0
+      '@rowick/data': 0.1.0
+      '@rowick/primitives': 0.1.0
+      '@rowick/react': 0.1.0(react@19.3.1)
+      '@rowick/virtual': 0.1.0
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
+
+  '@rowick/react@0.1.0(react@19.3.1)':
+    dependencies:
+      '@rowick/core': 0.1.0
+      react: 19.3.1
+
+  '@rowick/svelte-ui@0.1.0(svelte@5.57.3)':
+    dependencies:
+      '@rowick/core': 0.1.0
+      '@rowick/data': 0.1.0
+      '@rowick/primitives': 0.1.0
+      '@rowick/svelte': 0.1.0(svelte@5.57.3)
+      '@rowick/virtual': 0.1.0
+      svelte: 5.57.3
+
+  '@rowick/svelte@0.1.0(svelte@5.57.3)':
+    dependencies:
+      '@rowick/core': 0.1.0
+      svelte: 5.57.3
 
   '@rowick/theme@0.1.0': {}
 
@@ -6663,7 +6762,7 @@ snapshots:
   '@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.0))':
     dependencies:
       deepmerge: 4.3.1(patch_hash=djkursnltbasccsuuew3zwz2ya)
-      magic-string: 1.3.1
+      magic-string: 1.4.3
       obug: 2.2.1
       svelte: 5.57.3
       vite: 8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.0)
@@ -6939,7 +7038,7 @@ snapshots:
       '@vue/shared': 3.4.38
       estree-walker: 2.0.2
       magic-string: 0.30.21
-      postcss: 8.5.30
+      postcss: 8.5.32
       source-map-js: 1.2.2
 
   '@vue/compiler-sfc@3.5.44':
@@ -6951,7 +7050,7 @@ snapshots:
       '@vue/shared': 3.5.44
       estree-walker: 2.0.2
       magic-string: 0.30.21
-      postcss: 8.5.30
+      postcss: 8.5.32
       source-map-js: 1.2.2
 
   '@vue/compiler-ssr@3.4.38':
@@ -7291,7 +7390,7 @@ snapshots:
   code-red@1.0.4:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       acorn: 8.19.0
       estree-walker: 3.0.3
       periscopic: 3.1.0
@@ -7546,7 +7645,7 @@ snapshots:
 
   estree-walker@3.0.3:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
 
   etag@1.8.1: {}
 
@@ -7826,7 +7925,7 @@ snapshots:
 
   is-reference@1.2.1:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
 
   is-reference@3.0.3:
     dependencies:
@@ -7984,10 +8083,6 @@ snapshots:
       magic-string: 0.30.21
 
   magic-string@0.30.21:
-    dependencies:
-      '@jridgewell/sourcemap-codec': 1.6.0
-
-  magic-string@1.3.1:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
 
@@ -8502,7 +8597,7 @@ snapshots:
 
   periscopic@3.1.0:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       estree-walker: 3.0.3
       is-reference: 3.0.3
 
@@ -8566,6 +8661,13 @@ snapshots:
       source-map-js: 1.2.2
 
   powershell-utils@0.2.1: {}
+
+  prettier-plugin-svelte@4.1.1(prettier@3.9.10)(svelte@5.57.3):
+    dependencies:
+      prettier: 3.9.10
+      svelte: 5.57.3
+
+  prettier@3.9.10: {}
 
   pretty-bytes@7.2.0: {}
 

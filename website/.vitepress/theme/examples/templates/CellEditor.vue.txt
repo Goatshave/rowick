@@ -1,0 +1,21 @@
+<script setup lang="ts">
+import {onMounted,onBeforeUnmount,ref} from 'vue';
+import type {CellEditorContext} from '@rowick/core';
+import type {Person} from './people';
+import {errorId} from './model';
+import {createInlineEditor,focusEditor} from './inline-editor';
+const props=defineProps<{context:CellEditorContext<Person>;onValidation:(message:string)=>void}>();
+const input=ref<HTMLInputElement|HTMLSelectElement>();
+const draft=ref(String(props.context.value ?? ''));
+const error=ref('');
+const editor=createInlineEditor(props.context,message=>{error.value=message;props.onValidation(message?`${String(props.context.column.columnDef.header)}: ${message}`:'');});
+const choices=props.context.column.columnDef.editOptions;
+onMounted(()=>{if(input.value)focusEditor(input.value);});
+onBeforeUnmount(()=>props.onValidation(''));
+</script>
+<template>
+<div class="ce" :class="{'ce-invalid':error,'ce-select':choices,'ce-number':context.column.id==='score'}" @keydown="editor.keydown($event,draft)">
+<select v-if="choices" ref="input" v-model="draft" :aria-label="`Edit ${context.column.id}`" :aria-invalid="!!error" :aria-describedby="error?errorId:undefined" @change="editor.clear" @blur="editor.save(draft,$event)"><option v-for="choice in choices" :key="String(choice.value)" :value="String(choice.value)" :disabled="choice.disabled">{{choice.label}}</option></select>
+<input v-else ref="input" v-model="draft" type="text" :inputmode="context.column.id==='score'?'decimal':'text'" :aria-label="`Edit ${context.column.id}`" :aria-invalid="!!error" :aria-describedby="error?errorId:undefined" autocomplete="off" :spellcheck="false" @input="editor.clear" @blur="editor.save(draft,$event)" @compositionstart="editor.compositionStart" @compositionend="editor.compositionEnd"/>
+</div>
+</template>

@@ -1,0 +1,34 @@
+<script lang="ts">
+import {onDestroy} from 'svelte';
+import {DataGrid,createSvelteDataGridRenderer} from '@rowick/svelte-ui';
+import type {Grid,GridOptions} from '@rowick/core';
+import {createExampleModel,type Density,errorId} from './model';
+import type {Person} from './people';
+import {theme} from './theme';
+import './styles/rowick-theme.css';
+import './styles/rowick-grid.css';
+import './styles/controls.css';
+import './styles/example.css';
+__RENDER_IMPORTS__
+const model=createExampleModel('__FEATURE__');
+let state=model.getSnapshot();
+let rows=state.rows;
+let frame:HTMLElement;
+const unsubscribe=model.subscribe(next=>{state=next;if(rows!==next.rows)rows=next.rows;});
+onDestroy(()=>{unsubscribe();});
+$: options={data:rows,columns:model.columns,getRowId:(row:Person)=>row.id,initialState:model.initialState,onCellEdit:model.onCellEdit} satisfies GridOptions<Person>;
+const ready=(grid:Grid<unknown>)=>model.attach(grid as Grid<Person>,()=>frame??null);
+__RENDER_FUNCTIONS__
+</script>
+<section bind:this={frame} class="sample" data-rowick data-rowick-theme={theme} aria-label="__FEATURE__ example">
+<header class="sample-heading"><div class="sample-title"><strong>People</strong><span>{rows.length} total records</span></div><div class="sample-options"><label>Rows<select aria-label="Grid density" value={state.density} onchange={event=>model.setDensity(event.currentTarget.value as Density)}><option value="compact">Compact</option><option value="standard">Standard</option><option value="comfortable">Comfortable</option></select></label><button class="sample-reset" onclick={model.reset}>Reset example</button></div></header>
+<div class="sample-toolbar">__TOOLBAR__</div>
+{#key state.generation}
+<DataGrid options={options as GridOptions<unknown>} onGridReady={ready} density={state.density} class="rowick-grid--enterprise" ariaLabel="__FEATURE__ sample data" rowVirtualization={false} columnVirtualization={false} getCellClassName={model.cellClass} __RENDER_PROPS__/>
+{/key}
+{#if state.editError}<p id={errorId} class="sample-alert" role="alert">{state.editError}</p>{/if}
+<footer class="sample-footer"><span><span>{state.count} {state.count===1?'record':'records'}</span><span class="sample-footer-note">__FOOTER_NOTE__</span></span>__PAGER__</footer>
+<details class="sample-state"><summary>__INSPECT_LABEL__</summary><pre><code>{state.stateText}</code></pre></details>
+{#if state.csvRequested}<section class="sample-csv" aria-label="CSV output"><strong>CSV output</strong>{#if state.csv}<pre><code>{state.csv}</code></pre>{:else}<p>No matching rows to export. Clear the filters to include data.</p>{/if}</section>{/if}
+<p class="sample-announcement" role="status">{state.announcement}</p>
+</section>

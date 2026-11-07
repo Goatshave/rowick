@@ -1,0 +1,35 @@
+<script setup lang="ts">
+import {computed,h,onBeforeUnmount,ref,shallowRef} from 'vue';
+import {createDataGrid} from '@rowick/vue-ui';
+import type {Grid,CellContext,CellEditorContext} from '@rowick/core';
+import {createExampleModel,type Density,errorId} from './model';
+import type {Person} from './people';
+import {theme} from './theme';
+import './styles/rowick-theme.css';
+import './styles/rowick-grid.css';
+import './styles/controls.css';
+import './styles/example.css';
+__RENDER_IMPORTS__
+const model=createExampleModel('__FEATURE__');
+const state=shallowRef(model.getSnapshot());
+const rows=shallowRef(state.value.rows);
+const frame=ref<HTMLElement>();
+const unsubscribe=model.subscribe(next=>{state.value=next;if(rows.value!==next.rows)rows.value=next.rows;});
+onBeforeUnmount(()=>{unsubscribe();});
+const DataGrid=createDataGrid<Person>();
+const options=computed(()=>({data:rows.value,columns:model.columns,getRowId:(row:Person)=>row.id,initialState:model.initialState,onCellEdit:model.onCellEdit}));
+const ready=(grid:Grid<Person>)=>model.attach(grid,()=>frame.value??null);
+__RENDER_FUNCTIONS__
+</script>
+<template>
+<section ref="frame" class="sample" data-rowick :data-rowick-theme="theme" aria-label="__FEATURE__ example">
+<header class="sample-heading"><div class="sample-title"><strong>People</strong><span>{{rows.length}} total records</span></div><div class="sample-options"><label>Rows<select aria-label="Grid density" :value="state.density" @change="model.setDensity(($event.target as HTMLSelectElement).value as Density)"><option value="compact">Compact</option><option value="standard">Standard</option><option value="comfortable">Comfortable</option></select></label><button class="sample-reset" @click="model.reset">Reset example</button></div></header>
+<div class="sample-toolbar">__TOOLBAR__</div>
+<DataGrid :key="state.generation" :options="options" :on-grid-ready="ready" :density="state.density" class="rowick-grid--enterprise" aria-label="__FEATURE__ sample data" :row-virtualization="false" :column-virtualization="false" :get-cell-class-name="model.cellClass" __RENDER_PROPS__/>
+<p v-if="state.editError" :id="errorId" class="sample-alert" role="alert">{{state.editError}}</p>
+<footer class="sample-footer"><span><span>{{state.count}} {{state.count===1?'record':'records'}}</span><span class="sample-footer-note">__FOOTER_NOTE__</span></span>__PAGER__</footer>
+<details class="sample-state"><summary>__INSPECT_LABEL__</summary><pre><code>{{state.stateText}}</code></pre></details>
+<section v-if="state.csvRequested" class="sample-csv" aria-label="CSV output"><strong>CSV output</strong><pre v-if="state.csv"><code>{{state.csv}}</code></pre><p v-else>No matching rows to export. Clear the filters to include data.</p></section>
+<p class="sample-announcement" role="status">{{state.announcement}}</p>
+</section>
+</template>

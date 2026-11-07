@@ -617,7 +617,7 @@
 }
 
 .rowick-grid__body .rowick-grid__row:not([data-selected="true"]):not([data-grouped-row="true"]):not([data-group-footer-row="true"]):hover .rowick-grid__cell {
-  background: var(--rowick-surface-subtle, var(--rowick-surface));
+  background: var(--rowick-surface-hover, var(--rowick-surface-subtle, var(--rowick-surface)));
 }
 
 .rowick-grid__row[data-grouped-row="true"] .rowick-grid__cell {
@@ -638,12 +638,24 @@
   align-items: center;
   box-sizing: border-box;
   overflow: hidden;
-  padding: 0 12px;
+  padding: 0 16px;
 }
 
 .rowick-grid__header-cell {
   min-height: var(--rowick-header-height);
   background: var(--rowick-surface-muted);
+  color: var(--rowick-text-muted);
+  font-size: 12px;
+  font-weight: var(--rowick-font-weight-semibold, 600);
+  letter-spacing: .015em;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--rowick-surface) 65%, transparent);
+}
+
+.rowick-grid__header-cell[aria-sort="ascending"],
+.rowick-grid__header-cell[aria-sort="descending"] {
+  color: var(--rowick-text);
+  background: color-mix(in srgb, var(--rowick-accent) 7%, var(--rowick-surface-muted));
+  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--rowick-accent) 65%, transparent);
 }
 
 .rowick-grid__header-cell[data-grouped="true"] {
@@ -726,11 +738,14 @@
   background: var(--rowick-surface);
   white-space: nowrap;
   text-overflow: ellipsis;
+  line-height: 1.5;
+  transition: background-color var(--rowick-transition);
 }
 
 .rowick-grid__cell[data-focused="true"] {
   outline: 2px solid var(--rowick-focus);
   outline-offset: -2px;
+  z-index: 4;
 }
 
 .rowick-grid__cell[data-range-selected="true"] {
@@ -811,6 +826,7 @@
   box-sizing: border-box;
   border: 1px solid var(--rowick-border-color);
   border-radius: var(--rowick-radius-sm, 4px);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
   padding: 0 9px;
   color: var(--rowick-text);
   background: var(--rowick-surface);
@@ -819,6 +835,7 @@
 }
 
 .rowick-grid__cell-editor:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--rowick-focus) 12%, transparent);
   border-color: var(--rowick-focus);
 }
 
@@ -846,7 +863,8 @@
   display: inline-flex;
   flex: 1 1 auto;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 8px;
   width: auto;
   min-width: 24px;
   height: 100%;
@@ -856,6 +874,11 @@
   background: transparent;
   font: inherit;
   text-align: left;
+  cursor: pointer;
+}
+
+.rowick-grid__header-button:not(:disabled):hover {
+  color: var(--rowick-text);
 }
 
 .rowick-grid__header-cell[data-column-draggable="true"] .rowick-grid__header-button {
@@ -885,12 +908,40 @@
 }
 
 .rowick-grid__sort-indicator {
-  flex: 0 0 auto;
-  width: 18px;
-  color: var(--rowick-accent);
-  font-size: 10px;
-  text-align: right;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  flex: 0 0 12px;
+  width: 12px;
+  height: 18px;
+  color: var(--rowick-text-subtle);
+  font-size: 0;
 }
+
+.rowick-grid__sort-indicator:empty { opacity: 0; }
+.rowick-grid__header-button:disabled .rowick-grid__sort-indicator:empty { display: none; }
+.rowick-grid__header-button:not(:disabled):hover .rowick-grid__sort-indicator:empty,
+.rowick-grid__header-button:focus-visible .rowick-grid__sort-indicator:empty { opacity: .7; }
+.rowick-grid__sort-indicator::before,
+.rowick-grid__sort-indicator::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  width: 5px;
+  height: 5px;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  opacity: .4;
+}
+.rowick-grid__sort-indicator::before { top: 3px; transform: rotate(-45deg); }
+.rowick-grid__sort-indicator::after { bottom: 3px; transform: rotate(135deg); }
+.rowick-grid__header-cell[aria-sort="ascending"] .rowick-grid__sort-indicator::before,
+.rowick-grid__header-cell[aria-sort="descending"] .rowick-grid__sort-indicator::after {
+  color: var(--rowick-accent);
+  opacity: 1;
+}
+.rowick-grid__header-cell[aria-sort="ascending"] .rowick-grid__sort-indicator::after,
+.rowick-grid__header-cell[aria-sort="descending"] .rowick-grid__sort-indicator::before { opacity: .16; }
 
 .rowick-grid__pinning-controls {
   display: inline-flex;
@@ -1115,15 +1166,29 @@
 .rowick-grid__resize-handle {
   position: absolute;
   top: 0;
-  right: -3px;
+  right: -5px;
   bottom: 0;
-  width: 6px;
+  width: 10px;
   cursor: col-resize;
   touch-action: none;
 }
 
-.rowick-grid__resize-handle:hover {
-  background: color-mix(in srgb, var(--rowick-accent) 28%, transparent);
+.rowick-grid__resize-handle::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  bottom: 13px;
+  left: 4px;
+  width: 1px;
+  border-radius: 2px;
+  background: var(--rowick-border-color);
+}
+.rowick-grid__resize-handle:hover::before,
+.rowick-grid__resize-handle:focus-visible::before {
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--rowick-accent);
 }
 
 .rowick-grid__empty-cell {
@@ -1138,3 +1203,107 @@
 .rowick-grid__filter-controls { display: flex; gap: 4px; align-items: center; width: 100%; min-width: 0; }
 .rowick-grid__filter-controls .rowick-grid__filter-input { min-width: 0; flex: 1; width: 0; }
 .rowick-grid__filter-controls button { min-height: 24px; font: inherit; }
+
+/* Opt-in native checkbox styling for custom cells and application-owned controls. */
+input.rowick-checkbox[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  margin: 0;
+  vertical-align: middle;
+  border: 1px solid var(--rowick-border-strong, #bcc1c5);
+  border-radius: 4px;
+  background: linear-gradient(var(--rowick-surface, #fff), var(--rowick-surface-muted, #f7f8f8));
+  box-shadow: 0 1px 2px rgb(24 32 38 / 5%);
+  color: var(--rowick-surface, #fff);
+  cursor: pointer;
+  transition: border-color var(--rowick-transition, 140ms ease), background-color var(--rowick-transition, 140ms ease), box-shadow var(--rowick-transition, 140ms ease);
+}
+input.rowick-checkbox[type="checkbox"]:hover:not(:disabled) { border-color: var(--rowick-accent, #9c603c); }
+input.rowick-checkbox[type="checkbox"]:checked,
+input.rowick-checkbox[type="checkbox"]:indeterminate {
+  border-color: var(--rowick-accent, #9c603c);
+  background: var(--rowick-accent, #9c603c);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 16%), 0 1px 2px rgb(24 32 38 / 12%);
+}
+input.rowick-checkbox[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border-right: 1.7px solid currentColor;
+  border-bottom: 1.7px solid currentColor;
+  transform: rotate(45deg);
+}
+input.rowick-checkbox[type="checkbox"]:indeterminate::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 6px;
+  width: 8px;
+  height: 2px;
+  border: 0;
+  border-radius: 1px;
+  background: currentColor;
+  transform: none;
+}
+input.rowick-checkbox[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--rowick-focus, #9c603c);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--rowick-focus, #9c603c) 10%, transparent);
+}
+input.rowick-checkbox[type="checkbox"]:disabled {
+  opacity: 1;
+  color: var(--rowick-text-muted);
+  background: var(--rowick-surface-muted);
+  border-color: var(--rowick-border-color);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.rowick-grid__row[data-selected="true"] .rowick-grid__cell:first-child {
+  box-shadow: inset 3px 0 0 var(--rowick-accent);
+}
+@media (prefers-reduced-motion: reduce) {
+  input.rowick-checkbox[type="checkbox"], .rowick-grid__cell { transition: none; }
+}
+@media (forced-colors: active) {
+  input.rowick-checkbox[type="checkbox"] {
+    appearance: auto;
+    -webkit-appearance: auto;
+    background: none;
+    box-shadow: none;
+    color: CanvasText;
+    forced-color-adjust: auto;
+  }
+  input.rowick-checkbox[type="checkbox"]::after { display: none; }
+  .rowick-grid__row[data-selected="true"] .rowick-grid__cell:first-child { box-shadow: none; }
+}
+
+/* Optional workspace skin: quiet chrome keeps the data and interaction states primary. */
+.rowick-grid--enterprise {
+  font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  border-color: var(--rowick-border-color);
+  box-shadow: none;
+}
+.rowick-grid--enterprise .rowick-grid__header,
+.rowick-grid--enterprise .rowick-grid__header-cell { background: var(--rowick-surface-muted); }
+.rowick-grid--enterprise .rowick-grid__header-cell { color: var(--rowick-text-muted); font-size: 12px; font-weight: 500; letter-spacing: 0; border-right: 0; border-bottom-color: var(--rowick-border-color); }
+.rowick-grid--enterprise .rowick-grid__header-cell[data-pinned] { background: var(--rowick-surface-muted) !important; }
+.rowick-grid--enterprise .rowick-grid__header-cell[aria-sort=ascending],
+.rowick-grid--enterprise .rowick-grid__header-cell[aria-sort=descending] { color: var(--rowick-text); box-shadow: none; background: var(--rowick-surface-muted); }
+.rowick-grid--enterprise .rowick-grid__cell { font-size: 14px; line-height: 1.5; border-right: 0; }
+.rowick-grid--enterprise .rowick-grid__resize-handle::before { opacity: 0; }
+.rowick-grid--enterprise .rowick-grid__header-cell:hover .rowick-grid__resize-handle::before,
+.rowick-grid--enterprise .rowick-grid__resize-handle:focus-visible::before { opacity: 1; }
+.rowick-grid__cell--editable { cursor: text; }
+.rowick-grid__cell--readonly { color: var(--rowick-text-muted); }
+@media (forced-colors: active) {
+  .rowick-grid--enterprise .rowick-grid__header-cell { color: CanvasText; background: Canvas; }
+}

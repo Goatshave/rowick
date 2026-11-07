@@ -41,7 +41,7 @@ const grid = shallowRef<Grid<Project> | null>(null);
 const metrics = ref({ count: 12, selected: 0, allSelected: false, someSelected: false, pageIndex: 0, pageSize: 6, pageCount: 2, canPrevious: false, canNext: true });
 const rangeStart = computed(() => metrics.value.count ? metrics.value.pageIndex * metrics.value.pageSize + 1 : 0);
 const rangeEnd = computed(() => Math.min((metrics.value.pageIndex + 1) * metrics.value.pageSize, metrics.value.count));
-const avatarTones: Record<string, string> = { "Mina Park": "clay", "Alex Chen": "sage", "Joon Kim": "lavender", "Sofia Rossi": "rose", "Theo Martin": "sand", "Ara Lee": "sage" };
+
 const generation = ref(0);
 const announcement = ref("12 sample projects. Changes stay in this page.");
 const column = createColumnHelper<Project>();
@@ -50,7 +50,7 @@ const columns = [
     header: "Project", size: 245, minSize: 225, enableEditing: true,
     cell: ({ grid, row, value }) => h("span", { class: "demo-project" }, [
       h("input", {
-        type: "checkbox", class: "demo-checkbox", checked: grid.getIsRowSelected(row.id),
+        type: "checkbox", class: "demo-checkbox rowick-checkbox", checked: grid.getIsRowSelected(row.id),
         "aria-label": `Select ${String(value)}`,
         onPointerdown: (event: Event) => event.stopPropagation(),
         onClick: (event: Event) => event.stopPropagation(),
@@ -60,31 +60,13 @@ const columns = [
       }),
       h("span", { class: "demo-project-copy" }, [
         h("span", { class: "demo-project-name" }, String(value)),
-        h("span", { class: "demo-project-id" }, `RW-${row.id.slice(1).padStart(3, "0")}`),
       ]),
     ]),
     validateEditValue: (value) => String(value).trim().length > 0 || "Enter a project name.",
   }),
-  column.accessor("owner", {
-    header: "Owner", size: 155, minSize: 145,
-    cell: ({ value }) => h("span", { class: "demo-person" }, [
-      h("span", { class: ["demo-avatar", "demo-avatar-" + avatarTones[String(value)]], "aria-hidden": "true" }, String(value).split(" ").map((part) => part[0]).slice(0, 2).join("")),
-      h("span", String(value)),
-    ]),
-  }),
-  column.accessor("team", { header: "Team", size: 115, minSize: 105 }),
-  column.accessor("status", {
-    header: "Status", size: 140, minSize: 130,
-    cell: ({ value }) => h("span", { class: ["demo-status", "demo-status-" + String(value).toLowerCase().replaceAll(" ", "-")] }, [
-      h("svg", { viewBox: "0 0 16 16", fill: "none", "aria-hidden": "true" }, [
-        h("circle", { cx: 8, cy: 8, r: 5.5, stroke: "currentColor", "stroke-width": 1.4, opacity: value === "In progress" ? 0.35 : 1 }),
-        value === "Complete" ? h("path", { d: "m5.4 8 1.7 1.7 3.5-3.5", stroke: "currentColor", "stroke-width": 1.4, "stroke-linecap": "round", "stroke-linejoin": "round" })
-          : value === "In progress" ? h("path", { d: "M8 2.5A5.5 5.5 0 0 1 13.5 8", stroke: "currentColor", "stroke-width": 1.7, "stroke-linecap": "round" })
-          : value === "In review" ? h("circle", { cx: 8, cy: 8, r: 2, fill: "currentColor" }) : null,
-      ]),
-      String(value),
-    ]),
-  }),
+  column.accessor("owner", { header: "Owner", size: 155, minSize: 130 }),
+  column.accessor("team", { header: "Team", size: 125, minSize: 110 }),
+  column.accessor("status", { header: "Status", size: 140, minSize: 120 }),
   column.accessor("budget", {
     header: "Budget", size: 110, minSize: 95,
     cell: ({ value }) => h("span", { class: "demo-number" }, new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(Number(value))),
@@ -98,8 +80,8 @@ const options = computed<GridOptions<Project>>(() => ({
   initialState: { pagination: { pageIndex: 0, pageSize: 6 } },
   onStateChange: (next) => { gridState.value = next; },
   onCellEdit: (event) => {
-    if (event.phase !== "commit" || event.column.id !== "name") return;
-    rows.value = rows.value.map((row) => row.id === event.row.id ? { ...row, name: String(event.value) } : row);
+    if (event.phase !== "commit" || event.column.id !== "name" || event.validation?.valid === false || event.defaultPrevented) return;
+    rows.value = rows.value.map((row) => row.id === event.row.id ? { ...row, name: String(event.value).trim() } : row);
     announcement.value = "Project name updated. Changes stay in this page.";
     nextTick(() => { if (grid.value) metrics.value = readMetrics(grid.value); });
   },
@@ -164,13 +146,10 @@ function reset() {
 </script>
 
 <template>
-  <section ref="frame" class="rowick-demo" :data-rowick-theme="isDark ? 'dark' : 'light'" aria-label="Interactive Rowick example">
+  <section ref="frame" class="rowick-demo" data-rowick :data-rowick-theme="isDark ? 'dark' : 'light'" aria-label="Interactive Rowick example">
     <div class="demo-heading">
-      <div class="demo-workspace">
-        <span class="demo-project-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><path d="M14 15.5h6M14 19h4" stroke-linecap="round"/></svg></span>
-        <div><strong>Projects</strong><span class="demo-label">Your team’s work, in one place.</span></div>
-      </div>
-      <button class="demo-reset" type="button" @click="reset"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 8a6 6 0 1 1 0 5M4 3v5h5" stroke-linecap="round" stroke-linejoin="round"/></svg>Reset</button>
+      <div class="demo-workspace"><strong>Projects</strong><span class="demo-label">{{ rows.length }} total records</span></div>
+      <div class="demo-heading-actions"><a class="demo-source" href="#quickstart">View code <span aria-hidden="true">↗</span></a><button class="demo-reset" type="button" @click="reset">Reset example</button></div>
     </div>
     <div class="demo-toolbar">
       <div class="demo-views" role="group" aria-label="Project views">
@@ -187,13 +166,14 @@ function reset() {
       :options="options"
       :on-grid-ready="onGridReady"
       :render-empty-state="renderEmptyState"
+      class="rowick-grid--enterprise"
       aria-label="Sample projects"
       :row-virtualization="false"
       :column-virtualization="false"
     />
     <div class="demo-footer">
       <div class="demo-selection">
-        <label><input type="checkbox" class="demo-checkbox" :checked="metrics.allSelected" :indeterminate="metrics.someSelected && !metrics.allSelected" :disabled="!metrics.count" @change="grid?.toggleAllPageRowsSelected(($event.target as HTMLInputElement).checked)" />Select page</label>
+        <label><input type="checkbox" class="demo-checkbox rowick-checkbox" :checked="metrics.allSelected" :indeterminate="metrics.someSelected && !metrics.allSelected" :disabled="!metrics.count" @change="grid?.toggleAllPageRowsSelected(($event.target as HTMLInputElement).checked)" />Select page</label>
         <span v-if="metrics.selected" class="demo-selected-count" role="status">{{ metrics.selected }} selected<button type="button" aria-label="Clear row selection" @click="grid?.resetRowSelection()">Clear</button></span>
       </div>
       <div class="demo-pagination">
@@ -201,12 +181,12 @@ function reset() {
         <select aria-label="Projects per page" :value="metrics.pageSize" @change="grid?.setPageSize(Number(($event.target as HTMLSelectElement).value))"><option :value="6">6 / page</option><option :value="12">12 / page</option></select>
         <div class="demo-page-buttons">
           <button type="button" aria-label="Previous page" :disabled="!metrics.canPrevious" @click="grid?.previousPage()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m10 4-4 4 4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          <span aria-label="Current page">{{ metrics.count ? metrics.pageIndex + 1 : 0 }} / {{ metrics.pageCount }}</span>
+          <span aria-label="Current page">{{ metrics.count ? metrics.pageIndex + 1 : 0 }} / {{ metrics.count ? metrics.pageCount : 0 }}</span>
           <button type="button" aria-label="Next page" :disabled="!metrics.canNext" @click="grid?.nextPage()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 4 4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
     </div>
-    <div class="demo-footnote"><span>Double-click a project to edit <kbd>↵</kbd> save <kbd>esc</kbd> cancel</span><span class="demo-live"><i aria-hidden="true"/> Vue · Rowick 0.1.0</span></div>
+    <div class="demo-footnote"><span>Double-click a project to edit <kbd>↵</kbd> save <kbd>esc</kbd> cancel</span><span class="demo-live">Changes stay in this demo</span></div>
     <span class="demo-announcement" role="status" aria-live="polite">{{ announcement }}</span>
   </section>
 </template>

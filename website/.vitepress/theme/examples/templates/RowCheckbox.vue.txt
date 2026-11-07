@@ -1,0 +1,6 @@
+<script setup lang="ts">
+import type {CellContext} from '@rowick/core';
+import type {Person} from './people';
+defineProps<{context:CellContext<Person,unknown>;selected:boolean}>();
+</script>
+<template><label class="sample-row-check"><input type="checkbox" class="rowick-checkbox" :aria-label="`Select ${context.row.original?.name}`" :checked="selected" @pointerdown.stop @click.stop @keydown.stop @change="context.grid.toggleRowSelected(context.row.id,($event.target as HTMLInputElement).checked)"/>{{String(context.value)}}</label></template>

@@ -38,10 +38,10 @@ export default defineConfig({
       { text: "Guide", link: "/getting-started", activeMatch: "/(getting-started|react-ui|vue-ui|svelte-ui)" },
       { text: "Examples", link: "/examples" },
       { text: "Packages", link: "/packages" },
-      { text: "0.1.0", items: [
-        { text: "0.1.0 · latest release", link: "https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.0" },
+      { text: "0.1.1", items: [
+        { text: "0.1.1 · latest release", link: "https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.1" },
         { text: "Changelog", link: "https://github.com/Goatshave/rowick/blob/main/CHANGELOG.md" },
-        { text: "Validation scope", link: "/initial-release-validation" },
+        { text: "Validation scope", link: "/0.1.1-validation" },
       ] },
     ],
     sidebar: [
@@ -84,7 +84,7 @@ export default defineConfig({
         { text: "Architecture", link: "/architecture" },
         { text: "API stability", link: "/api-stability" },
         { text: "Feature boundaries", link: "/feature-boundaries" },
-        { text: "0.1.0 validation scope", link: "/initial-release-validation" },
+        { text: "0.1.1 validation scope", link: "/0.1.1-validation" },
       ] },
     ],
     search: { provider: "local" },

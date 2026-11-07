@@ -1,10 +1,10 @@
 # Getting started
 
-> **Rowick 0.1.0 is available on npm.**
+> **Rowick 0.1.1 is available on npm.**
 >
 > Install the published `@rowick/*` packages using the commands below. Keep all
-> Rowick packages on the same version. See the [release notes](https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.0)
-> and [initial validation scope](initial-release-validation.md) for tested coverage and deferred manual checks.
+> Rowick packages on the same version. See the [release notes](https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.1)
+> and [0.1.1 validation scope](0.1.1-validation.md) for tested coverage and deferred manual checks.
 
 Rowick separates its framework-agnostic engine, framework adapters, styled UI renderers, virtualization primitives, and theme tokens. Most applications should start with the maintained UI package for their framework.
 

@@ -12,7 +12,7 @@ setting excludes `docs/maintainers/**` and the repository-only `docs/README.md`
 from both pages and local search. Public maintenance, verification, release and
 dependency-security procedures remain available through the GitHub repository's
 [maintainer index](../docs/maintainers/README.md). User-facing release coverage and
-limitations remain in `docs/initial-release-validation.md`.
+limitations remain in `docs/0.1.1-validation.md`.
 
 From the repository root:
 
@@ -45,7 +45,7 @@ no deployment token is stored as a secret.
 and rejects maintainer routes or maintainer titles in the local search index.
 Both general CI and the deployment workflow run it before publication.
 
-The React, Vue and Svelte previews deliberately install the public `0.1.0`
+The React, Vue and Svelte previews deliberately install the public `0.1.1`
 runtime packages from npm. Their CSS comes from the repository's current shared
 theme and grid styles, so the website can preview the next stylesheet changes.
 The private website version and all five runtime dependency pins track the

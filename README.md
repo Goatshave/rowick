@@ -12,11 +12,11 @@
 Typed data grids for React, Vue, and Svelte. Use the styled UI for your framework,
 or build a custom renderer with the shared headless engine.
 
-> **Rowick 0.1.0 is available on [npm](https://www.npmjs.com/org/rowick).**
-> See the [release notes](https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.0)
+> **Rowick 0.1.1 is available on [npm](https://www.npmjs.com/org/rowick).**
+> See the [release notes](https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.1)
 > and keep all `@rowick/*` packages on the same version.
 >
-> Review the [initial 0.1.0 validation scope](docs/initial-release-validation.md),
+> Review the [0.1.1 validation scope](docs/0.1.1-validation.md),
 > including the explicitly deferred manual platform and assistive-technology checks.
 > Try the local examples to explore the current source.
 

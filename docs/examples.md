@@ -27,8 +27,8 @@ framework examples in the repository.
 - [Persisted preferences](preferences.md)
 
 The repository’s server examples run with a local service. This static site does
-not host a backend. See the [0.1.0 validation scope](initial-release-validation.md)
-for platform checks deferred in the initial release.
+not host a backend. See the [0.1.1 validation scope](0.1.1-validation.md)
+for manual platform checks explicitly deferred for 0.1.1.
 
-The previews run the published `0.1.0` core and UI packages for the selected
+The previews run the published `0.1.1` core and UI packages for the selected
 React, Vue or Svelte framework. See [shared setup](examples/setup.md) for framework wiring.

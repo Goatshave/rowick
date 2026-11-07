@@ -1,7 +1,7 @@
 {
   "name": "@rowick/docs",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "scripts": {
     "dev": "node ../scripts/build-doc-examples.mjs && vitepress dev . --host 127.0.0.1 --port 4290 --strictPort",
@@ -11,11 +11,11 @@
   },
   "dependencies": {
     "@fontsource-variable/instrument-sans": "5.3.0",
-    "@rowick/core": "0.1.0",
-    "@rowick/react-ui": "0.1.0",
-    "@rowick/svelte-ui": "0.1.0",
-    "@rowick/theme": "0.1.0",
-    "@rowick/vue-ui": "0.1.0",
+    "@rowick/core": "0.1.1",
+    "@rowick/react-ui": "0.1.1",
+    "@rowick/svelte-ui": "0.1.1",
+    "@rowick/theme": "0.1.1",
+    "@rowick/vue-ui": "0.1.1",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "svelte": "5.57.3",

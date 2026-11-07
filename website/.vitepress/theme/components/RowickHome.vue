@@ -18,8 +18,8 @@ const features = [
     <section class="home-hero" aria-labelledby="home-title">
       <div class="hero-grid" aria-hidden="true"></div>
       <div class="hero-copy">
-      <a class="release-note" href="https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.0">
-        <span class="release-version">0.1.0</span> A new home for your data <span aria-hidden="true">↗</span>
+      <a class="release-note" href="https://github.com/Goatshave/rowick/releases/tag/rowick-v0.1.1">
+        <span class="release-version">0.1.1</span> Refined grids and framework examples <span aria-hidden="true">↗</span>
       </a>
       <h1 id="home-title">Make your data<br /><span>feel at home.</span></h1>
       </div>
@@ -72,7 +72,7 @@ const features = [
       <h2 id="closing-title">Make room for your next idea.</h2>
       <p>Start with the grid. Build the interface you have in mind.</p>
       <div class="hero-actions"><a class="home-button primary" :href="withBase('/getting-started')">Read the docs <span aria-hidden="true">↗</span></a><a class="home-button text-button" href="https://github.com/Goatshave/rowick">View on GitHub <span aria-hidden="true">↗</span></a></div>
-      <a class="validation-link" :href="withBase('/initial-release-validation')">0.1.0 support and validation scope <span aria-hidden="true">↗</span></a>
+      <a class="validation-link" :href="withBase('/0.1.1-validation')">0.1.1 support and validation scope <span aria-hidden="true">↗</span></a>
     </section>
   </main>
 </template>

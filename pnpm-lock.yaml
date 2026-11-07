@@ -875,20 +875,20 @@ importers:
         specifier: 5.3.0
         version: 5.3.0
       '@rowick/core':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: 0.1.1
+        version: 0.1.1
       '@rowick/react-ui':
-        specifier: 0.1.0
-        version: 0.1.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        specifier: 0.1.1
+        version: 0.1.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@rowick/svelte-ui':
-        specifier: 0.1.0
-        version: 0.1.0(svelte@5.57.3)
+        specifier: 0.1.1
+        version: 0.1.1(svelte@5.57.3)
       '@rowick/theme':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: 0.1.1
+        version: 0.1.1
       '@rowick/vue-ui':
-        specifier: 0.1.0
-        version: 0.1.0(vue@3.5.44(typescript@6.0.3))
+        specifier: 0.1.1
+        version: 0.1.1(vue@3.5.44(typescript@6.0.3))
       react:
         specifier: 19.3.1
         version: 19.3.1
@@ -2362,49 +2362,49 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rowick/core@0.1.0':
-    resolution: {integrity: sha512-E6gyOQNJZUF8nbmfQ22qpQSlfHvgjxBGEwU+0A+NSosKHkIEMLblZzwYFfK2qCTZ/MGThnrdx9E/Q4qHOXmM7Q==}
+  '@rowick/core@0.1.1':
+    resolution: {integrity: sha512-m2WDaYicFBBoRYKCiLLXfhw/BZYT4euRdnA85Lv8wcsGm1ZmXhA5JVUvANg/TaDCNNZX5BjqhJLVElWCZyTf/w==}
 
-  '@rowick/data@0.1.0':
-    resolution: {integrity: sha512-g8ue+dFz0WdE8yCJ/5kMNRWmYLxoFskCATIAPFHr0NRac3ZxejezEeWYDGqcbcUXAONQFkAniGghNTWAP2Kv6Q==}
+  '@rowick/data@0.1.1':
+    resolution: {integrity: sha512-x2AF6cfS9oVoqMoaj6SXtAvIJP4E4DQkf6WUv71c5umfEbojIeVKS0RQ3EqTeJU5ofmAGo5XcthdDlgEKDhONQ==}
 
-  '@rowick/primitives@0.1.0':
-    resolution: {integrity: sha512-fubXqRzCegOrRM9HGRY7GOTlml0/sleJ9pBk5SWLfI35qybzTAhgUuMJHxmOGb52LFOnMHQWGRdiC8WMy45Erw==}
+  '@rowick/primitives@0.1.1':
+    resolution: {integrity: sha512-2lzaZr4HPnxis1Ll2MpQDZ+rGau2pBmVB2s+hoUxX2ed3Kd0Tddd//o2IlxQPBFBwDhIlYvMspnWjRP4mY+8Mg==}
 
-  '@rowick/react-ui@0.1.0':
-    resolution: {integrity: sha512-cw0QEqHIRT6QAbIBe6fzMoWkqYOgfCSk1SHi1K6NXL6EKdzr974JXxPMgShxeKqEGKZoXZetP8jrP9uRsTEQvw==}
+  '@rowick/react-ui@0.1.1':
+    resolution: {integrity: sha512-3hsuNuVEOsrPS8vUZZOtXkRZnhMsaRuVxbSpeHTVKFUBs/oTt44tByiW8xH0EFTLCpE9JYYxQDMtFJ+ENtNpsQ==}
     peerDependencies:
       react: ^18.2.0 || ^19.0.0
       react-dom: ^18.2.0 || ^19.0.0
 
-  '@rowick/react@0.1.0':
-    resolution: {integrity: sha512-vfNfGF44+4ORa8zyKwU78vVedpZ8HHpdLqwKt/PJ/ceeqhBMy+OWx25Ue/xlM94uBfqyoU9RYRI9klEUrngwRg==}
+  '@rowick/react@0.1.1':
+    resolution: {integrity: sha512-IwO7ia5UcZkoWk6N3iAMI+4Se+jbi08nDyjRuP2W2apkEAiVM8V5VcqVUvifete8uegI5XS4J78XVRqTnY+bsw==}
     peerDependencies:
       react: ^18.2.0 || ^19.0.0
 
-  '@rowick/svelte-ui@0.1.0':
-    resolution: {integrity: sha512-T794lrEOfSKwX8R4ni9AaYsBGe5ahTHtinTqEiWzxfOhdeF+bDzl7dANdwKQuZdhaBZJ52hkT7tVZEbfHmq9cQ==}
+  '@rowick/svelte-ui@0.1.1':
+    resolution: {integrity: sha512-/K3AFNQCHEwHK2YPj0SnglWm5/U1kCFe6n/8RFw4CdPMT+awiAalOdNzNfOT1L+dSN0mFkCbIKLIQTYpfsgDDQ==}
     peerDependencies:
       svelte: ^4.2.20 || ^5.0.0
 
-  '@rowick/svelte@0.1.0':
-    resolution: {integrity: sha512-7YRcjBtP5H5Yo4Oq7ZiLD/px/DRNJoQKcXhez50R7xb0Eh7e8ATU94sEbLDWEP46ry4MXoHk3rIMUgQA7M5opA==}
+  '@rowick/svelte@0.1.1':
+    resolution: {integrity: sha512-jfnLTp17+HEcWVbSesleXHtvIB9x2dZY6tEKKcrSuQwDdeGw5LR8nhN98U4m5+6FTfmM86L/xLDGl6Rkpi3Jlw==}
     peerDependencies:
       svelte: ^4.2.20 || ^5.0.0
 
-  '@rowick/theme@0.1.0':
-    resolution: {integrity: sha512-c1KI/OGjMzXLn5dNimpNzhC3bQlnceqmSQMY0EO0kKIpVJmeUeqyNnUqjqr0RUXoS2W8Fxe+hoHw/ruwAist7A==}
+  '@rowick/theme@0.1.1':
+    resolution: {integrity: sha512-GqkRLlnX1OPNQd+LHRPMl/+jjXhBJwMouHL+2fQ7+8ehHTa3heCBTEK6GuZIT+hExpAi7YQtQwgSH1HYol4nUQ==}
 
-  '@rowick/virtual@0.1.0':
-    resolution: {integrity: sha512-I2WuOskXsToWtjOdeQnOcN9+WgwQIhnLiyT6Edus4ICo0DZP9WI+Ah0/2SsX9oqHabWjgVEo4EmFAg7LEBv1yQ==}
+  '@rowick/virtual@0.1.1':
+    resolution: {integrity: sha512-EFsjKCmypDwOMsM1sKKpZ3X1B7tH5FYmpFsJkhAQbWRQXeZCSvryLLHGLBGS9llQlmY1grYeGAzvtRACau4iVg==}
 
-  '@rowick/vue-ui@0.1.0':
-    resolution: {integrity: sha512-5Z/6w0JZKTt0ODLXtmZvyPwyfpN5du1iHWh46gwiNXe6s0gI5/enJ7ms5fUPHwFzQj5tlEU1sJ+EYc76LrTvCA==}
+  '@rowick/vue-ui@0.1.1':
+    resolution: {integrity: sha512-fO91hmJWRk747WXPtsqJsMUtO5PplviKHCDczk+gxL2L9VIN6MkjIwrnEKdEYfzro0XBgcCrqk9J/0nhX7WG4Q==}
     peerDependencies:
       vue: ^3.4.0
 
-  '@rowick/vue@0.1.0':
-    resolution: {integrity: sha512-iRKoUFGnON+Q5q+paUx1ewu/3KG3WwHgVW2rtSzHuhz7OCK4cN6gMJ5aQU+izp5+edePir9YXzslo3RmeU4/vg==}
+  '@rowick/vue@0.1.1':
+    resolution: {integrity: sha512-sLX6yoybQ08bmBADv76NPkDz4Hc7Ao0dQ3EfvJsXnpbabxQSLR7rgyadDsY8tqYYCabvpJpFd0W2G5SC5c5qOA==}
     peerDependencies:
       vue: ^3.4.0
 
@@ -6602,61 +6602,61 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.64.9':
     optional: true
 
-  '@rowick/core@0.1.0': {}
+  '@rowick/core@0.1.1': {}
 
-  '@rowick/data@0.1.0':
+  '@rowick/data@0.1.1':
     dependencies:
-      '@rowick/core': 0.1.0
+      '@rowick/core': 0.1.1
 
-  '@rowick/primitives@0.1.0':
+  '@rowick/primitives@0.1.1':
     dependencies:
-      '@rowick/core': 0.1.0
+      '@rowick/core': 0.1.1
 
-  '@rowick/react-ui@0.1.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@rowick/react-ui@0.1.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
-      '@rowick/core': 0.1.0
-      '@rowick/data': 0.1.0
-      '@rowick/primitives': 0.1.0
-      '@rowick/react': 0.1.0(react@19.3.1)
-      '@rowick/virtual': 0.1.0
+      '@rowick/core': 0.1.1
+      '@rowick/data': 0.1.1
+      '@rowick/primitives': 0.1.1
+      '@rowick/react': 0.1.1(react@19.3.1)
+      '@rowick/virtual': 0.1.1
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  '@rowick/react@0.1.0(react@19.3.1)':
+  '@rowick/react@0.1.1(react@19.3.1)':
     dependencies:
-      '@rowick/core': 0.1.0
+      '@rowick/core': 0.1.1
       react: 19.3.1
 
-  '@rowick/svelte-ui@0.1.0(svelte@5.57.3)':
+  '@rowick/svelte-ui@0.1.1(svelte@5.57.3)':
     dependencies:
-      '@rowick/core': 0.1.0
-      '@rowick/data': 0.1.0
-      '@rowick/primitives': 0.1.0
-      '@rowick/svelte': 0.1.0(svelte@5.57.3)
-      '@rowick/virtual': 0.1.0
+      '@rowick/core': 0.1.1
+      '@rowick/data': 0.1.1
+      '@rowick/primitives': 0.1.1
+      '@rowick/svelte': 0.1.1(svelte@5.57.3)
+      '@rowick/virtual': 0.1.1
       svelte: 5.57.3
 
-  '@rowick/svelte@0.1.0(svelte@5.57.3)':
+  '@rowick/svelte@0.1.1(svelte@5.57.3)':
     dependencies:
-      '@rowick/core': 0.1.0
+      '@rowick/core': 0.1.1
       svelte: 5.57.3
 
-  '@rowick/theme@0.1.0': {}
+  '@rowick/theme@0.1.1': {}
 
-  '@rowick/virtual@0.1.0': {}
+  '@rowick/virtual@0.1.1': {}
 
-  '@rowick/vue-ui@0.1.0(vue@3.5.44(typescript@6.0.3))':
+  '@rowick/vue-ui@0.1.1(vue@3.5.44(typescript@6.0.3))':
     dependencies:
-      '@rowick/core': 0.1.0
-      '@rowick/data': 0.1.0
-      '@rowick/primitives': 0.1.0
-      '@rowick/virtual': 0.1.0
-      '@rowick/vue': 0.1.0(vue@3.5.44(typescript@6.0.3))
+      '@rowick/core': 0.1.1
+      '@rowick/data': 0.1.1
+      '@rowick/primitives': 0.1.1
+      '@rowick/virtual': 0.1.1
+      '@rowick/vue': 0.1.1(vue@3.5.44(typescript@6.0.3))
       vue: 3.5.44(typescript@6.0.3)
 
-  '@rowick/vue@0.1.0(vue@3.5.44(typescript@6.0.3))':
+  '@rowick/vue@0.1.1(vue@3.5.44(typescript@6.0.3))':
     dependencies:
-      '@rowick/core': 0.1.0
+      '@rowick/core': 0.1.1
       vue: 3.5.44(typescript@6.0.3)
 
   '@shikijs/core@4.6.0':

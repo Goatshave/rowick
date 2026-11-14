@@ -13,13 +13,13 @@
   },
   "dependencies": {
     "@rowick/example-shared-server": "workspace:*",
-    "@sveltejs/adapter-node": "^6.0.0",
-    "@sveltejs/kit": "^3.1.0",
+    "@sveltejs/adapter-node": "^6.0.2",
+    "@sveltejs/kit": "^3.2.0",
     "svelte": "^5.57.2"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.2.0",
     "typescript": "^6.0.3",
-    "vite": "^8.3.4"
+    "vite": "^8.3.7"
   }
 }

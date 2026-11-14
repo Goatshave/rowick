@@ -10,13 +10,13 @@
   },
   "dependencies": {
     "@rowick/data": "workspace:*",
-    "@lucide/vue": "^1.57.0",
+    "@lucide/vue": "^1.71.0",
     "@rowick/core": "workspace:*",
     "@rowick/theme": "workspace:*",
     "@rowick/vue": "workspace:*",
     "@rowick/vue-ui": "workspace:*",
-    "vite": "^8.3.4",
-    "vue": "^3.5.44",
+    "vite": "^8.3.7",
+    "vue": "^3.5.45",
     "@rowick/example-shared-server": "workspace:*"
   },
   "devDependencies": {
